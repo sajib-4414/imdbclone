@@ -14,9 +14,11 @@ class ReviewSerializer(serializers.ModelSerializer):
       
 
 class WatchListSerializer(serializers.ModelSerializer):
-    reviews = ReviewSerializer(many=True, read_only=True)
+    # reviews = ReviewSerializer(many=True, read_only=True)
     # a custom populated serializer method field which does not exist on database
     # len_name = serializers.SerializerMethodField()
+    
+    platform = serializers.CharField(source='platform.name')
     class Meta:
         model = WatchList
         # fields = "__all__" when serializing all fields of a model

@@ -15,6 +15,7 @@ from watchlist_app.api.permissions import IsAdminOrReadOnly, IsReviewUserOrReadO
 from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, ScopedRateThrottle
 from watchlist_app.api.throttling import ReviewCreateThrottle, ReviewListThrottle
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 
 class UserReview(generics.ListAPIView):
     # queryset = Review.objects.all() to customize the queryset
@@ -101,8 +102,8 @@ class ReviewCreate(generics.CreateAPIView):
 class WatchListSearchView(generics.ListAPIView):
     queryset = WatchList.objects.all()
     serializer_class = WatchListSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['title', 'platform__name']
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['avg_rating']
     
     
 class WatchListView(APIView):
