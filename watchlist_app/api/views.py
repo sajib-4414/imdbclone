@@ -16,6 +16,7 @@ from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, Scoped
 from watchlist_app.api.throttling import ReviewCreateThrottle, ReviewListThrottle
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
+from watchlist_app.api.pagination import WatchListCursorPagination, WatchListLimitOffsetPagination, WatchlistPagination
 
 class UserReview(generics.ListAPIView):
     # queryset = Review.objects.all() to customize the queryset
@@ -102,8 +103,10 @@ class ReviewCreate(generics.CreateAPIView):
 class WatchListSearchView(generics.ListAPIView):
     queryset = WatchList.objects.all()
     serializer_class = WatchListSerializer
-    filter_backends = [filters.OrderingFilter]
-    ordering_fields = ['avg_rating']
+    # Cursor pagination defaults to created time based ordering and ASKS to disable other ordering
+    # filter_backends = [filters.OrderingFilter] 
+    # ordering_fields = ['avg_rating']
+    pagination_class = WatchListCursorPagination
     
     
 class WatchListView(APIView):

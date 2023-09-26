@@ -149,7 +149,13 @@ REST_FRAMEWORK = {
         'review-create': '1/day',
         'review-list': '10/day',
         'review-detail': '2/day',
-    }
+    },
+    # disables the browsable nice API page, but yyou can have a production settings file to disable in prod.
+     'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    )
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    # 'PAGE_SIZE': 5
 }
 # more https://django-rest-framework-simplejwt.readthedocs.io/en/latest/settings.html
 # common are rotate refresh token lifetime, access token lifetime, RT token lifetime
