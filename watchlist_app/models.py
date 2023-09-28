@@ -10,10 +10,10 @@ class StreamPlatform(models.Model):
     def __str__(self) -> str:
         return self.name
     
-class WatchList(models.Model):
+class Movie(models.Model):
     title = models.CharField(max_length=50)
     storyline = models.CharField(max_length=200)
-    platform = models.ForeignKey(StreamPlatform, on_delete=models.CASCADE, related_name="watchlist") # Many to One
+    platform = models.ForeignKey(StreamPlatform, on_delete=models.CASCADE, related_name="movie") # Many to One
     # here streamplatform has many watchlists, so to access the watchlists from a single stream platform
     # we can do this, netflix_watchlist = netflix.watchlist.all()
     active = models.BooleanField(default=True)
@@ -29,9 +29,9 @@ class Review(models.Model):
     rating = models.PositiveIntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
     description = models.CharField(max_length=200, null=True)
     active = models.BooleanField(default=True) #if a rview is spam, we inactive it
-    watchlist = models.ForeignKey(WatchList, on_delete=models.CASCADE, related_name='reviews')
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='reviews')
     created = models.DateTimeField(auto_now_add=True) # writes date when an object is created
     update = models.DateTimeField(auto_now=True) # writes date when an object is created, updated
     
     def __str__(self) -> str:
-        return str(self.rating) + ' | ' + self.watchlist.title + ' | ' + str(self.review_user)
+        return str(self.rating) + ' | ' + self.movie.title + ' | ' + str(self.review_user)

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from watchlist_app.models import WatchList, StreamPlatform, Review
+from watchlist_app.models import Movie, StreamPlatform, Review
 
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -7,20 +7,20 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         # fields = "__all__"
-        exclude = ('watchlist',) # must be a tuple. we are excluding, as we are using this to create the
+        exclude = ('movie',) # must be a tuple. we are excluding, as we are using this to create the
         #review also, and we dont want user to input a movie/watchlist id, it should be taaken from the
         #url, and we will set it programmatically, so by excluding this will not enforce watchlist id
         #tobe present in the payload.
       
 
-class WatchListSerializer(serializers.ModelSerializer):
+class MovieSerializer(serializers.ModelSerializer):
     # reviews = ReviewSerializer(many=True, read_only=True)
     # a custom populated serializer method field which does not exist on database
     # len_name = serializers.SerializerMethodField()
     
     platform = serializers.CharField(source='platform.name')
     class Meta:
-        model = WatchList
+        model = Movie
         # fields = "__all__" when serializing all fields of a model
         # fields = ('id', 'name', 'description') # if we're serializing some fields only
         exclude = ['active'] # serialize all but active
@@ -28,7 +28,7 @@ class WatchListSerializer(serializers.ModelSerializer):
 class StreamPlatformSerializer(serializers.ModelSerializer):
 # creates link instead of ID in the response
 # class StreamPlatformSerializer(serializers.HyperlinkedModelSerializer):
-    watchlist = WatchListSerializer(many=True, read_only=True) # this is the related name field, remember
+    movie = MovieSerializer(many=True, read_only=True) # this is the related name field, remember
     #we have related_name watchlist in the model foreign key declaration
     
     # it will show only watchlist names, which is the output of __str__ method. 

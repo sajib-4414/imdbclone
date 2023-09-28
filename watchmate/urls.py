@@ -6,7 +6,7 @@ urlpatterns = [
     # path("api-auth/", include('rest_framework.urls')),
     path("admin-dashboard/", admin.site.urls),
     path("api/v1/", include([
-        path("watch/", include('watchlist_app.api.urls')),
+        path("movies/", include('watchlist_app.api.urls')),
         path("account/", include('user_app.api.urls')),
     ])),
 ]

@@ -11,15 +11,15 @@ from rest_framework.throttling import (AnonRateThrottle, ScopedRateThrottle,
                                        UserRateThrottle)
 from rest_framework.views import APIView
 
-from watchlist_app.api.pagination import (WatchListCursorPagination,
-                                          WatchListLimitOffsetPagination,
-                                          WatchlistPagination)
+from watchlist_app.api.pagination import (MovieListCursorPagination,
+                                          MovieListLimitOffsetPagination,
+                                          MovieListPagination)
 from watchlist_app.api.permissions import (IsAdminOrReadOnly,
                                            IsReviewUserOrReadOnly)
 from watchlist_app.api.serializers import *
 from watchlist_app.api.throttling import (ReviewCreateThrottle,
                                           ReviewListThrottle)
-from watchlist_app.models import Review, StreamPlatform, WatchList
+from watchlist_app.models import Review, StreamPlatform, Movie
 
 
 class UserReview(generics.ListAPIView):
@@ -46,7 +46,7 @@ class ReviewList(generics.ListAPIView):
     
     def get_queryset(self):
         pk = self.kwargs['pk']
-        return Review.objects.filter(watchlist=pk)
+        return Review.objects.filter(movie=pk)
     
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Review.objects.all()
@@ -67,23 +67,23 @@ class ReviewCreate(generics.CreateAPIView):
     # https://www.django-rest-framework.org/api-guide/generic-views/#concrete-view-classes -> save and deletion hooks
     def perform_create(self, serializer): #override and customize the create method of createapiview
         pk = self.kwargs.get('pk')
-        watchlist = WatchList.objects.get(pk=pk)
+        movie = Movie.objects.get(pk=pk)
         
         user = self.request.user
         
-        review_queryset = Review.objects.filter(review_user=user, watchlist=watchlist)
+        review_queryset = Review.objects.filter(review_user=user, movie=movie)
         if review_queryset.exists():
             raise ValidationError('You have already reviewed this movie!')
         
-        if watchlist.number_rating == 0:
-            watchlist.avg_rating = serializer.validated_data['rating']
+        if movie.number_rating == 0:
+            movie.avg_rating = serializer.validated_data['rating']
         else:
-            watchlist.avg_rating = (watchlist.avg_rating * watchlist.number_rating + serializer.validated_data['rating']) / (watchlist.number_rating + 1)
+            movie.avg_rating = (movie.avg_rating * movie.number_rating + serializer.validated_data['rating']) / (movie.number_rating + 1)
         
-        watchlist.number_rating = watchlist.number_rating + 1
-        watchlist.save()
+        movie.number_rating = movie.number_rating + 1
+        movie.save()
         
-        serializer.save(watchlist=watchlist, review_user=user) # saving the review for that particular movie
+        serializer.save(movie=movie, review_user=user) # saving the review for that particular movie
 
 
 # class ReviewList(mixins.ListModelMixin, mixins.CreateModelMixin, GenericAPIView):
@@ -104,46 +104,46 @@ class ReviewCreate(generics.CreateAPIView):
 #         return self.retrieve(request, *args, **kwargs)
 
 # to test search only
-class WatchListSearchView(generics.ListAPIView):
-    queryset = WatchList.objects.all()
-    serializer_class = WatchListSerializer
+class MovieSearchView(generics.ListAPIView):
+    queryset = Movie.objects.all()
+    serializer_class = MovieSerializer
     # Cursor pagination defaults to created time based ordering and ASKS to disable other ordering
     # filter_backends = [filters.OrderingFilter] 
     # ordering_fields = ['avg_rating']
-    pagination_class = WatchListCursorPagination
+    pagination_class = MovieListCursorPagination
     
     
-class WatchListView(APIView):
+class MovieListGetCreateView(APIView):
     permission_classes = [IsAdminOrReadOnly]
     def get(self, request):
-        movies = WatchList.objects.all()
-        serializer = WatchListSerializer(movies, many=True)
+        movies = Movie.objects.all()
+        serializer = MovieSerializer(movies, many=True)
         return Response(serializer.data)
     
     def post(self, request):
-        serializer = WatchListSerializer(data=request.data)
+        serializer = MovieSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class WatchListDetailView(APIView):
+class MovieDetailView(APIView):
     permission_classes = [IsAdminOrReadOnly]
     
     def get_object(self, pk):
         try:
-            return WatchList.objects.get(pk=pk)
-        except WatchList.DoesNotExist:
+            return Movie.objects.get(pk=pk)
+        except Movie.DoesNotExist:
             raise Http404
     
     def get(self, request, pk):
         movie = self.get_object(pk)
-        serializer = WatchListSerializer(movie)
+        serializer = MovieSerializer(movie)
         return Response(serializer.data)
     
     def put(self, request, pk):
         movie = self.get_object(pk)
-        serializer = WatchListSerializer(movie, data=request.data)
+        serializer = MovieSerializer(movie, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)

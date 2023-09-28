@@ -1,9 +1,9 @@
 from django.urls import path,include
-from watchlist_app.api.views import (WatchListDetailView, WatchListView, 
+from watchlist_app.api.views import (MovieDetailView, MovieListGetCreateView, 
                                     #  StreamPlatformView, StreamPlatformDetailView, 
                                      ReviewList,
                                      ReviewDetail, ReviewCreate, StreamPlatformViewSet, UserReview,
-                                     WatchListSearchView
+                                     MovieSearchView
                                      )
 from rest_framework.routers import DefaultRouter
 
@@ -12,14 +12,14 @@ router.register('stream', StreamPlatformViewSet, basename='streamplatform') #thi
 #individual get, delete, put all endpoints
 
 urlpatterns = [
-    path("", WatchListView.as_view(), name='movie-list'), # for class based view you need as_view()
-    path('<int:pk>/', WatchListDetailView.as_view(), name='movie-detail'),
+    path("", MovieListGetCreateView.as_view(), name='movie-list'), # for class based view you need as_view()
+    path('<int:pk>/', MovieDetailView.as_view(), name='movie-detail'),
     # path('stream/', StreamPlatformView.as_view(), name='stream-list'),
     # path('stream/<int:pk>/', StreamPlatformDetailView.as_view(), name='streamplatform-detail'),
     path('',include(router.urls)),
     
     # for testing search results
-    path('list2/', WatchListSearchView.as_view(), name='watch-list'),
+    path('list2/', MovieSearchView.as_view(), name='watch-list'),
     
     #viewsets works fine for simple tasks, but the following urls, where we have to do complex lookup and creation, 
     # non viewset views are easier to implement

@@ -82,7 +82,7 @@ class WatchListTestCase(APITestCase):
             "website": "https://netflix.com"
         }
         self.stream = models.StreamPlatform.objects.create(**kwargs)
-        self.watchlist = models.WatchList.objects.create(platform=self.stream, title="Rocky handsome movie",
+        self.movie = models.Movie.objects.create(platform=self.stream, title="Rocky handsome movie",
                                                          storyline = "A brave movie", active=True)
         
         
@@ -114,10 +114,10 @@ class WatchListTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
     def test_watchlist_individual_get(self):
-        response = self.client.get(reverse('movie-detail', args=[self.watchlist.id]))
+        response = self.client.get(reverse('movie-detail', args=[self.movie.id]))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(models.WatchList.objects.count(), 1)
-        self.assertEqual(models.WatchList.objects.get().title, 'Rocky handsome movie')
+        self.assertEqual(models.Movie.objects.count(), 1)
+        self.assertEqual(models.Movie.objects.get().title, 'Rocky handsome movie')
     
     # this view requires admin credential to update.
     def test_watchlist_update(self):
@@ -126,12 +126,12 @@ class WatchListTestCase(APITestCase):
             "storyline": "new storyline",
             "active": True
         }
-        response = self.client.put(reverse('movie-detail', args=[self.watchlist.id]), data) # viewset creates viewnames like this
+        response = self.client.put(reverse('movie-detail', args=[self.movie.id]), data) # viewset creates viewnames like this
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
     
     # this view requires admin credential to delete.
     def test_watchlist_delete(self):
-        response = self.client.delete(reverse('movie-detail', args=[self.watchlist.id])) # viewset creates viewnames like this
+        response = self.client.delete(reverse('movie-detail', args=[self.movie.id])) # viewset creates viewnames like this
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
     
 class ReviewTestCase(APITestCase):
@@ -149,46 +149,46 @@ class ReviewTestCase(APITestCase):
             "website": "https://netflix.com"
         }
         self.stream = models.StreamPlatform.objects.create(**kwargs)
-        self.watchlist = models.WatchList.objects.create(platform=self.stream, title="Rocky handsome movie",
+        self.movie = models.Movie.objects.create(platform=self.stream, title="Rocky handsome movie",
                                                          storyline = "A brave movie", active=True)
-        self.watchlist2 = models.WatchList.objects.create(platform=self.stream, title="Rocky handsome movie",
+        self.movie2 = models.Movie.objects.create(platform=self.stream, title="Rocky handsome movie",
                                                          storyline = "A brave movie", active=True)
-        self.review = models.Review.objects.create(watchlist=self.watchlist2, review_user=self.user, rating=5,
+        self.review = models.Review.objects.create(movie=self.movie2, review_user=self.user, rating=5,
                                                      description="Awesome movie", active=True)
         
     def test_review_create(self):
         data = {
-            "watchlist":self.watchlist,
+            "movie":self.movie,
             "user":self.user,
             "rating":5,
             "description":"Awesome movie",
             "active":True
         }
-        response = self.client.post(reverse('review-create', args=[self.watchlist.id]),data)
+        response = self.client.post(reverse('review-create', args=[self.movie.id]),data)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         
         self.assertEqual(models.Review.objects.count(), 2)
         self.assertEqual(models.Review.objects.first().description, 'Awesome movie')
         
         # review is not allowed to be created second time, one person one review only
-        response = self.client.post(reverse('review-create', args=[self.watchlist.id]),data)
+        response = self.client.post(reverse('review-create', args=[self.movie.id]),data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         
     def test_review_create_un_authorized(self):
         data = {
-            "watchlist":self.watchlist,
+            "movie":self.movie,
             "user":self.user,
             "rating":5,
             "description":"Awesome movie",
             "active":True
         }
         self.client.force_authenticate(user=None) # means not logged in
-        response = self.client.post(reverse('review-create', args=[self.watchlist.id]),data)
+        response = self.client.post(reverse('review-create', args=[self.movie.id]),data)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
     
     def test_review_update(self):
         data = {
-            "watchlist":self.watchlist,
+            "movie":self.movie,
             "user":self.user,
             "rating":2,
             "description":"Awesome movie updated",
@@ -198,7 +198,7 @@ class ReviewTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
     
     def test_review_list(self):
-        response = self.client.get(reverse('review-list',args=[self.watchlist.id]))
+        response = self.client.get(reverse('review-list',args=[self.movie.id]))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
     
     def test_review_individual(self):
@@ -210,6 +210,6 @@ class ReviewTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
     
     def test_review_user(self):
-        response = self.client.get('/api/v1/watch/user-reviews/?username='+self.user.username)
+        response = self.client.get('/api/v1/movies/user-reviews/?username='+self.user.username)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
