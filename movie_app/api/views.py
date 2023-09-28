@@ -11,15 +11,15 @@ from rest_framework.throttling import (AnonRateThrottle, ScopedRateThrottle,
                                        UserRateThrottle)
 from rest_framework.views import APIView
 
-from watchlist_app.api.pagination import (MovieListCursorPagination,
+from movie_app.api.pagination import (MovieListCursorPagination,
                                           MovieListLimitOffsetPagination,
                                           MovieListPagination)
-from watchlist_app.api.permissions import (IsAdminOrReadOnly,
+from movie_app.api.permissions import (IsAdminOrReadOnly,
                                            IsReviewUserOrReadOnly)
-from watchlist_app.api.serializers import *
-from watchlist_app.api.throttling import (ReviewCreateThrottle,
+from movie_app.api.serializers import *
+from movie_app.api.throttling import (ReviewCreateThrottle,
                                           ReviewListThrottle)
-from watchlist_app.models import Review, StreamPlatform, Movie
+from movie_app.models import Review, StreamPlatform, Movie
 
 
 class UserReview(generics.ListAPIView):

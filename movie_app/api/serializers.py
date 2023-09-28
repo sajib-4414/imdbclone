@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from watchlist_app.models import Movie, StreamPlatform, Review
+from movie_app.models import Movie, StreamPlatform, Review
 
 
 class ReviewSerializer(serializers.ModelSerializer):

@@ -5,8 +5,8 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 
-from watchlist_app.api import serializers
-from watchlist_app import models
+from movie_app.api import serializers
+from movie_app import models
 
 class StreamPlatformTestCase(APITestCase):
     def setUp(self):
