@@ -144,11 +144,11 @@ REST_FRAMEWORK = {
     #     'rest_framework.throttling.UserRateThrottle'
     # ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '1/day',
-        'user': '3/day',
-        'review-create': '1/day',
-        'review-list': '10/day',
-        'review-detail': '2/day',
+        'anon': '100/day',
+        'user': '300/day',
+        'review-create': '50/day',
+        'review-list': '100/day',
+        'review-detail': '200/day',
     },
     # disables the browsable nice API page, but yyou can have a production settings file to disable in prod.
      'DEFAULT_RENDERER_CLASSES': (

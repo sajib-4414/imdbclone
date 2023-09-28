@@ -1,22 +1,26 @@
-from watchlist_app.models import WatchList, StreamPlatform, Review
-from watchlist_app.api.serializers import (WatchListSerializer, StreamPlatformSerializer,
-                                           ReviewSerializer)
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
-from rest_framework.views import APIView
-from rest_framework import status
 from django.http import Http404
+from django_filters.rest_framework import DjangoFilterBackend
 # from rest_framework import mixins 
-from rest_framework import generics
-from rest_framework import viewsets
+from rest_framework import filters, generics, status, viewsets
 # from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
-from watchlist_app.api.permissions import IsAdminOrReadOnly, IsReviewUserOrReadOnly
-from rest_framework.throttling import UserRateThrottle, AnonRateThrottle, ScopedRateThrottle
-from watchlist_app.api.throttling import ReviewCreateThrottle, ReviewListThrottle
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
-from watchlist_app.api.pagination import WatchListCursorPagination, WatchListLimitOffsetPagination, WatchlistPagination
+from rest_framework.permissions import (IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
+from rest_framework.response import Response
+from rest_framework.throttling import (AnonRateThrottle, ScopedRateThrottle,
+                                       UserRateThrottle)
+from rest_framework.views import APIView
+
+from watchlist_app.api.pagination import (WatchListCursorPagination,
+                                          WatchListLimitOffsetPagination,
+                                          WatchlistPagination)
+from watchlist_app.api.permissions import (IsAdminOrReadOnly,
+                                           IsReviewUserOrReadOnly)
+from watchlist_app.api.serializers import *
+from watchlist_app.api.throttling import (ReviewCreateThrottle,
+                                          ReviewListThrottle)
+from watchlist_app.models import Review, StreamPlatform, WatchList
+
 
 class UserReview(generics.ListAPIView):
     # queryset = Review.objects.all() to customize the queryset
