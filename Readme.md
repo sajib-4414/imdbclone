@@ -1,4 +1,4 @@
-# Project Name
+# IMDB Movie Review Backend
 
 IMDB movie review app clone with Django REST framework backend APIs.
 
