@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx-api-gateway
+    ports:
+      - "8005:80"
+    volumes:
+      - ./nginx-config.conf:/etc/nginx/nginx.conf
+      - ./user_service/static:/app/static  # Map the volume for static files
+    depends_on:
+      - auth-service
+      - user-service
+      - movie-service
+    networks:
+      - main-internal-net
+  
+  auth-service:
+    build:
+      context: ./auth-service  # Path to the directory containing your FastAPI authentication service
+      dockerfile: dev.Dockerfile
+    ports:
+      - "8003:8003"
+    volumes:
+      - ./auth-service:/app
+    networks:
+      - main-internal-net
+  
+  movie-service:
+    build:
+      context: ./movie-service  # Relative path to the movie-service folder
+      dockerfile: dev.Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./movie-service:/app  # Map the volume for the code in the movie-service folder
+    ports:
+      - "8001:8000"
+    networks:
+      - main-internal-net
+  user-service:
+    build:
+      context: ./user_service  # Relative path to the user_service folder
+      dockerfile: dev.Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./user_service:/app  # Map the volume for the code in the user_service folder
+    ports:
+      - "8002:8000"
+    networks:
+      - main-internal-net
+
+networks:
+  main-internal-net:
+    driver: bridge
