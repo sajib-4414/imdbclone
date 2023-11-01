@@ -24,6 +24,12 @@ def registration_view(request):
         data = {}
         
         if serializer.is_valid():
+            validated_data = serializer.validated_data
+            token_data = {
+                "username": validated_data['username'],
+                "email": validated_data['email'],
+                # Add any other necessary data for token creation
+            }
             response = httpx.post("http://auth-service:8003/token/create/", json=token_data)
             if response.status_code == 200:
                 token = response.json().get("token")
@@ -38,11 +44,7 @@ def registration_view(request):
             data['username'] = account.username
             data['email'] = account.email
 
-            token_data = {
-                "username": account.username,
-                "email": account.email,
-                # Add any other necessary data for token creation
-            }
+            
             
             
             # token = Token.objects.get(user=account).key
