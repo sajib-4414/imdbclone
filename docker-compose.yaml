@@ -8,6 +8,7 @@ services:
       - "8005:80"
     volumes:
       - ./nginx-config.conf:/etc/nginx/nginx.conf
+      - ./user_service/static:/app/static  # Map the volume for static files
     depends_on:
       - auth-service
       - user-service

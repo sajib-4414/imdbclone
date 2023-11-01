@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+servicePrefix = "user-service/"
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path(f"{servicePrefix}admin/", admin.site.urls),
 ]

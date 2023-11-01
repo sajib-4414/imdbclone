@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Response
+from fastapi import FastAPI, Response, HTTPException
 import uvicorn
 import httpx
 
@@ -6,8 +6,10 @@ app = FastAPI()
 
 @app.get("/")
 async def read_root():
-    return {"message": "Hello, World"}
-
+    auth = False
+    if auth:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    return Response(status_code=204) 
 # # # Define endpoints for various microservices
 # # @app.get("/user-service/{path:path}")
 # # async def user_service_pass_through(path: str):
@@ -27,6 +29,7 @@ async def read_root():
 
 # @app.get("/movie-service/{path:path}")
 # async def tile_request(path: str, response: Response):
+#     print("Hi here")
 #     async with httpx.AsyncClient() as client:
 #         proxy = await client.get(f"http://movie-service:8001/{path}")
 #     response.body = proxy.content
