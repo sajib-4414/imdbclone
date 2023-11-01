@@ -12,6 +12,8 @@ services:
       - auth-service
       - user-service
       - movie-service
+    networks:
+      - main-internal-net
   
   auth-service:
     build:
@@ -19,6 +21,10 @@ services:
       dockerfile: dev.Dockerfile
     ports:
       - "8003:8003"
+    volumes:
+      - ./auth-service:/app
+    networks:
+      - main-internal-net
   
   movie-service:
     build:
@@ -29,6 +35,8 @@ services:
       - ./movie-service:/app  # Map the volume for the code in the movie-service folder
     ports:
       - "8001:8000"
+    networks:
+      - main-internal-net
   user-service:
     build:
       context: ./user_service  # Relative path to the user_service folder
@@ -38,4 +46,9 @@ services:
       - ./user_service:/app  # Map the volume for the code in the user_service folder
     ports:
       - "8002:8000"
-  
+    networks:
+      - main-internal-net
+
+networks:
+  main-internal-net:
+    driver: bridge
