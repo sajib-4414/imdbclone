@@ -9,6 +9,6 @@ urlpatterns = [
     path(f"{servicePrefix}admin-dashboard/", admin.site.urls),
     path(f"{servicePrefix}api/v1/", include([
         path("movies/", include('movie_app.api.urls')),
-        path("account/", include('user_app.api.urls')),
+        # path("account/", include('user_app.api.urls')),
     ])),
 ]

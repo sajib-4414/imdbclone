@@ -38,9 +38,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "movie_app",
-    "user_app",
     "rest_framework",
-    'rest_framework.authtoken', #this will create a token table in the database,
+    # 'rest_framework.authtoken', #this will create a token table in the database,
     'django_filters'
 ]
 

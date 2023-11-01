@@ -1,40 +1,63 @@
-from fastapi import FastAPI, Response, HTTPException
+from fastapi import FastAPI, Response, HTTPException, Header
+from model import TokenUser
+from jose import jwt, JWTError
 import uvicorn
 import httpx
+from datetime import datetime, timedelta
 
 app = FastAPI()
 
+# Define a secret key for JWT token signing (keep this secret)
+SECRET_KEY = "your-secret-key"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30  # Adjust expiration time as needed
+
+# Secret key used to encode and decode JWT tokens
+SECRET_KEY = "your-secret-key"
+ALGORITHM = "HS256"
+
+# Function to validate a JWT token
+def validate_token(token: str):
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        # You can add additional checks here, e.g., checking expiration
+        return payload
+    except JWTError:
+        return None
+
+# Create an API endpoint to validate a token
+@app.post("/token/validate/")
+def validate_jwt_token(authorization: str = Header(None)):
+    if not authorization:
+        raise HTTPException(status_code=401, detail="Authorization header is missing")
+    
+
+    token = authorization.replace("Bearer ", "")
+    payload = validate_token(token)
+    if payload:
+        # Token is valid
+        return {"message": "Token is valid", "payload": payload}
+    else:
+        # Token is invalid
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+# Endpoint to generate tokens (similar to your code)
+@app.post("/token/create/")
+def create_token(user: TokenUser):
+    expires = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    payload = {
+        "sub": user.username,
+        "exp": expires,
+    }
+    token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
+    return {"token": token}
+        
 @app.get("/")
 async def read_root():
     auth = False
     if auth:
         raise HTTPException(status_code=401, detail="Unauthorized")
     return Response(status_code=204) 
-# # # Define endpoints for various microservices
-# # @app.get("/user-service/{path:path}")
-# # async def user_service_pass_through(path: str):
-# #     # This endpoint passes the request to the user service
-# #     return {"message": "User service pass-through", "path": path}
-
-# # @app.get("/movie-service/{path:path}")
-# # async def movie_service_pass_through(path: str):
-# #     # This endpoint passes the request to the movie service
-# #     print("came here")
-# #     return {"message": "Movie service pass-through", "path": path}
-
-# @app.get("/new")
-# async def user_service_pass_through():
-#     # This endpoint passes the request to the user service
-#     return {"hi": "User service pass-through"}
-
-# @app.get("/movie-service/{path:path}")
-# async def tile_request(path: str, response: Response):
-#     print("Hi here")
-#     async with httpx.AsyncClient() as client:
-#         proxy = await client.get(f"http://movie-service:8001/{path}")
-#     response.body = proxy.content
-#     response.status_code = proxy.status_code
-#     return response
 
 # if __name__ == "__main__":
 #     uvicorn.run(app, host="0.0.0.0", port=8003)

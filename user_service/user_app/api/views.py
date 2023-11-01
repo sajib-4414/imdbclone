@@ -2,8 +2,10 @@ from rest_framework.decorators import api_view
 from user_app.api.serializers import RegistrationSerializer
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.authtoken.models import Token
-from rest_framework_simplejwt.tokens import RefreshToken
+from django.http import HttpResponseBadRequest
+import httpx
+# from rest_framework.authtoken.models import Token
+# from rest_framework_simplejwt.tokens import RefreshToken
 # from user_app.models import * #sometime the signal file doesn't fire, in that case load that file
 
 @api_view(['POST',])
@@ -22,14 +24,29 @@ def registration_view(request):
         data = {}
         
         if serializer.is_valid():
+            response = httpx.post("http://auth-service:8003/token/create/", json=token_data)
+            if response.status_code == 200:
+                token = response.json().get("token")
+                data['token'] = token
+            else:
+                # Handle token creation error
+                data['token'] = 'Token creation failed'
+                raise HttpResponseBadRequest("Token creation failed")
+
             account = serializer.save()
-            
             data['response'] = 'Registration Successful'
             data['username'] = account.username
             data['email'] = account.email
+
+            token_data = {
+                "username": account.username,
+                "email": account.email,
+                # Add any other necessary data for token creation
+            }
             
-            token = Token.objects.get(user=account).key
-            data['token'] = token
+            
+            # token = Token.objects.get(user=account).key
+            # data['token'] = token
             # refresh = RefreshToken.for_user(account)
             # data['token'] =  {
             # 'refresh': str(refresh),
