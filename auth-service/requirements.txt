@@ -3,3 +3,5 @@ uvicorn==0.15.0
 httpx 
 pydantic
 python-jose
+requests
+idna

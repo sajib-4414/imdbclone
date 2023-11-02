@@ -23,4 +23,18 @@ class RegistrationSerializer(serializers.ModelSerializer):
         account.save()
         
         return account
-        
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField()
+
+    def validate(self, data):
+        username = data.get('username')
+        password = data.get('password')
+
+        if not username:
+            raise serializers.ValidationError({'username': 'Username is required'})
+        if not password:
+            raise serializers.ValidationError({'password': 'Password is required'})
+
+        return data

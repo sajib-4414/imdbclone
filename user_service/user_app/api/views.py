@@ -1,8 +1,10 @@
 from rest_framework.decorators import api_view
-from user_app.api.serializers import RegistrationSerializer
+from user_app.api.serializers import RegistrationSerializer, LoginSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import HttpResponseBadRequest
+from django.contrib.auth import authenticate, login
+from django.http import JsonResponse
 import httpx
 # from rest_framework.authtoken.models import Token
 # from rest_framework_simplejwt.tokens import RefreshToken
@@ -60,3 +62,24 @@ def registration_view(request):
             data = serializer.errors
             
         return Response(data, status.HTTP_201_CREATED)
+
+@api_view(['POST'])
+def login_validate_view(request):
+
+    if request.method == 'POST':
+        serializer = LoginSerializer(data=request.data)
+        data = {}
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            user = authenticate(request, username=validated_data['username'], password=validated_data['password'])
+            if user is not None:
+            # The username and password are correct
+                login(request, user)  # Log the user in
+                return JsonResponse({
+                    'username': user.get_username(),
+                    'email': user.email
+                })
+            else:
+                # The username and password are not correct
+                return JsonResponse({'message': 'Invalid username or password'}, status=401)
+        return JsonResponse({'message': 'wrong data'}, status=401)
