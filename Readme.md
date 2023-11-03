@@ -83,3 +83,6 @@ Regular user:
 * Token Authentication
 * Throttling to limit requests.
 
+#### grpc code
+protoc -I . --pyi_out=. user_login_verification.proto
+protoc -I . --python_out=. user_login_verification.proto
