@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "user_app",
     "rest_framework",
+    'django_grpc_framework',
     # 'rest_framework.authtoken' #this will create a token table in the database
 ]
 

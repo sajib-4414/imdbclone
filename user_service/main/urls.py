@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,  include
+from user_app.grpc_views.validate_handler import grpc_handlers as login_validate_grpc_handlers
 
 servicePrefix = "user-service/"
 
@@ -24,3 +25,6 @@ urlpatterns = [
         path("account/", include('user_app.api.urls')),
     ])),
 ]
+
+def grpc_handlers(server):
+    login_validate_grpc_handlers(server)
