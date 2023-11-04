@@ -1,14 +1,3 @@
-# the following code block is to load module outside the project
-import sys
-import os
-
-# Define the path to the directory containing the module you want to import
-external_module_dir = '../'  # Replace with the actual directory path
-
-# Add the directory to sys.path
-sys.path.append(external_module_dir)
-###
-
 from django_grpc_framework import proto_serializers
 from login_proto import login_grpc_pb2
 from rest_framework import serializers
@@ -40,4 +29,5 @@ class LoginProtoSerializer(proto_serializers.ProtoSerializer):
         return {
             'username': instance.username,
             'email': instance.email,
+            'valid':True
         }

@@ -42,11 +42,12 @@ services:
     build:
       context: ./user_service  # Relative path to the user_service folder
       dockerfile: dev.Dockerfile
-    command: python manage.py runserver 0.0.0.0:8000
+    command: python runcommand.py
     volumes:
       - ./user_service:/app  # Map the volume for the code in the user_service folder
     ports:
       - "8002:8000"
+      - "5008:50051"
     networks:
       - main-internal-net
 

@@ -4,3 +4,7 @@ from pydantic import BaseModel
 class TokenUser(BaseModel):
     username: str
     email: str
+
+class LoginRequestBody(BaseModel):
+    username: str
+    password: str

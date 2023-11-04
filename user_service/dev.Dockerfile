@@ -22,6 +22,10 @@ RUN python manage.py collectstatic --noinput
 
 # Expose the port on which your Django app will run
 EXPOSE 8000
+EXPOSE 50051
 
-# Define the command to run your Django application
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# # Define the command to run your Django application
+# CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+
+CMD ["python", "runcommand.py"]

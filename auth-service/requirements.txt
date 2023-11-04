@@ -5,3 +5,5 @@ pydantic
 python-jose
 requests
 idna
+grpcio
+grpcio-tools

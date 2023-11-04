@@ -68,9 +68,12 @@ def login_validate_view(request):
 
     if request.method == 'POST':
         serializer = LoginSerializer(data=request.data)
-        data = {}
+        print("request data is")
+        print(request.data)
         if serializer.is_valid():
             validated_data = serializer.validated_data
+            print("validated data is ")
+            print(validated_data)
             user = authenticate(request, username=validated_data['username'], password=validated_data['password'])
             if user is not None:
             # The username and password are correct
