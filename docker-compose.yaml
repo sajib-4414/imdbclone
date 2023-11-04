@@ -42,7 +42,7 @@ services:
     build:
       context: ./user_service  # Relative path to the user_service folder
       dockerfile: dev.Dockerfile
-    command: python runcommand.py
+    command: /usr/bin/supervisord #python runcommand.py
     volumes:
       - ./user_service:/app  # Map the volume for the code in the user_service folder
     ports:

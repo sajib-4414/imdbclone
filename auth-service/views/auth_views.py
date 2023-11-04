@@ -1,10 +1,7 @@
-from fastapi import HTTPException, Request, Body
+from fastapi import HTTPException, Request, Body, APIRouter, status
 from model import TokenUser, LoginRequestBody
-import json
-import requests
 from helpers.token_helper import token_creator
-# auth_views.py
-from fastapi import APIRouter
+from helpers.error_parser import grpc_error_parser
 import grpc
 from login_proto import login_grpc_pb2, login_grpc_pb2_grpc
 router = APIRouter()
@@ -15,17 +12,23 @@ router = APIRouter()
 async def login(request: Request, login_request: LoginRequestBody = Body(...)):
     username = login_request.username
     password = login_request.password
-    with grpc.insecure_channel('user-service:50051') as channel:
-        stub = login_grpc_pb2_grpc.UserLoginServiceStub(channel)
-        response = stub.ValidateUser(login_grpc_pb2.UserValidationRequest(username=username,password=password))
-        is_credential_valid = response.valid
-        # print(response, end="")
-        if is_credential_valid:
-            tokenuser = TokenUser(username=username, email=response.email)
-            token = token_creator(tokenuser)
-            return {"token": token}
-        else:
-            raise HTTPException(status_code=401, detail="Invalid username or password")
+    try:
+        with grpc.insecure_channel('user-service:50051') as channel: #always use internal port of service in the code,external port is for postman or external client
+            stub = login_grpc_pb2_grpc.UserLoginServiceStub(channel)
+            response = stub.ValidateUser(login_grpc_pb2.UserValidationRequest(username=username,password=password))
+            is_credential_valid = response.valid
+            # print(response, end="")
+            if is_credential_valid:
+                tokenuser = TokenUser(username=username, email=response.email)
+                token = token_creator(tokenuser)
+                return {"token": token}
+            else:
+                raise HTTPException(status_code=401, detail="Invalid username or password")
+    except grpc.RpcError as rpc_error:
+        parsed_errors = grpc_error_parser(rpc_error)
+        http_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED , detail=parsed_errors)
+        raise http_exception
+        
     
     # Working code to call another service with REST api with docker, just transitioned to GRPC
     # data = {

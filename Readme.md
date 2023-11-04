@@ -15,7 +15,11 @@ Load Balancer: For development, nginx. django admin's file serving is not workin
 
 Database: database per service, will try to use mysql, postgres. will try to use Redis, MongoDB for some service. 
 * **Authentication**: it is a Flask, lightweight microservice, just does authentication, for now generate JWT token, and return to user. it contacts the user service through grpc for login call. Most of the API calls of all services are set to have authentication through this auth service in the nginx configuration. Planned to mgirate to Oauth2. 
-* **User service**: handles signup of user and user profile updates.
+
+Testcases written some, need to work on mocking grpc
+* **User service**: handles signup of user and user profile updates. it has two servers running, grpc server for login validate, and development server for grpc
+Testcases are written, both type of testcases python manage.py test and also pytest.
+But it seems like running python manage.py test runs all test cases everywhere.
 * **Movie service**: handles movie creation,only admin can create movies. handles watchlist creation by individual users. In future: will have cast, crew, release date, these features.
 * **Comments and Discussion**: In future, will handle comments, reply, discussion.
 * **Notification service**: Plan to do this in Flask. In future will send in app and email notification for comments, replies, new movies added which they might like
@@ -107,6 +111,10 @@ Regular user:
 * Token Authentication
 * Throttling to limit requests.
 
+## How I added test
+* to run test files with name `test_` and files that subclass `TestCase`, install `pytest`, `pytest-django`, and have a `pytest.ini` file in the root project directory with database settings[at minimum] and other settings. and then run pytest. I did this in `user_service`
+* to run test files with tests.py, run `python manage.py test`
+
 ### How did I add Grpc microservice.
 * I added Grpc through django-grpc-server framework. https://djangogrpcframework.readthedocs.io/en/latest/
 * current version 0.2.1 is ONLY compatible with django 4.0.10, if you have higher django version then you have to modify some parts of the django libarary in the site packages folder.
@@ -128,3 +136,4 @@ and start a grpc server, and it can accept grpc requests and send respons in the
    - Create Hanlder either in a handler.py file or in the urls file
    - run the grpc server `python manage.py grpcrunserver --dev`, 
    - I faced significant issue with packages in the proto file. I beleive it is best to keep the proto file inside a folder, and mention it as a pacakage in the proto file. then the generated python files also will be under a package directory, and will import themselves(the pb2grpc will improt pb2) from packages. the package example is found in the building a service section of the grpc. 
+   - **Limitation**: at present the generated pb2 and pb2 grpc files, i am copying them to both of the services which creates grpc server and which calls it. in future i plan to make it a library.
