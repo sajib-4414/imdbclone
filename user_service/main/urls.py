@@ -14,10 +14,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,  include
+from user_app.grpc_views.validate_handler import grpc_handlers as login_validate_grpc_handlers
 
 servicePrefix = "user-service/"
 
 urlpatterns = [
     path(f"{servicePrefix}admin/", admin.site.urls),
+    path(f"{servicePrefix}api/v1/",  include([
+        path("account/", include('user_app.api.urls')),
+    ])),
 ]
+
+def grpc_handlers(server):
+    login_validate_grpc_handlers(server)

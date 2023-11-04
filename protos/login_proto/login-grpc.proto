@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package login_proto;
+
+import "google/protobuf/empty.proto";
+
+
+service UserLoginService {
+  // Method to validate user credentials
+  rpc ValidateUser (UserValidationRequest) returns (UserValidationResponse){}
+}
+
+
+message UserValidationRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message UserValidationResponse {
+  bool valid = 1;
+  string username = 2;
+  string email = 3;
+}
