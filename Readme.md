@@ -14,9 +14,13 @@ IMDB movie review app clone with Django REST framework backend APIs.
 Load Balancer: For development, nginx. django admin's file serving is not working right now when admin of individual services is accessed through ngninx.
 
 Database: database per service, will try to use mysql, postgres. will try to use Redis, MongoDB for some service. 
-* **Authentication**: it is a Flask, lightweight microservice, just does authentication, for now generate JWT token, and return to user. it contacts the user service through grpc for login call. Most of the API calls of all services are set to have authentication through this auth service in the nginx configuration. Planned to mgirate to Oauth2. 
+* **Authentication**: it is a Flask, lightweight microservice
+    * Central authenticaiton: except some API calls, all microservice API calls will pass through central auth api, it validates the token and then sends the username in the header to the desitnation microservice. 
+    **Important** !!There is custom authentication file set in the django setttings.py file for each service,that will identify the user in the request.user. Example how to do for other services: look at the movie_service, in movie_service/main/custom_authentication_backend.py file, and see it is added as authentication in the movie_service/main/settings.py file. it requires all the microservices will have same userdatabase copy, otherwise through load balancer, nobody will be able to access any API of any service. Planned to mgirate to Oauth2. 
+   * Login: for now generate JWT token, and return to user. it contacts the user service through grpc for validating login credentials. 
 
-Testcases written some, need to work on mocking grpc
+some testcases are written , need to work on mocking grpc
+
 * **User service**: handles signup of user and user profile updates. it has two servers running, grpc server for login validate, and development server for grpc
 Testcases are written, both type of testcases python manage.py test and also pytest.
 But it seems like running python manage.py test runs all test cases everywhere.
@@ -44,6 +48,13 @@ But it seems like running python manage.py test runs all test cases everywhere.
 ## Documentation.
 * Add swagger UI for API documentation
 * Add sphinx for Project documentation
+
+## Some steps i converted monolith movie app to microservice
+usecase for monolith movie app to User-service+Movie_service
+* **Creating table, copying data**: in the beginning it was movie review monolith app. then i created another app, user_microservice with the same user table. now i copied the original app's user_table data to the user_microservice, then all user related tables, i created and copied the data. then i kept just the user table as a copy database in the original app. 
+* **Moving code and API paths**: I copied the code directly associated with the user table, login, signup, permission, other information code to user_service. I ensured testcases passed, and the user_services was working. I then slowly commented out those codes in the original app to make sure it is not referecing anything more than just the core user table, which is needed to map movies to users. When I commented everything, and tested, it all worked. Then i added the user_services to the load balancer, so that the user related api calls are directed to the User service.
+* **Setting Custom authentication**:Now the user service should contain all user related tables. and should handle login, signup, but the movie service should not do those. and most importantly these databases should be in sync.[with event based systems, we can restream previously lost events to create missing users]. so i made sure user is only authenticatiing with the user_service with JWT and with that JWT token they can access movie service. movie service will recognize the jwt token and map it to the user of its dataabase and let user access api. (Actually, I did central authentication though, where all call will pass via auth_service[i further broke down user service to a user_service+stateless auth service], if yes then it will pass username in the header, movie service is identifying the user from the database with custom authentication file set inthe django setings). it will modify the request.user for every request.
+* **Slowly delete code** : Now when I saw that login, signup, profile modify is done via user_service, and movie service can effectively work with movie releated things with its movie table and user table. I deleted the code. I also deleted the tables from the movie service's database. also tested the code to see all existing funcationality works or not.
 
 ## Description
 User Role:

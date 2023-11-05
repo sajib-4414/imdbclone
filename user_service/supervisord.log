@@ -98,3 +98,293 @@
 2023-11-04 23:48:22,593 INFO waiting for django, grpc to die
 2023-11-04 23:48:22,687 INFO stopped: grpc (exit status 0)
 2023-11-04 23:48:22,763 INFO stopped: django (exit status 0)
+2023-11-04 23:53:19,414 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-04 23:53:19,421 INFO supervisord started with pid 1
+2023-11-04 23:53:20,424 INFO spawned: 'django' with pid 13
+2023-11-04 23:53:20,426 INFO spawned: 'grpc' with pid 14
+2023-11-04 23:53:21,428 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-04 23:53:21,428 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 00:06:06,460 WARN received SIGTERM indicating exit request
+2023-11-05 00:06:06,461 INFO waiting for django, grpc to die
+2023-11-05 00:06:06,544 INFO stopped: grpc (exit status 0)
+2023-11-05 00:06:06,621 INFO stopped: django (exit status 0)
+2023-11-05 00:06:09,403 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 00:06:09,417 INFO supervisord started with pid 1
+2023-11-05 00:06:10,420 INFO spawned: 'django' with pid 7
+2023-11-05 00:06:10,422 INFO spawned: 'grpc' with pid 8
+2023-11-05 00:06:11,424 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 00:06:11,425 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 00:20:25,915 WARN received SIGTERM indicating exit request
+2023-11-05 00:20:25,916 INFO waiting for django, grpc to die
+2023-11-05 00:20:26,023 INFO stopped: grpc (exit status 0)
+2023-11-05 00:20:26,108 INFO stopped: django (exit status 0)
+2023-11-05 00:20:29,461 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 00:20:29,468 INFO supervisord started with pid 1
+2023-11-05 00:20:30,473 INFO spawned: 'django' with pid 7
+2023-11-05 00:20:30,475 INFO spawned: 'grpc' with pid 8
+2023-11-05 00:20:31,477 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 00:20:31,478 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 00:20:36,759 WARN received SIGTERM indicating exit request
+2023-11-05 00:20:36,760 INFO waiting for django, grpc to die
+2023-11-05 00:20:36,857 INFO stopped: grpc (exit status 0)
+2023-11-05 00:20:36,935 INFO stopped: django (exit status 0)
+2023-11-05 00:21:11,125 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 00:21:11,136 INFO supervisord started with pid 1
+2023-11-05 00:21:12,141 INFO spawned: 'django' with pid 7
+2023-11-05 00:21:12,147 INFO spawned: 'grpc' with pid 8
+2023-11-05 00:21:13,152 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 00:21:13,153 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 00:24:13,693 WARN received SIGTERM indicating exit request
+2023-11-05 00:24:13,701 INFO waiting for django, grpc to die
+2023-11-05 00:24:13,887 INFO stopped: grpc (exit status 0)
+2023-11-05 00:24:14,042 INFO stopped: django (exit status 0)
+2023-11-05 00:24:19,193 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 00:24:19,204 INFO supervisord started with pid 1
+2023-11-05 00:24:20,208 INFO spawned: 'django' with pid 7
+2023-11-05 00:24:20,211 INFO spawned: 'grpc' with pid 8
+2023-11-05 00:24:21,214 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 00:24:21,215 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 00:25:01,785 WARN received SIGTERM indicating exit request
+2023-11-05 00:25:01,786 INFO waiting for django, grpc to die
+2023-11-05 00:25:01,897 INFO stopped: grpc (exit status 0)
+2023-11-05 00:25:01,987 INFO stopped: django (exit status 0)
+2023-11-05 00:25:05,040 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 00:25:05,051 INFO supervisord started with pid 1
+2023-11-05 00:25:06,055 INFO spawned: 'django' with pid 7
+2023-11-05 00:25:06,057 INFO spawned: 'grpc' with pid 8
+2023-11-05 00:25:07,059 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 00:25:07,059 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 00:28:08,439 WARN received SIGTERM indicating exit request
+2023-11-05 00:28:08,440 INFO waiting for django, grpc to die
+2023-11-05 00:28:08,546 INFO stopped: grpc (exit status 0)
+2023-11-05 00:28:08,621 INFO stopped: django (exit status 0)
+2023-11-05 00:28:12,547 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 00:28:12,558 INFO supervisord started with pid 1
+2023-11-05 00:28:13,562 INFO spawned: 'django' with pid 7
+2023-11-05 00:28:13,565 INFO spawned: 'grpc' with pid 8
+2023-11-05 00:28:14,568 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 00:28:14,568 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 00:36:35,367 WARN received SIGTERM indicating exit request
+2023-11-05 00:36:35,367 INFO waiting for django, grpc to die
+2023-11-05 00:36:35,448 INFO stopped: grpc (exit status 0)
+2023-11-05 00:36:35,547 INFO stopped: django (exit status 0)
+2023-11-05 00:36:38,210 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 00:36:38,217 INFO supervisord started with pid 1
+2023-11-05 00:36:39,220 INFO spawned: 'django' with pid 7
+2023-11-05 00:36:39,224 INFO spawned: 'grpc' with pid 8
+2023-11-05 00:36:40,227 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 00:36:40,227 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 00:42:00,917 WARN received SIGTERM indicating exit request
+2023-11-05 00:42:00,917 INFO waiting for django, grpc to die
+2023-11-05 00:42:01,016 INFO stopped: grpc (exit status 0)
+2023-11-05 00:42:01,109 INFO stopped: django (exit status 0)
+2023-11-05 00:42:03,954 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 00:42:03,969 INFO supervisord started with pid 1
+2023-11-05 00:42:04,972 INFO spawned: 'django' with pid 7
+2023-11-05 00:42:04,975 INFO spawned: 'grpc' with pid 8
+2023-11-05 00:42:05,977 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 00:42:05,978 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:01:21,897 WARN received SIGTERM indicating exit request
+2023-11-05 01:01:21,898 INFO waiting for django, grpc to die
+2023-11-05 01:01:21,991 INFO stopped: grpc (exit status 0)
+2023-11-05 01:01:22,071 INFO stopped: django (exit status 0)
+2023-11-05 01:01:24,763 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 01:01:24,778 INFO supervisord started with pid 1
+2023-11-05 01:01:25,783 INFO spawned: 'django' with pid 7
+2023-11-05 01:01:25,785 INFO spawned: 'grpc' with pid 8
+2023-11-05 01:01:26,788 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:01:26,788 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:05:18,451 WARN received SIGTERM indicating exit request
+2023-11-05 01:05:18,452 INFO waiting for django, grpc to die
+2023-11-05 01:05:18,587 INFO stopped: grpc (exit status 0)
+2023-11-05 01:05:18,733 INFO stopped: django (exit status 0)
+2023-11-05 01:12:28,142 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 01:12:28,201 INFO supervisord started with pid 1
+2023-11-05 01:12:29,208 INFO spawned: 'django' with pid 7
+2023-11-05 01:12:29,210 INFO spawned: 'grpc' with pid 8
+2023-11-05 01:12:30,213 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:12:30,214 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:14:12,344 WARN received SIGTERM indicating exit request
+2023-11-05 01:14:12,345 INFO waiting for django, grpc to die
+2023-11-05 01:14:12,429 INFO stopped: grpc (exit status 0)
+2023-11-05 01:14:12,521 INFO stopped: django (exit status 0)
+2023-11-05 01:17:10,567 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 01:17:10,575 INFO supervisord started with pid 1
+2023-11-05 01:17:11,579 INFO spawned: 'django' with pid 7
+2023-11-05 01:17:11,581 INFO spawned: 'grpc' with pid 8
+2023-11-05 01:17:12,584 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:17:12,584 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:21:46,252 WARN received SIGTERM indicating exit request
+2023-11-05 01:21:46,253 INFO waiting for django, grpc to die
+2023-11-05 01:21:46,350 INFO stopped: grpc (exit status 0)
+2023-11-05 01:21:46,432 INFO stopped: django (exit status 0)
+2023-11-05 01:21:49,325 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 01:21:49,334 INFO supervisord started with pid 1
+2023-11-05 01:21:50,338 INFO spawned: 'django' with pid 8
+2023-11-05 01:21:50,340 INFO spawned: 'grpc' with pid 9
+2023-11-05 01:21:51,343 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:21:51,343 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:23:43,835 WARN received SIGTERM indicating exit request
+2023-11-05 01:23:43,836 INFO waiting for django, grpc to die
+2023-11-05 01:23:43,919 INFO stopped: grpc (exit status 0)
+2023-11-05 01:23:43,997 INFO stopped: django (exit status 0)
+2023-11-05 01:23:46,804 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 01:23:46,815 INFO supervisord started with pid 1
+2023-11-05 01:23:47,819 INFO spawned: 'django' with pid 7
+2023-11-05 01:23:47,821 INFO spawned: 'grpc' with pid 8
+2023-11-05 01:23:48,824 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:23:48,824 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:25:03,346 WARN received SIGTERM indicating exit request
+2023-11-05 01:25:03,348 INFO waiting for django, grpc to die
+2023-11-05 01:25:03,452 INFO stopped: grpc (exit status 0)
+2023-11-05 01:25:03,531 INFO stopped: django (exit status 0)
+2023-11-05 01:25:06,343 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 01:25:06,350 INFO supervisord started with pid 1
+2023-11-05 01:25:07,354 INFO spawned: 'django' with pid 7
+2023-11-05 01:25:07,356 INFO spawned: 'grpc' with pid 8
+2023-11-05 01:25:08,359 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:25:08,360 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:27:53,972 WARN received SIGTERM indicating exit request
+2023-11-05 01:27:53,974 INFO waiting for django, grpc to die
+2023-11-05 01:27:54,074 INFO stopped: grpc (exit status 0)
+2023-11-05 01:27:54,164 INFO stopped: django (exit status 0)
+2023-11-05 01:27:57,069 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 01:27:57,079 INFO supervisord started with pid 1
+2023-11-05 01:27:58,083 INFO spawned: 'django' with pid 7
+2023-11-05 01:27:58,085 INFO spawned: 'grpc' with pid 8
+2023-11-05 01:27:59,087 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:27:59,088 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:29:08,497 WARN received SIGTERM indicating exit request
+2023-11-05 01:29:08,498 INFO waiting for django, grpc to die
+2023-11-05 01:29:08,600 INFO stopped: grpc (exit status 0)
+2023-11-05 01:29:08,677 INFO stopped: django (exit status 0)
+2023-11-05 01:29:11,608 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 01:29:11,619 INFO supervisord started with pid 1
+2023-11-05 01:29:12,623 INFO spawned: 'django' with pid 7
+2023-11-05 01:29:12,625 INFO spawned: 'grpc' with pid 8
+2023-11-05 01:29:13,627 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:29:13,628 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:29:34,016 WARN received SIGTERM indicating exit request
+2023-11-05 01:29:34,017 INFO waiting for django, grpc to die
+2023-11-05 01:29:34,107 INFO stopped: grpc (exit status 0)
+2023-11-05 01:29:34,192 INFO stopped: django (exit status 0)
+2023-11-05 01:29:36,897 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 01:29:36,908 INFO supervisord started with pid 1
+2023-11-05 01:29:37,911 INFO spawned: 'django' with pid 7
+2023-11-05 01:29:37,914 INFO spawned: 'grpc' with pid 8
+2023-11-05 01:29:38,916 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:29:38,917 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:30:18,275 WARN received SIGTERM indicating exit request
+2023-11-05 01:30:18,276 INFO waiting for django, grpc to die
+2023-11-05 01:30:18,373 INFO stopped: grpc (exit status 0)
+2023-11-05 01:30:18,452 INFO stopped: django (exit status 0)
+2023-11-05 01:30:20,952 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 01:30:20,960 INFO supervisord started with pid 1
+2023-11-05 01:30:21,964 INFO spawned: 'django' with pid 7
+2023-11-05 01:30:21,967 INFO spawned: 'grpc' with pid 8
+2023-11-05 01:30:22,969 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:30:22,970 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:31:05,210 WARN received SIGTERM indicating exit request
+2023-11-05 01:31:05,211 INFO waiting for django, grpc to die
+2023-11-05 01:31:05,337 INFO stopped: grpc (exit status 0)
+2023-11-05 01:31:05,420 INFO stopped: django (exit status 0)
+2023-11-05 01:31:08,277 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 01:31:08,285 INFO supervisord started with pid 1
+2023-11-05 01:31:09,289 INFO spawned: 'django' with pid 7
+2023-11-05 01:31:09,291 INFO spawned: 'grpc' with pid 8
+2023-11-05 01:31:10,294 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:31:10,294 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:31:29,661 WARN received SIGTERM indicating exit request
+2023-11-05 01:31:29,662 INFO waiting for django, grpc to die
+2023-11-05 01:31:29,760 INFO stopped: grpc (exit status 0)
+2023-11-05 01:31:29,842 INFO stopped: django (exit status 0)
+2023-11-05 01:31:32,362 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 01:31:32,371 INFO supervisord started with pid 1
+2023-11-05 01:31:33,375 INFO spawned: 'django' with pid 7
+2023-11-05 01:31:33,377 INFO spawned: 'grpc' with pid 8
+2023-11-05 01:31:34,379 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:31:34,380 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:34:23,113 WARN received SIGTERM indicating exit request
+2023-11-05 01:34:23,114 INFO waiting for django, grpc to die
+2023-11-05 01:34:23,206 INFO stopped: grpc (exit status 0)
+2023-11-05 01:34:23,292 INFO stopped: django (exit status 0)
+2023-11-05 01:34:26,976 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 01:34:26,983 INFO supervisord started with pid 1
+2023-11-05 01:34:27,986 INFO spawned: 'django' with pid 7
+2023-11-05 01:34:27,989 INFO spawned: 'grpc' with pid 8
+2023-11-05 01:34:28,991 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:34:28,992 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:35:58,331 WARN received SIGTERM indicating exit request
+2023-11-05 01:35:58,331 INFO waiting for django, grpc to die
+2023-11-05 01:35:58,434 INFO stopped: grpc (exit status 0)
+2023-11-05 01:35:58,525 INFO stopped: django (exit status 0)
+2023-11-05 01:36:00,957 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 01:36:00,966 INFO supervisord started with pid 1
+2023-11-05 01:36:01,969 INFO spawned: 'django' with pid 7
+2023-11-05 01:36:01,972 INFO spawned: 'grpc' with pid 8
+2023-11-05 01:36:02,974 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:36:02,975 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:36:32,720 WARN received SIGTERM indicating exit request
+2023-11-05 01:36:32,722 INFO waiting for django, grpc to die
+2023-11-05 01:36:32,808 INFO stopped: grpc (exit status 0)
+2023-11-05 01:36:32,883 INFO stopped: django (exit status 0)
+2023-11-05 01:36:35,444 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 01:36:35,454 INFO supervisord started with pid 1
+2023-11-05 01:36:36,458 INFO spawned: 'django' with pid 7
+2023-11-05 01:36:36,460 INFO spawned: 'grpc' with pid 8
+2023-11-05 01:36:37,462 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:36:37,463 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:38:38,085 WARN received SIGTERM indicating exit request
+2023-11-05 01:38:38,086 INFO waiting for django, grpc to die
+2023-11-05 01:38:38,194 INFO stopped: grpc (exit status 0)
+2023-11-05 01:38:38,280 INFO stopped: django (exit status 0)
+2023-11-05 01:38:41,283 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 01:38:41,292 INFO supervisord started with pid 1
+2023-11-05 01:38:42,295 INFO spawned: 'django' with pid 7
+2023-11-05 01:38:42,297 INFO spawned: 'grpc' with pid 8
+2023-11-05 01:38:43,300 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 01:38:43,300 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 02:06:16,734 WARN received SIGTERM indicating exit request
+2023-11-05 02:06:16,735 INFO waiting for django, grpc to die
+2023-11-05 02:06:16,820 INFO stopped: grpc (exit status 0)
+2023-11-05 02:06:16,895 INFO stopped: django (exit status 0)
+2023-11-05 02:06:19,249 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 02:06:19,257 INFO supervisord started with pid 1
+2023-11-05 02:06:20,260 INFO spawned: 'django' with pid 7
+2023-11-05 02:06:20,264 INFO spawned: 'grpc' with pid 8
+2023-11-05 02:06:21,266 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 02:06:21,267 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 02:13:20,311 WARN received SIGTERM indicating exit request
+2023-11-05 02:13:20,312 INFO waiting for django, grpc to die
+2023-11-05 02:13:20,421 INFO stopped: grpc (exit status 0)
+2023-11-05 02:13:20,509 INFO stopped: django (exit status 0)
+2023-11-05 02:13:23,369 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 02:13:23,379 INFO supervisord started with pid 1
+2023-11-05 02:13:24,383 INFO spawned: 'django' with pid 7
+2023-11-05 02:13:24,385 INFO spawned: 'grpc' with pid 8
+2023-11-05 02:13:25,388 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 02:13:25,388 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 02:14:18,727 WARN received SIGTERM indicating exit request
+2023-11-05 02:14:18,728 INFO waiting for django, grpc to die
+2023-11-05 02:14:18,811 INFO stopped: grpc (exit status 0)
+2023-11-05 02:14:18,887 INFO stopped: django (exit status 0)
+2023-11-05 02:14:21,311 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 02:14:21,319 INFO supervisord started with pid 1
+2023-11-05 02:14:22,322 INFO spawned: 'django' with pid 7
+2023-11-05 02:14:22,325 INFO spawned: 'grpc' with pid 8
+2023-11-05 02:14:23,327 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 02:14:23,327 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 02:16:55,872 WARN received SIGTERM indicating exit request
+2023-11-05 02:16:55,873 INFO waiting for django, grpc to die
+2023-11-05 02:16:55,982 INFO stopped: grpc (exit status 0)
+2023-11-05 02:16:56,067 INFO stopped: django (exit status 0)
+2023-11-05 02:16:58,877 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2023-11-05 02:16:58,887 INFO supervisord started with pid 1
+2023-11-05 02:16:59,891 INFO spawned: 'django' with pid 7
+2023-11-05 02:16:59,894 INFO spawned: 'grpc' with pid 8
+2023-11-05 02:17:00,896 INFO success: django entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 02:17:00,896 INFO success: grpc entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2023-11-05 03:36:23,538 WARN received SIGTERM indicating exit request
+2023-11-05 03:36:23,547 INFO waiting for django, grpc to die
+2023-11-05 03:36:23,910 INFO stopped: grpc (exit status 0)
+2023-11-05 03:36:24,234 INFO stopped: django (exit status 0)
