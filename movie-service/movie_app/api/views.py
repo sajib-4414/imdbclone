@@ -20,6 +20,7 @@ from movie_app.api.serializers import *
 from movie_app.api.throttling import (ReviewCreateThrottle,
                                           ReviewListThrottle)
 from movie_app.models import Review, StreamPlatform, Movie
+from django.contrib.auth.models import User
 
 
 class UserReview(generics.ListAPIView):
@@ -59,6 +60,10 @@ class ReviewCreate(generics.CreateAPIView):
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticated]
     throttle_classes = [ReviewCreateThrottle]
+    def create(self, request, *args, **kwargs):
+        # Set the custom request variable
+        self.request = request
+        return super().create(request, *args, **kwargs)
     
     def get_queryset(self):
         return Review.objects.all()
@@ -69,9 +74,8 @@ class ReviewCreate(generics.CreateAPIView):
         pk = self.kwargs.get('pk')
         movie = Movie.objects.get(pk=pk)
         
-        user = self.request.user
         
-        review_queryset = Review.objects.filter(review_user=user, movie=movie)
+        review_queryset = Review.objects.filter(review_user=self.request.user, movie=movie)
         if review_queryset.exists():
             raise ValidationError('You have already reviewed this movie!')
         

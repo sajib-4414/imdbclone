@@ -14,9 +14,13 @@ IMDB movie review app clone with Django REST framework backend APIs.
 Load Balancer: For development, nginx. django admin's file serving is not working right now when admin of individual services is accessed through ngninx.
 
 Database: database per service, will try to use mysql, postgres. will try to use Redis, MongoDB for some service. 
-* **Authentication**: it is a Flask, lightweight microservice, just does authentication, for now generate JWT token, and return to user. it contacts the user service through grpc for login call. Most of the API calls of all services are set to have authentication through this auth service in the nginx configuration. Planned to mgirate to Oauth2. 
+* **Authentication**: it is a Flask, lightweight microservice
+    * Central authenticaiton: except some API calls, all microservice API calls will pass through central auth api, it validates the token and then sends the username in the header to the desitnation microservice. 
+    **Important** !!There is custom authentication file set in the django setttings.py file for each service,that will identify the user in the request.user. Example how to do for other services: look at the movie_service, in movie_service/main/custom_authentication_backend.py file, and see it is added as authentication in the movie_service/main/settings.py file. it requires all the microservices will have same userdatabase copy, otherwise through load balancer, nobody will be able to access any API of any service. Planned to mgirate to Oauth2. 
+   * Login: for now generate JWT token, and return to user. it contacts the user service through grpc for validating login credentials. 
 
-Testcases written some, need to work on mocking grpc
+some testcases are written , need to work on mocking grpc
+
 * **User service**: handles signup of user and user profile updates. it has two servers running, grpc server for login validate, and development server for grpc
 Testcases are written, both type of testcases python manage.py test and also pytest.
 But it seems like running python manage.py test runs all test cases everywhere.

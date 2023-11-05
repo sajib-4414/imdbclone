@@ -1,5 +1,6 @@
 # auth_views.py
 from fastapi import APIRouter, HTTPException, Header
+from fastapi.responses import JSONResponse
 from model import TokenUser
 from helpers.token_helper import token_creator, validate_token
 router = APIRouter()
@@ -16,10 +17,16 @@ async def validate_jwt_token(authorization: str = Header(None)):
     if not authorization:
         raise HTTPException(status_code=401, detail="Authorization header is missing")
     token = authorization.replace("Bearer ", "")
-    payload = validate_token(token)
+    payload = validate_token(token) #contains email and username
     if payload:
-        # Token is valid
-        return {"message": "Token is valid", "payload": payload}
+        response = {"message": "Authentication Successful"}
+        headers = {
+            "Content-Type": "application/json",
+            "user_email": "test@test.com",
+            "X-Username": payload.get("sub"),
+        }
+        return JSONResponse(content=response, headers=headers)
+
     else:
         # Token is invalid
         raise HTTPException(status_code=401, detail="Invalid token")
