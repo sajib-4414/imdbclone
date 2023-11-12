@@ -98,24 +98,34 @@ export const doLogin = createAsyncThunk(
 export const LoginSlice = createSlice({
 	name:"loginstate",
 	initialState,
+	//this section is synchronous redux
 	reducers:{
-	
+		loadUserFromStorage:(state, action:PayloadAction<LoggedInUser>)=>{
+            state.loggedInUser = action.payload
+        },
+		logoutDeleteFromStorage:(state, action:PayloadAction)=>{
+            state.loggedInUser = null
+			localStorage.removeItem('user');
+        }
 	},
+	//this section is for async thunk redux
 	extraReducers:(builder)=>{
 		//every asynchtyunk retyurns 3 state, the async function with thumnk
         //first state is fulfilled with is no error,  second state is loading state when async
         //funciton is not yet resolved, third one is error state, when async fncitn inside thunk returns error
 		builder.addCase(doLogin.fulfilled,(state,action)=>{
             //action has the response payload
-            state.loggedInUser = action.payload
-			console.log("action payload is")
-			console.log(state.loggedInUser.token)
+            state.loggedInUser = action.payload //storing the logged in user in the state
+			localStorage.setItem('user', JSON.stringify(action.payload));
         })
 		builder.addCase(doLogin.rejected, (state, action) => {
 			state.loggedInUser = null;
-			// state.error = action.error.message || "Login failed."; // Set error message
+			
 		});
 	}
 })	
 
+//this exports extra reducers automatically
 export default LoginSlice.reducer;
+//this exports regular reducers
+export const { loadUserFromStorage,logoutDeleteFromStorage } = LoginSlice.actions

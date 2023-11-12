@@ -1,11 +1,15 @@
 import React, { FC } from "react";
 import { Link } from "react-router-dom";
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'; // Make sure Bootstrap JS is imported
-import { useAppSelector } from "../store/store";
+import { useAppDispatch, useAppSelector } from "../store/store";
+import { LoggedInUser, logoutDeleteFromStorage } from "../store/features/loginSlice";
 
 const Header: FC = () => {
-  const loggedInUser = useAppSelector((state) => state.loginUser.loggedInUser);
-
+  const loggedInUser:LoggedInUser = useAppSelector((state) => state.loginUser.loggedInUser);
+  const dispatch = useAppDispatch();
+  const handleLogout = () => {
+    dispatch(logoutDeleteFromStorage())
+  }
   return (
     <header className="p-3 bg-dark text-white">
       <div className="container">
@@ -41,13 +45,14 @@ const Header: FC = () => {
                   <li><a className="dropdown-item" href="#">Profile</a></li>
                   <li><a className="dropdown-item" href="#">Settings</a></li>
                   <li><hr className="dropdown-divider" /></li>
-                  <li><a className="dropdown-item" href="#">Logout</a></li>
+                  <li>
+                    <a className="dropdown-item" href="#" onClick={handleLogout}>Logout</a></li>
                 </ul>
               </div>
             ) : (
               <>
                 <Link to="login" className="btn btn-outline-light me-2">Login</Link>
-                <button type="button" className="btn btn-warning">Sign-up</button>
+                <Link to="signup" className="btn btn-warning">Sign-up</Link>
               </>
             )}
           </div>
