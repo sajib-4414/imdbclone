@@ -10,6 +10,9 @@ import Container from './common/Container';
 import { Route, Routes } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
 import Login from './components/auth/Login';
+import { loadUserFromStorage } from './store/features/loginSlice';
+import { ProtectedRoute } from './common/ProtectedRoute';
+import Signup from './components/auth/Signup';
 
 const AppProviderWrapper = () => {
 
@@ -25,23 +28,32 @@ const AppProviderWrapper = () => {
 }
 const App : FC = () => {
   const dispatch = useAppDispatch(); // Works!
-  useEffect(()=>{
-    dispatch(fetchPerson())
-  })
+  // useEffect(()=>{
+  //   dispatch(fetchPerson())
+  // })
+
+   useEffect(()=>{
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      // Dispatch action to restore user data in the Redux store
+      dispatch(loadUserFromStorage(JSON.parse(storedUser)));
+    }
+  },[])
+  
   return (
     <Container>
       <Routes>
         <Route path="/" element={ <Dashboard/> } />
         <Route path="login" element={ <Login /> } />
-        <Route path="add" element={ <Add /> } />
+        <Route path="signup" element={ <Signup /> } />
+        <Route element={<ProtectedRoute/>}>
+          <Route path="add" element={ <Add /> } />
+        </Route>
+        
         <Route path="users" element={ <List /> } />
         <Route path="products" element={ <Products/> } />
         <Route path="cart" element={ <Cart/> } />
       </Routes>
-      
-      
-      
-      
     </Container>
   );
 }

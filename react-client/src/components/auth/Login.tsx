@@ -14,8 +14,7 @@ const Login:React.FC =()=>{
     const [loginError, setLoginError] = useState([]);
 
     const submitLogin = async ()=>{
-        // console.log('logging in wtih ...',{email, password})
-        // navigate("/");
+        if (!loginValidate()){return}
         try {
             const resultAction = await dispatch(doLogin({ username, password }));
             const originalPromiseResult = unwrapResult(resultAction)//is needed to throw error
@@ -29,6 +28,26 @@ const Login:React.FC =()=>{
             setLoginError(rejectedValueOrSerializedError.errors)
             console.error('Login failed:', rejectedValueOrSerializedError.errors);
           }
+    }
+    const loginValidate = ():boolean =>{
+        const errors = []
+        switch(true){
+            case !username:
+                errors.push({
+                    "error_code":"usename_empty",
+                    "error_details":"Username is required"
+                })
+            case !password:
+                errors.push({
+                    "error_code":"password_empty",
+                    "error_details":"Password is required"
+                })
+        }
+        if(errors.length>0){
+            setLoginError(errors)
+            return false
+        }
+        return true
     }
 
     return(

@@ -11,7 +11,7 @@ const Error: React.FC<ErrorProps> = ({ errors }) => {
       <ul>
         {errors.map((error, index) => (
           <li key={index}>
-            {error.error_code}: {error.error_details}
+            {error.error_details}
           </li>
         ))}
       </ul>
