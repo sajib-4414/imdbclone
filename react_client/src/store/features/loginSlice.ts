@@ -17,48 +17,6 @@ const initialState:LoggedInUserState={
 }
 
 //unique key, async function
-// export const doLogin = createAsyncThunk(
-// 	"user/login", 
-// 	async({ username, password }: { username: string; password: string }, thunkAPI)=>
-// 	{
-// 		const root_url = "http://localhost:8005" //process.env.REACT_API_HOST
-// 		const loginUrl = `${root_url}/auth/login`
-// 		try{
-// 			const response = await fetch(loginUrl , {
-// 				method: "POST",
-// 				headers:{
-// 					"Content-Type": "application/json"
-// 				},
-// 				body:JSON.stringify({
-// 					username,
-// 					password
-// 				})
-// 			})
-// 			if (!response.ok) {
-// 				if (response.status === 401) {
-// 				  // Handle 401 Unauthorized error
-// 				  console.error("Unauthorized access:", response.statusText);
-// 				  return thunkAPI.rejectWithValue("Unauthorized access");
-// 				}
-		
-// 				// Handle other HTTP errors
-// 				const errorData = await response.json();
-// 				throw new Error(errorData.message);
-// 			}
-// 			const data = await response.json();//data will have name and id inside it
-// 			return data;
-// 		} catch(err){
-// 			if (!err.response) {
-// 				throw err
-// 			  }
-			
-// 			//throw error
-// 			return thunkAPI.rejectWithValue(err.message)
-// 			//return rejectWithValue(err.response.data)
-// 		}
-// 	}
-// )	
-
 export const doLogin = createAsyncThunk(
 	"user/login",
 	async ({ username, password }: { username: string; password: string }, thunkAPI) => {
@@ -95,6 +53,32 @@ export const doLogin = createAsyncThunk(
 	}
   );
 
+export const doSignUp = createAsyncThunk(
+	"user/signup",
+	async ({ username, password, password2, email }: { username: string; password: string, password2:string,email:string }, thunkAPI) => {
+	  const root_url = "http://localhost:8005"; // process.env.REACT_API_HOST
+	  const loginUrl = `${root_url}/user-service/api/v1/account/register/`;
+  
+	  try {
+		const response = await axios.post(loginUrl, {
+		  username,
+		  password,
+		  password2,
+		  email
+		});
+  
+		return response.data;
+	  } catch (err) {
+		// Axios automatically rejects the promise on HTTP error status codes
+		if (axios.isAxiosError(err)) {
+  		  // Handle other HTTP errors
+		  console.error("HTTP error:", err.response?.data);
+		  return thunkAPI.rejectWithValue(err.response?.data);
+		}
+	  }
+	}
+  );
+
 export const LoginSlice = createSlice({
 	name:"loginstate",
 	initialState,
@@ -119,6 +103,15 @@ export const LoginSlice = createSlice({
 			localStorage.setItem('user', JSON.stringify(action.payload));
         })
 		builder.addCase(doLogin.rejected, (state, action) => {
+			state.loggedInUser = null;
+			
+		});
+		builder.addCase(doSignUp.fulfilled,(state,action)=>{
+            //action has the response payload
+            state.loggedInUser = action.payload //storing the logged in user in the state
+			localStorage.setItem('user', JSON.stringify(action.payload));
+        })
+		builder.addCase(doSignUp.rejected, (state, action) => {
 			state.loggedInUser = null;
 			
 		});

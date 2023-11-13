@@ -1,7 +1,13 @@
 import React, {useState} from 'react'
 import Error from '../../common/Error';
+import { useAppDispatch } from '../../store/store';
+import { doSignUp } from '../../store/features/loginSlice';
+import { unwrapResult } from '@reduxjs/toolkit'
+import { useNavigate } from 'react-router-dom';
 
 const Signup:React.FC =()=>{
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -31,12 +37,27 @@ const Signup:React.FC =()=>{
           [e.target.name]: e.target.value,
         });
       };
-      const handleSubmit = (e: React.FormEvent) => {
+      const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if(!signUpvalidate()) return;
         
         // Add your signup logic here using the form data
         console.log('Form submitted:', formData);
+
+        try {
+          const resultAction = await dispatch(doSignUp({
+            username: formData['username'],
+            password: formData['password'],
+            password2: formData['confirmPassword'],
+            email: formData['email']
+        }));
+          const originalPromiseResult = unwrapResult(resultAction)//is needed to throw error
+          navigate("/");
+        } catch (rejectedValueOrSerializedError) {
+          // Handle login error
+          setSignUpErrors(rejectedValueOrSerializedError.errors)
+          console.error('Login failed:', rejectedValueOrSerializedError.errors);
+        }
       };
       return(
         <div className="container mt-5">

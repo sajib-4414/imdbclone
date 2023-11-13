@@ -21,7 +21,10 @@ const AppProviderWrapper = () => {
     <Provider store={store}> 
 
     {/* // Now App has access to context */}
+    <React.StrictMode>
     <App /> 
+    </React.StrictMode>
+   
       
     </Provider>
   )

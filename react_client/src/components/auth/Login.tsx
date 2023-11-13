@@ -4,6 +4,8 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import { doLogin } from '../../store/features/loginSlice';
 import { unwrapResult } from '@reduxjs/toolkit'
 import Error from '../../common/Error';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login:React.FC =()=>{
     const navigate = useNavigate();
@@ -22,7 +24,15 @@ const Login:React.FC =()=>{
             // console.log(originalPromiseResult)//you can read succees response here
             
             // If login is successful, redirect to the home page
-            navigate("/");
+            toast.success("Login Successful!", {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+     
+            setTimeout(() => {
+              navigate('/');
+            }, 1000); 
+
+            // navigate("/");
           } catch (rejectedValueOrSerializedError) {
             // Handle login error
             setLoginError(rejectedValueOrSerializedError.errors)
@@ -53,6 +63,7 @@ const Login:React.FC =()=>{
     return(
         <div className="container mt-5">
             <h2 className="mb-4">Login</h2>
+            <ToastContainer />
             <form>
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">
