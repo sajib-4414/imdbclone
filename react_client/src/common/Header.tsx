@@ -6,6 +6,7 @@ import { LoggedInUser, logoutDeleteFromStorage } from "../store/features/loginSl
 
 const Header: FC = () => {
   const loggedInUser:LoggedInUser = useAppSelector((state) => state.loginUser.loggedInUser);
+    useAppSelector((state) => console.log(state))
   const dispatch = useAppDispatch();
   const handleLogout = () => {
     dispatch(logoutDeleteFromStorage())
@@ -40,6 +41,7 @@ const Header: FC = () => {
                   aria-expanded="false"
                 >
                   {loggedInUser.username}
+                  
                 </button>
                 <ul className="dropdown-menu" aria-labelledby="userDropdown">
                   <li><a className="dropdown-item" href="#">Profile</a></li>

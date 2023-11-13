@@ -1,8 +1,10 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from django.db import IntegrityError
 
 class RegistrationSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(style={'input_type': 'password'},write_only=True)
+       
     class Meta:
         model = User
         fields = ( 'username', 'email', 'password','password2')
@@ -11,18 +13,27 @@ class RegistrationSerializer(serializers.ModelSerializer):
                 'write_only': True
             }
         }
+    
+    def validate_email(self, value):
+        """
+        Check if the email address is unique.
+        """
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError('This email address is already in use.')
+        return value
+    
+    def validate(self, data):
+        password = data.get('password')
+        password2 = data.get('password2')
+
+        if password and password2 and password != password2:
+            raise serializers.ValidationError({'password':'Password and Confirm Password must be the same'})
+
+        return data
     def save(self):
-        password = self.validated_data['password']
-        password2 = self.validated_data['password2']
-        if password!= password2:
-            raise serializers.ValidationError({'error': 'Password and Confirm Password must be the same'})
-        if User.objects.filter(email=self.validated_data['email']).exists():
-            raise serializers.ValidationError({'error': 'Email already exists'})
-        account = User(email=self.validated_data['email'],username=self.validated_data['username'])
-        account.set_password(password)
-        account.save()
-        
-        return account
+        user = User.objects.create(username=self.validated_data['username'], email=self.validated_data['email'])
+        user.set_password(self.validated_data['password'])
+        return user
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
