@@ -32,17 +32,19 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /\.s?[ac]ss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
-        exclude: [/node_modules/],
+        test:/.scss$/, 
+        use: ["style-loader", "css-loader", "sass-loader" ]
       },
       {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        test: /\.css$/, 
+        use: ["style-loader", "css-loader"]
       },
     ],
   },
   resolve: {
+    alias: {
+      styles: path.resolve(__dirname, 'styles'),
+    },
     extensions: ['.tsx', '.ts', '.js'],
   },
   plugins: [
