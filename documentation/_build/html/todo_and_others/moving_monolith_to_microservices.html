@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Moving monolith to microservices. &#8212; IMDB Clone project 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=039e1c02" />
+    <script src="../_static/documentation_options.js?v=2709fde1"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="CI/CD and Scaling" href="scaling_plan.html" />
+    <link rel="prev" title="Documentation" href="documentation_tobe_added.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="moving-monolith-to-microservices">
+<h1>Moving monolith to microservices.<a class="headerlink" href="#moving-monolith-to-microservices" title="Link to this heading">¶</a></h1>
+<p>usecase for monolith movie app to User-service+Movie_service</p>
+<ul class="simple">
+<li><p><strong>Creating table, copying data</strong>: in the beginning it was movie review monolith app. then i created another app,
+user_microservice with the same user table. now i copied the original app’s user_table data to the user_microservice,
+then all user related tables, i created and copied the data. then i kept just the user table as a copy database in the original app.</p></li>
+<li><p><strong>Moving code and API paths</strong>: I copied the code directly associated with the user table, login, signup, permission, other information
+code to user_service. I ensured testcases passed, and the user_services was working. I then slowly commented out those codes in the
+original app to make sure it is not referecing anything more than just the core user table, which is needed to map movies to users.
+When I commented everything, and tested, it all worked. Then i added the user_services to the load balancer, so that the user related api
+calls are directed to the User service.</p></li>
+<li><p><strong>Setting Custom authentication</strong>:Now the user service should contain all user related tables. and should handle login,
+signup, but the movie service should not do those. and most importantly these databases should be in sync.
+[with event based systems, we can restream previously lost events to create missing users]. so i made sure user is only authenticatiing
+with the user_service with JWT and with that JWT token they can access movie service. movie service will recognize the jwt token
+and map it to the user of its dataabase and let user access api. (Actually, I did central authentication though, where all call
+will pass via auth_service[i further broke down user service to a user_service+stateless auth service], if yes then it will pass
+username in the header, movie service is identifying the user from the database with custom authentication file set inthe django setings).
+it will modify the request.user for every request.</p></li>
+<li><p><strong>Slowly delete code</strong> : Now when I saw that login, signup, profile modify is done via user_service, and movie service can effectively work
+with movie releated things with its movie table and user table. I deleted the code. I also deleted the tables from the movie service’s database.
+also tested the code to see all existing funcationality works or not.</p></li>
+</ul>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">IMDB Clone project</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../auth_service_doc/index.html">Auth-Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../movie_service_doc/index.html">Movie-Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_service_doc/index.html">User-Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../react_client_doc/index.html">React Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../grpc_doc/index.html">GRPC Introduction</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="services_to_be_added.html">Services to be Added</a></li>
+<li class="toctree-l1"><a class="reference internal" href="documentation_tobe_added.html">Documentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Moving monolith to microservices.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scaling_plan.html">CI/CD and Scaling</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../business_logic/user_roles.html">Users and Roles</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="documentation_tobe_added.html" title="previous chapter">Documentation</a></li>
+      <li>Next: <a href="scaling_plan.html" title="next chapter">CI/CD and Scaling</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Shamsul Arefin.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="../_sources/todo_and_others/moving_monolith_to_microservices.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -13,7 +13,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="Auth-Service" href="../auth_service_doc/index.html" />
+    <link rel="prev" title="User-service" href="../user_service_doc/index.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -32,18 +32,43 @@
             
   <section id="grpc-introduction">
 <h1>GRPC Introduction<a class="headerlink" href="#grpc-introduction" title="Link to this heading">¶</a></h1>
-<p>Includes how did I add grpc. what is gprc and what file is needed.</p>
+<p>Includes how did I add grpc.</p>
+<ul class="simple">
+<li><p>GRPC needs to run a server to listen to it.</p></li>
+<li><p>For grpc you need two file, pb2 and pb2 grpc.</p></li>
+<li><p><strong>Limitation</strong>: at present the generated pb2 and pb2 grpc files, i am copying them to both of the services which creates grpc server and which calls it. in future i plan to make it a library.</p></li>
+</ul>
 <!-- ## means these are Subheadings, will be included in the sphinx home page, ### or more # are not included -->
 <section id="libraries-used">
 <h2>Libraries Used<a class="headerlink" href="#libraries-used" title="Link to this heading">¶</a></h2>
 <p>django-grpc library.</p>
-</section>
-<section id="how-to-add">
-<h2>How to add<a class="headerlink" href="#how-to-add" title="Link to this heading">¶</a></h2>
+<section id="how-to-run">
+<h3>How to Run<a class="headerlink" href="#how-to-run" title="Link to this heading">¶</a></h3>
 <ul class="simple">
-<li><p>Feature 1: Describe feature 1.</p></li>
-<li><p>Feature 2: Describe feature 2.</p></li>
-<li><p>Feature 3: Describe feature 3.</p></li>
+<li><p>I added Grpc through django-grpc-server framework. https://djangogrpcframework.readthedocs.io/en/latest/</p></li>
+<li><p>current version 0.2.1 is ONLY compatible with django 4.0.10, if you have higher django version then you have to modify some parts of the django libarary in the site packages folder.</p></li>
+<li><p>What the plugin does is it allows you to create
+and start a grpc server, and it can accept grpc requests and send respons in the django project.</p></li>
+<li><p>there is a catch, it does not by default allow you to start the django development server, when you run the <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">manage.py</span> <span class="pre">grpcrunserver</span></code> it creates a grpc server ONLY not the django development server.</p></li>
+<li><p>You have two options to start the development server. One is start the grpc server with the <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">manage.py</span> <span class="pre">grpcrunserver</span></code> in one terminal and in another terminal you can start <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">manage.py</span> <span class="pre">runserver</span></code>, then you will be running the development server where you can listen to REST /HTTP requests. Second Option is, you create a python script to run both the commands, and run that script, thats what i did in the <code class="docutils literal notranslate"><span class="pre">user_service/runcommand.py</span></code> file.</p></li>
+<li><p>The question is why do we want this complex setup? because we want to run REST and grpc server in the same project, so that we can call individual methods, database tables. If you want a django project that will only listent to grpc, then you dont need to follow the two options i specified above. just start the grpc server.</p></li>
+</ul>
+</section>
+<section id="steps-to-use-django-grpc-library">
+<h3>Steps to use django grpc library<a class="headerlink" href="#steps-to-use-django-grpc-library" title="Link to this heading">¶</a></h3>
+<p>Now to add grpc code in your django rest framework project you need to do following things(ref: https://djangogrpcframework.readthedocs.io/en/latest/quickstart.html for basic example, https://djangogrpcframework.readthedocs.io/en/latest/tutorial/building_services.html the example I used):</p>
+<ul class="simple">
+<li><p>first have django, djangorestframework activated in your project.</p></li>
+<li><p>create a proto file, this is the protobuff file.</p></li>
+<li><p>install <code class="docutils literal notranslate"><span class="pre">grpcio,djangogrpcframework,</span> <span class="pre">grpcio-tools</span></code></p></li>
+<li><p>add <code class="docutils literal notranslate"><span class="pre">django_grpc_framework</span></code> to your installed apps.</p></li>
+<li><p>generate python file from the proto file with Python’s grpc_tools (not the windows/linux’s grpc tools) with this, Remember we need to generate two files, one is <code class="docutils literal notranslate"><span class="pre">pb2</span></code>, one is <code class="docutils literal notranslate"><span class="pre">pb2_grpc</span></code>, the command is
+<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">grpc_tools.protoc</span> <span class="pre">--proto_path=./[this</span> <span class="pre">is</span> <span class="pre">your</span> <span class="pre">path</span> <span class="pre">to</span> <span class="pre">proto</span> <span class="pre">files]</span> <span class="pre">--python_out=./[path</span> <span class="pre">to</span> <span class="pre">generate</span> <span class="pre">python</span> <span class="pre">pb2</span> <span class="pre">output</span> <span class="pre">files]</span> <span class="pre">--grpc_python_out=./[to</span> <span class="pre">generate</span> <span class="pre">pb2_grpc</span> <span class="pre">file]</span> <span class="pre">./account.proto[which</span> <span class="pre">file</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">proto</span> <span class="pre">path</span> <span class="pre">you</span> <span class="pre">want</span> <span class="pre">to</span> <span class="pre">choose</span> <span class="pre">to</span> <span class="pre">create</span> <span class="pre">python]</span></code></p></li>
+<li><p>You may want to create a serializer to validate the incoming message. you can use the <code class="docutils literal notranslate"><span class="pre">proto_serializers.ModelProtoSerializer</span></code> or <code class="docutils literal notranslate"><span class="pre">proto_serializers.ProtoSerializer</span></code> , documentation is not that good.</p></li>
+<li><p>Create service</p></li>
+<li><p>Create Hanlder either in a handler.py file or in the urls file</p></li>
+<li><p>run the grpc server <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">manage.py</span> <span class="pre">grpcrunserver</span> <span class="pre">--dev</span></code>,</p></li>
+<li><p>I faced significant issue with packages in the proto file. I beleive it is best to keep the proto file inside a folder, and mention it as a pacakage in the proto file. then the generated python files also will be under a package directory, and will import themselves(the pb2grpc will improt pb2) from packages. the package example is found in the building a service section of the grpc.</p></li>
 </ul>
 <!-- ## Getting Started
 
@@ -55,6 +80,7 @@ List any prerequisites that need to be installed and provide commands to install
 
 ```bash -->
 <!-- npm install -->
+</section>
 </section>
 </section>
 
@@ -78,9 +104,11 @@ List any prerequisites that need to be installed and provide commands to install
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../auth_service_doc/index.html">Auth-Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../react_client_doc/index.html">React Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../movie_service_doc/index.html">Movie-Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_service_doc/index.html">User-service</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">GRPC Introduction</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#libraries-used">Libraries Used</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#how-to-add">How to add</a></li>
 </ul>
 </li>
 </ul>
@@ -89,7 +117,7 @@ List any prerequisites that need to be installed and provide commands to install
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="../auth_service_doc/index.html" title="previous chapter">Auth-Service</a></li>
+      <li>Previous: <a href="../user_service_doc/index.html" title="previous chapter">User-service</a></li>
   </ul></li>
 </ul>
 </div>

@@ -13,7 +13,7 @@
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="GRPC Introduction" href="../grpc_doc/index.html" />
+    <link rel="next" title="React Client" href="../react_client_doc/index.html" />
     <link rel="prev" title="Welcome to IMDB Clone project’s documentation!" href="../index.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -33,8 +33,23 @@
             
   <section id="auth-service">
 <h1>Auth-Service<a class="headerlink" href="#auth-service" title="Link to this heading">¶</a></h1>
-<div class="toctree-wrapper compound">
-</div>
+<p>Auth-Service is a Flask-based lightweight microservice providing central authentication for microservices.</p>
+<ul>
+<li><p><strong>Central Authentication:</strong>
+All microservice API calls pass through the central auth API. It validates the token and then sends the username in the header to the destination microservice.</p></li>
+<li><p><strong>Login:</strong>
+For now generate JWT token, and return to user. it contacts the user service through grpc for validating login credentials..</p></li>
+<li><p><strong>Handle Custom Authentication for other Django Services:</strong>
+Important Note: There is a custom authentication file set in the Django <cite>settings.py</cite> file for each service. It identifies the user in the <cite>request.user</cite>.
+For example, in the <cite>movie_service</cite>, check the <cite>movie_service/main/custom_authentication_backend.py</cite> file, and see how it is added as authentication in the <cite>movie_service/main/settings.py</cite> file.</p>
+<p>It’s crucial that all microservices share the same user database. Without a shared database, access to any API of any service through the load balancer will be restricted.</p>
+</li>
+<li><p><strong>Test Cases coverage:</strong>
+some testcases are written, that are non GRPC related. need to work on mocking grpc to run a grpc involved test.</p>
+<p><strong>Migration Plan to OAuth2:</strong>
+There is a planned migration to OAuth2 for improved security and scalability.</p>
+</li>
+</ul>
 </section>
 
 
@@ -56,9 +71,10 @@
 <h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Auth-Service</a><ul class="simple">
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Auth-Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../react_client_doc/index.html">React Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../movie_service_doc/index.html">Movie-Service</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_service_doc/index.html">User-service</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../grpc_doc/index.html">GRPC Introduction</a></li>
 </ul>
 
@@ -67,7 +83,7 @@
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
       <li>Previous: <a href="../index.html" title="previous chapter">Welcome to IMDB Clone project’s documentation!</a></li>
-      <li>Next: <a href="../grpc_doc/index.html" title="next chapter">GRPC Introduction</a></li>
+      <li>Next: <a href="../react_client_doc/index.html" title="next chapter">React Client</a></li>
   </ul></li>
 </ul>
 </div>
