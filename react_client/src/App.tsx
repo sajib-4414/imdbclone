@@ -14,6 +14,7 @@ import { loadUserFromStorage } from './store/features/loginSlice';
 import { ProtectedRoute } from './common/ProtectedRoute';
 import Signup from './components/auth/Signup';
 import MovieList from './components/Movies-All';
+import NotFound from './common/NotFound';
 
 const AppProviderWrapper = () => {
 
@@ -57,6 +58,7 @@ const App : FC = () => {
         <Route path="users" element={ <List /> } />
         <Route path="products" element={ <Products/> } />
         <Route path="cart" element={ <Cart/> } />
+        <Route path="*" element={ <NotFound/> } />
       </Routes>
     </Container>
   );
