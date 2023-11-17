@@ -22,6 +22,7 @@ from movie_app.api.throttling import (ReviewCreateThrottle,
 from movie_app.models import Review, StreamPlatform, Movie
 from django.contrib.auth.models import User
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
+from django.http import HttpResponse
 
 class UserReview(generics.ListAPIView):
     # queryset = Review.objects.all() to customize the queryset
@@ -120,6 +121,8 @@ class MovieSearchView(generics.ListAPIView):
 class MovieListGetCreateView(APIView):
     permission_classes = [IsAdminOrReadOnly]
     def get(self, request):
+        # Simulate a 401 response for demonstration purposes
+        return HttpResponse(status=401)
         movies = Movie.objects.all()
         serializer = MovieSerializer(movies, many=True)
         return Response(serializer.data)

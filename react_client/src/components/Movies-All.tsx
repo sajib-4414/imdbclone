@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import axiosInstance from '../axiosInstance';
 // import 'styles/movies-list.css'
 import 'styles/nested-unresolved.css'
 import styled from '@emotion/styled';
@@ -18,18 +19,31 @@ const MovieList: React.FC = () => {
   //use useeffect to call a method right after rendering
   // and also for cleanup
   useEffect(()=>{
-    const fetchMovies = async()=>{
-      try{
-        const root_url =  process.env.REACT_API_HOST
-	      const moviesUrl = `${root_url}/movie-service/api/v1/movies`;
-        const response = await axios.get(moviesUrl);
+    // const fetchMovies = async()=>{
+    //   try{
+    //     const root_url =  process.env.REACT_API_HOST
+	  //     const moviesUrl = `${root_url}/movie-service/api/v1/movies`;
+    //     const response = await axios.get(moviesUrl);
+    //     setCurrentPageMovies(response.data);
+    //     // console.log(response.data)
+    //   }catch(error){
+    //     console.error('Error fetching movies:', error);
+    //   }
+    // }
+    // fetchMovies();
+    const moviesUrl = `/movie-service/api/v1/movies`;
+    const fetchMovies = async()=>
+    {
+      await axiosInstance.get(moviesUrl)
+      .then(response =>{
         setCurrentPageMovies(response.data);
-        // console.log(response.data)
-      }catch(error){
-        console.error('Error fetching movies:', error);
-      }
+      })
+      .catch(error=>{
+        console.error('Error fetching movies2:', error);
+      })
     }
     fetchMovies();
+    
   },[])
 
   return (
