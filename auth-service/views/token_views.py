@@ -15,7 +15,11 @@ def create_token(user: TokenUser):
 @router.get("/")
 async def validate_jwt_token(authorization: str = Header(None)):
     if not authorization:
-        raise HTTPException(status_code=401, detail="Authorization header is missing")
+        # raise HTTPException(status_code=401, detail="Authorization header is missing")
+        #Letting the destination service handle what happens when authorization is not present
+        # Return a response indicating the absence of authentication
+        response = {"message": "No authentication header provided"}
+        return JSONResponse(content=response, status_code=200)
     token = authorization.replace("Bearer ", "")
     payload = validate_token(token) #contains email and username
     if payload:

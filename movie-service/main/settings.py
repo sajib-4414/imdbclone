@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     "movie_app",
     "rest_framework",
     # 'rest_framework.authtoken', #this will create a token table in the database,
-    'django_filters'
+    'django_filters',
+    'drf_spectacular'
 ]
 
 MIDDLEWARE = [
@@ -152,7 +153,8 @@ REST_FRAMEWORK = {
     # disables the browsable nice API page, but yyou can have a production settings file to disable in prod.
      'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
-    )
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     # 'PAGE_SIZE': 5
 }
@@ -161,3 +163,6 @@ REST_FRAMEWORK = {
 # SIMPLE_JWT = {
 #     'ROTATE_REFRESH_TOKENS': True
 # }
+SPECTACULAR_SETTINGS = {
+    "TITLE":"movie-service"
+}

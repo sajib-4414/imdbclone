@@ -49,27 +49,30 @@ IMDB movie review app clone with Django REST framework backend APIs.
 
 # API Endpoints
 
-### User App Endpoints
+### Auth service endpoints
 
-#### User Authentication
+- `GET localhost:8005/`: Root path, being called for every request.Verifies a token.
+- `POST localhost:8005/auth-service/login`: login and returns a JWT token. -> for external login.
+- `POST /token/create/`: Creates a new token given user email, and username. -> internal purpose only. It is called by the user-service.
 
-- `POST /api/v1/login/`: Obtain an authentication token.
-- `POST /api/v1/register/`: Register a new user.
-- `POST /api/v1/logout/`: Log out and revoke the authentication token.
+### User service endpoints
+- `POST localhost:8005/user-service/api/v1/register`: Registers and returns a JWT token. -> for external registration.
+- `POST localhost:8005/user-service/api/v1/login-validate/`: It was meant to be called by the auth service to validate credentials and let the auth service know that it is a valid user. But this is Not used anymore, endpoint is there. now we are using grpc endpoint to validate it. now auth service calls grpc endpoint for this.
 
-### Movie App Endpoints
 
-#### Movies
+### Movie service endpoints
 
-- `GET /api/v1/`: List all movies.
-- `POST /api/v1/`: Create a new movie.
-- `GET /api/v1/<int:pk>/`: Retrieve details of a specific movie.
+#### Movie APIs
+
+- `GET localhost:8005/movie-service/api/v1/movies/`: List all movies.
+- `POST /api/v1/movies/`: Create a new movie.
+- `GET /api/v1/movies/<int:pk>/`: Retrieve details of a specific movie.
 - `POST /api/v1/<int:pk>/reviews/create/`: Create a review for a specific movie.
 - `GET /api/v1/<int:pk>/reviews/`: List all reviews for a specific movie.
 - `GET /api/v1/reviews/<int:pk>/`: Retrieve details of a specific review.
 - `GET /api/v1/list2/`: Search for movies (example endpoint).
 
-#### Stream Platforms
+#### Streaming Platform APIs
 
 - `GET /api/v1/stream/`: List all stream platforms.
 - `POST /api/v1/stream/`: Create a new stream platform.

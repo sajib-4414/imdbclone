@@ -13,7 +13,7 @@ services:
       - auth-service
       - user-service
       - movie-service
-      # - client-service
+      - client-service
     networks:
       - main-internal-net
   

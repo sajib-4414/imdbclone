@@ -1,0 +1,29 @@
+.bookmark-post .favorite-icon a, .job-box.bookmark-post .favorite-icon a {
+    background-color: #da3746;
+    color: #fff;
+    border-color: danger;
+}
+
+.favorite-icon a {
+    display: inline-block;
+    width: 80px;
+    height: 30px;
+    font-size: 15px;
+    line-height: 30px;
+    text-align: center;
+    border: 1px solid #eff0f2;
+    border-radius: 6px;
+    color: rgba(173,181,189,.55);
+    -webkit-transition: all .5s ease;
+    transition: all .5s ease;
+}
+
+.favorite-icon a span{
+    color: rgba(8, 11, 203, 0.55);
+}
+  
+.candidate-list-box .favorite-icon {
+    position: absolute;
+    right: 22px;
+    top: 22px;
+}
