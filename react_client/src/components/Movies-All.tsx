@@ -547,11 +547,8 @@ const RatingBadge:React.FC<RatingBadgeProps> = ({movie})=>{
   };
   return (
     <span className={getBadgeClass()}>
-      <a className="primary-link" href="#">
-        
         <i className="mdi mdi-star align-middle"></i>
         {movie.avg_rating}
-      </a>
     </span>
   );
 }
