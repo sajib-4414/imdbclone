@@ -6,6 +6,7 @@ import { unwrapResult } from '@reduxjs/toolkit'
 import Error from '../../common/Error';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { ToastType, useNotification } from '../../contexts/NotificationContext';
 
 const Login:React.FC =()=>{
     const navigate = useNavigate();
@@ -14,6 +15,7 @@ const Login:React.FC =()=>{
     const dispatch = useAppDispatch();
     const loggedInUser = useAppSelector((state) => state.loginUser.loggedInUser);
     const [loginError, setLoginError] = useState([]);
+    const notificationHook = useNotification();
 
     const submitLogin = async ()=>{
         if (!loginValidate()){return}
@@ -24,15 +26,8 @@ const Login:React.FC =()=>{
             // console.log(originalPromiseResult)//you can read succees response here
             
             // If login is successful, redirect to the home page
-            toast.success("Login Successful!", {
-                position: toast.POSITION.TOP_RIGHT,
-              });
-     
-            setTimeout(() => {
-              navigate('/');
-            }, 1000); 
-
-            // navigate("/");
+            notificationHook.showNotification('Login successful',{type:ToastType.Success})
+            navigate('/');
           } catch (rejectedValueOrSerializedError) {
             // Handle login error
             setLoginError(rejectedValueOrSerializedError.errors)

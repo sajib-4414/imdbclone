@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import axiosInstance from '../axiosInstance';
+import React, { useEffect, useRef, useState } from 'react';
+import createAxiosInstance from '../axiosInstance';
 // import 'styles/movies-list.css'
 import 'styles/nested-unresolved.css'
 import styled from '@emotion/styled';
-import axios from 'axios';
+import { useNotification  } from '../contexts/NotificationContext';
+import { useNavigate } from 'react-router-dom';
+
 interface Movie {
   id: number;
   platform:string;
@@ -16,24 +18,16 @@ interface Movie {
 
 const MovieList: React.FC = () => {
   const [currentPageMovies, setCurrentPageMovies] = useState<Movie[]>([])
+  const axiosInstance = createAxiosInstance(useNavigate(), useNotification())
   //use useeffect to call a method right after rendering
   // and also for cleanup
   useEffect(()=>{
-    // const fetchMovies = async()=>{
-    //   try{
-    //     const root_url =  process.env.REACT_API_HOST
-	  //     const moviesUrl = `${root_url}/movie-service/api/v1/movies`;
-    //     const response = await axios.get(moviesUrl);
-    //     setCurrentPageMovies(response.data);
-    //     // console.log(response.data)
-    //   }catch(error){
-    //     console.error('Error fetching movies:', error);
-    //   }
-    // }
     // fetchMovies();
+    
     const moviesUrl = `/movie-service/api/v1/movies`;
     const fetchMovies = async()=>
     {
+
       await axiosInstance.get(moviesUrl)
       .then(response =>{
         setCurrentPageMovies(response.data);

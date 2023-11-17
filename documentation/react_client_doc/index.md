@@ -17,10 +17,22 @@ React, Express, React toolkit, nodejs.
 - **Use effect**: To run some functions once, or every time some state changes. if the dependency in the dependency array changes, the function will run. if the dependency array is empty, it will run after component rendered for the first time, for once ONLY. Can optionally be used to cleanup unmounting, have to use this feature.
 - **Redux toolkit**: To efficiently emit/dispatch events to update state of the app centrally, and get the state centrally.
 - **Scoped styling**: Used emotion styled component for scoped styling. We first create a Container with the css, and then create the actual component with the container component. Example found in Movies-All.tsx. Emotion styling can be done with emotion/style or emotion/css. emotion/style has built in typescript support. emotion/css, needs to be configured, it does not easily support typescript.
+- **Using Context with Provider For Global task** - used to show notification.
+- **using centralized axios instance** - used an axios instance. usenavigate, usenotification is passed, so axios can throw
+notificaiton and error
+- **Typescript with babel** -webpack dev server.
 
 #### Findings:
 - for some unknown reason, in the react docker file if the directory is /app, then nothing installs, therfore
 i set the working directory as /app2
+- use DotEnv with webpack to get access to process.env variables.
+- to allow useeffect to run exactly once, use it with useref. used it for notification.
+  const initialized = useRef(false);
+  useEffect(()=>{
+    if (!initialized.current) {
+      initialized.current = true
+      doSomethingThatneedstobedneonce()
+    }
 
 <!-- ## Getting Started
 

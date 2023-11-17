@@ -15,19 +15,15 @@ import { ProtectedRoute } from './common/ProtectedRoute';
 import Signup from './components/auth/Signup';
 import MovieList from './components/Movies-All';
 import NotFound from './common/NotFound';
+import { NotificationProvider } from './contexts/NotificationContext';
 
 const AppProviderWrapper = () => {
 
   return (
-    // Set context
+    // Set context of React store
     <Provider store={store}> 
-
     {/* // Now App has access to context */}
-    <React.StrictMode>
-    <App /> 
-    </React.StrictMode>
-   
-      
+        <App /> 
     </Provider>
   )
 }
@@ -46,21 +42,24 @@ const App : FC = () => {
   },[])
   
   return (
-    <Container>
-      <Routes>
-        <Route path="/" element={ <Dashboard/> } />
-        <Route path="login" element={ <Login /> } />
-        <Route path="signup" element={ <Signup /> } />
-        <Route element={<ProtectedRoute/>}>
-          <Route path="add" element={ <Add /> } />
-        </Route>
-        <Route path="movies" element={ <MovieList /> } />
-        <Route path="users" element={ <List /> } />
-        <Route path="products" element={ <Products/> } />
-        <Route path="cart" element={ <Cart/> } />
-        <Route path="*" element={ <NotFound/> } />
-      </Routes>
-    </Container>
+    <NotificationProvider>
+      <Container>
+        <Routes>
+          <Route path="/" element={ <Dashboard/> } />
+          <Route path="login" element={ <Login /> } />
+          <Route path="signup" element={ <Signup /> } />
+          <Route element={<ProtectedRoute/>}>
+            <Route path="add" element={ <Add /> } />
+          </Route>
+          <Route path="movies" element={ <MovieList /> } />
+          <Route path="users" element={ <List /> } />
+          <Route path="products" element={ <Products/> } />
+          <Route path="cart" element={ <Cart/> } />
+          <Route path="*" element={ <NotFound/> } />
+        </Routes>
+      </Container>
+    </NotificationProvider>
+    
   );
 }
 
