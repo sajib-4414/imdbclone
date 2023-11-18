@@ -122,7 +122,7 @@ class MovieListGetCreateView(APIView):
     permission_classes = [IsAdminOrReadOnly]
     def get(self, request):
         # Simulate a 401 response for demonstration purposes
-        return HttpResponse(status=401)
+        # return HttpResponse(status=401)
         movies = Movie.objects.all()
         serializer = MovieSerializer(movies, many=True)
         return Response(serializer.data)

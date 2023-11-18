@@ -54,6 +54,7 @@ IMDB movie review app clone with Django REST framework backend APIs.
 - `GET localhost:8005/`: Root path, being called for every request.Verifies a token.
 - `POST localhost:8005/auth-service/login`: login and returns a JWT token. -> for external login.
 - `POST /token/create/`: Creates a new token given user email, and username. -> internal purpose only. It is called by the user-service.
+- `POST /token/refresh`: Refreshes the jwt token
 
 ### User service endpoints
 - `POST localhost:8005/user-service/api/v1/register`: Registers and returns a JWT token. -> for external registration.

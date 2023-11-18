@@ -4,6 +4,7 @@ from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 app = FastAPI()
 
+# below are the error parser middleware
 #overrriding the default http exception format
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request, exc: HTTPException):
