@@ -1,6 +1,6 @@
-import React, { FC, useRef } from 'react';
-import { addPerson, savePerson } from '../store/features/personSlice';
-import { useAppDispatch } from '../store/store';
+import React, { FC, useRef } from "react";
+import { addPerson, savePerson } from "../store/features/personSlice";
+import { useAppDispatch } from "../store/store";
 
 const Add: FC = () => {
   const name = useRef<string>("");
@@ -22,7 +22,7 @@ const Add: FC = () => {
       <button
         type="button"
         className="btn btn-primary"
-        onClick={() => dispatch(savePerson( name.current ))}
+        onClick={() => dispatch(savePerson(name.current))}
       >
         Add
       </button>

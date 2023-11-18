@@ -1,66 +1,69 @@
-import React, {useState} from 'react'
-import Error from '../../common/Error';
-import { useAppDispatch } from '../../store/store';
-import { doSignUp } from '../../store/features/loginSlice';
-import { unwrapResult } from '@reduxjs/toolkit'
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import Error from "../../common/Error";
+import { useAppDispatch } from "../../store/store";
+import { doSignUp } from "../../store/features/loginSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useNavigate } from "react-router-dom";
 
-const Signup:React.FC =()=>{
+const Signup: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        username: '',
-        password: '',
-        confirmPassword: '',
-      });
-      const [signupErrors, setSignUpErrors] = useState([]);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    username: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const [signupErrors, setSignUpErrors] = useState([]);
 
-      const signUpvalidate = ():boolean =>{
-        const errors = []
-        switch(true){
-            case formData['password'] !== formData['confirmPassword']:
-                errors.push({
-                    "error_code":"password_not_match",
-                    "error_details":"Passwords does not match"
-                })
-        }
-        setSignUpErrors(errors)
-        if(errors.length>0) return false
-        else return true
-    }
-    
-      const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({
-          ...formData,
-          [e.target.name]: e.target.value,
+  //showing static errors, but in the same format.
+  const signUpvalidate = (): boolean => {
+    const errors = [];
+    switch (true) {
+      case formData["password"] !== formData["confirmPassword"]:
+        errors.push({
+          error_code: "password_not_match",
+          error_details: "Passwords does not match",
         });
-      };
-      const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if(!signUpvalidate()) return;
-        
-        // Add your signup logic here using the form data
-        console.log('Form submitted:', formData);
+    }
+    setSignUpErrors(errors);
+    if (errors.length > 0) return false;
+    else return true;
+  };
 
-        try {
-          const resultAction = await dispatch(doSignUp({
-            username: formData['username'],
-            password: formData['password'],
-            password2: formData['confirmPassword'],
-            email: formData['email']
-        }));
-          const originalPromiseResult = unwrapResult(resultAction)//is needed to throw error
-          navigate("/");
-        } catch (rejectedValueOrSerializedError) {
-          // Handle login error
-          setSignUpErrors(rejectedValueOrSerializedError.errors)
-          console.error('Login failed:', rejectedValueOrSerializedError.errors);
-        }
-      };
-      return(
-        <div className="container mt-5">
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!signUpvalidate()) return;
+
+    // Add your signup logic here using the form data
+    console.log("Form submitted:", formData);
+
+    try {
+      const resultAction = await dispatch(
+        doSignUp({
+          username: formData["username"],
+          password: formData["password"],
+          password2: formData["confirmPassword"],
+          email: formData["email"],
+        }),
+      );
+      const originalPromiseResult = unwrapResult(resultAction); //is needed to throw error
+      navigate("/");
+    } catch (rejectedValueOrSerializedError) {
+      // Handle login error
+      setSignUpErrors(rejectedValueOrSerializedError.errors);
+      console.error("Login failed:", rejectedValueOrSerializedError.errors);
+    }
+  };
+  return (
+    <div className="container mt-5">
       <div className="row justify-content-center">
         <div className="col-md-6">
           <h2 className="mb-4">Sign Up</h2>
@@ -154,5 +157,5 @@ const Signup:React.FC =()=>{
       </div>
     </div>
   );
-}
+};
 export default Signup;

@@ -1,44 +1,33 @@
-import React, { useEffect, useRef, useState } from 'react';
-import createAxiosInstance from '../axiosInstance';
+import React, { useEffect, useRef, useState } from "react";
+import createAxiosInstance from "../axiosInstance";
 // import 'styles/movies-list.css'
-import 'styles/nested-unresolved.css'
-import styled from '@emotion/styled';
-import { useNotification  } from '../contexts/NotificationContext';
-import { useNavigate } from 'react-router-dom';
-
-interface Movie {
-  id: number;
-  platform:string;
-  storyline:string;
-  avg_rating:number;
-  number_rating:number;
-  title: string;
-  releaseYear: number;
-}
+import "styles/nested-unresolved.css";
+import styled from "@emotion/styled";
+import { useNotification } from "../contexts/NotificationContext";
+import { useNavigate } from "react-router-dom";
+import { Movie } from "../interfaces/Movie";
 
 const MovieList: React.FC = () => {
-  const [currentPageMovies, setCurrentPageMovies] = useState<Movie[]>([])
-  const axiosInstance = createAxiosInstance(useNavigate(), useNotification())
+  const [currentPageMovies, setCurrentPageMovies] = useState<Movie[]>([]);
+  const axiosInstance = createAxiosInstance(useNavigate(), useNotification());
   //use useeffect to call a method right after rendering
   // and also for cleanup
-  useEffect(()=>{
+  useEffect(() => {
     // fetchMovies();
-    
-    const moviesUrl = `/movie-service/api/v1/movies`;
-    const fetchMovies = async()=>
-    {
 
-      await axiosInstance.get(moviesUrl)
-      .then(response =>{
-        setCurrentPageMovies(response.data);
-      })
-      .catch(error=>{
-        console.error('Error fetching movies2:', error);
-      })
-    }
+    const moviesUrl = `/movie-service/api/v1/movies`;
+    const fetchMovies = async () => {
+      await axiosInstance
+        .get(moviesUrl)
+        .then((response) => {
+          setCurrentPageMovies(response.data);
+        })
+        .catch((error) => {
+          console.error("Error fetching movies2:", error);
+        });
+    };
     fetchMovies();
-    
-  },[])
+  }, []);
 
   return (
     <CSSContainer>
@@ -161,299 +150,509 @@ const MovieList: React.FC = () => {
                 </div>
               </div>
               <div className="candidate-list">
-                {currentPageMovies.map((movie)=>(
+                {currentPageMovies.map((movie) => (
                   <div className="candidate-list-box card mt-4" key={movie.id}>
-                  <div className="p-4 card-body">
+                    <div className="p-4 card-body">
                       <div className="align-items-center row">
-                          <div className="col-auto">
-                              <div className="candidate-list-images">
-                                  <a href="#"><img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" className="avatar-md img-thumbnail rounded-circle" /></a>
-                              </div>
+                        <div className="col-auto">
+                          <div className="candidate-list-images">
+                            <a href="#">
+                              <img
+                                src="https://bootdey.com/img/Content/avatar/avatar1.png"
+                                alt=""
+                                className="avatar-md img-thumbnail rounded-circle"
+                              />
+                            </a>
                           </div>
-                          <div className="col-lg-5">
-                              <div className="candidate-list-content mt-3 mt-lg-0">
-                                  <h5 className="fs-19 mb-0">
-                                      <a className="primary-link" href="#">{movie.title}</a>
-                                      {/* {movie.avg_rating>4?yes:no}
+                        </div>
+                        <div className="col-lg-5">
+                          <div className="candidate-list-content mt-3 mt-lg-0">
+                            <h5 className="fs-19 mb-0">
+                              <a className="primary-link" href="#">
+                                {movie.title}
+                              </a>
+                              {/* {movie.avg_rating>4?yes:no}
                                       <span className="badge bg-success ms-1">
                                         <i className="mdi mdi-star align-middle">
                                           </i>{movie.avg_rating}
                                       </span> */}
-                                      <RatingBadge movie={movie}/>
-                                  </h5>
-                                  <p className="text-muted mb-2">Platform:{movie.platform}</p>
-                                  <ul className="list-inline mb-0 text-muted">
-                                      <li className="list-inline-item">2022</li>
-                                      <li className="list-inline-item"><i className="mdi mdi-clock"></i> 2h 22min</li>
-                                  </ul>
-                              </div>
+                              <RatingBadge movie={movie} />
+                            </h5>
+                            <p className="text-muted mb-2">
+                              Platform:{movie.platform}
+                            </p>
+                            <ul className="list-inline mb-0 text-muted">
+                              <li className="list-inline-item">2022</li>
+                              <li className="list-inline-item">
+                                <i className="mdi mdi-clock"></i> 2h 22min
+                              </li>
+                            </ul>
                           </div>
-                          <div className="col-lg-4">
-                              <div className="mt-2 mt-lg-0 d-flex flex-wrap align-items-start gap-1">
-                                  <span className="badge bg-soft-secondary fs-14 mt-1">Genre1</span><span className="badge bg-soft-secondary fs-14 mt-1">Genre2</span><span className="badge bg-soft-secondary fs-14 mt-1">Genre3</span>
-                              </div>
+                        </div>
+                        <div className="col-lg-4">
+                          <div className="mt-2 mt-lg-0 d-flex flex-wrap align-items-start gap-1">
+                            <span className="badge bg-soft-secondary fs-14 mt-1">
+                              Genre1
+                            </span>
+                            <span className="badge bg-soft-secondary fs-14 mt-1">
+                              Genre2
+                            </span>
+                            <span className="badge bg-soft-secondary fs-14 mt-1">
+                              Genre3
+                            </span>
                           </div>
+                        </div>
                       </div>
                       <div className="favorite-icon">
-                           <a href="#"><span>Rate</span> <i className="mdi mdi-star fs-18"></i></a>
+                        <a href="#">
+                          <span>Rate</span>{" "}
+                          <i className="mdi mdi-star fs-18"></i>
+                        </a>
                       </div>
-                      
+                    </div>
                   </div>
-              </div>
                 ))}
-              <div className="candidate-list-box card mt-4">
-                        <div className="p-4 card-body">
-                            <div className="align-items-center row">
-                                <div className="col-auto">
-                                    <div className="candidate-list-images">
-                                        <a href="#"><img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" className="avatar-md img-thumbnail rounded-circle" /></a>
-                                    </div>
-                                </div>
-                                <div className="col-lg-5">
-                                    <div className="candidate-list-content mt-3 mt-lg-0">
-                                        <h5 className="fs-19 mb-0">
-                                            <a className="primary-link" href="#">Charles Dickens</a><span className="badge bg-success ms-1"><i className="mdi mdi-star align-middle"></i>4.8</span>
-                                        </h5>
-                                        <p className="text-muted mb-2">Project Manager</p>
-                                        <ul className="list-inline mb-0 text-muted">
-                                            <li className="list-inline-item"><i className="mdi mdi-map-marker"></i> Oakridge Lane Richardson</li>
-                                            <li className="list-inline-item"><i className="mdi mdi-wallet"></i> $650 / hours</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div className="col-lg-4">
-                                    <div className="mt-2 mt-lg-0 d-flex flex-wrap align-items-start gap-1">
-                                        <span className="badge bg-soft-secondary fs-14 mt-1">Leader</span><span className="badge bg-soft-secondary fs-14 mt-1">Manager</span><span className="badge bg-soft-secondary fs-14 mt-1">Developer</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="favorite-icon">
-                                <a href="#"><i className="mdi mdi-heart fs-18"></i></a>
-                            </div>
+                <div className="candidate-list-box card mt-4">
+                  <div className="p-4 card-body">
+                    <div className="align-items-center row">
+                      <div className="col-auto">
+                        <div className="candidate-list-images">
+                          <a href="#">
+                            <img
+                              src="https://bootdey.com/img/Content/avatar/avatar1.png"
+                              alt=""
+                              className="avatar-md img-thumbnail rounded-circle"
+                            />
+                          </a>
                         </div>
-                    </div>
-                    <div className="candidate-list-box bookmark-post card mt-4">
-                        <div className="p-4 card-body">
-                            <div className="align-items-center row">
-                                <div className="col-auto">
-                                    <div className="candidate-list-images">
-                                        <a href="#"><img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="" className="avatar-md img-thumbnail rounded-circle" /></a>
-                                    </div>
-                                </div>
-                                <div className="col-lg-5">
-                                    <div className="candidate-list-content mt-3 mt-lg-0">
-                                        <h5 className="fs-19 mb-0">
-                                            <a className="primary-link" href="#">Gabriel Palmer</a>
-                                            <span className="badge bg-warning ms-1">
-                                              <i className="mdi mdi-star align-middle">
-                                                </i>3.4
-                                                </span>
-                                        </h5>
-                                        <p className="text-muted mb-2">HTML Developer</p>
-                                        <ul className="list-inline mb-0 text-muted">
-                                            <li className="list-inline-item"><i className="mdi mdi-map-marker"></i> Oakridge Lane California</li>
-                                            <li className="list-inline-item"><i className="mdi mdi-wallet"></i> $250 / hours</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div className="col-lg-4">
-                                    <div className="mt-2 mt-lg-0 d-flex flex-wrap align-items-start gap-1"><span className="badge bg-soft-secondary fs-14 mt-1">Design</span><span className="badge bg-soft-secondary fs-14 mt-1">Developer</span></div>
-                                </div>
-                            </div>
-                            <div className="favorite-icon">
-                                <a href="#"><i className="mdi mdi-heart fs-18"></i></a>
-                            </div>
+                      </div>
+                      <div className="col-lg-5">
+                        <div className="candidate-list-content mt-3 mt-lg-0">
+                          <h5 className="fs-19 mb-0">
+                            <a className="primary-link" href="#">
+                              Charles Dickens
+                            </a>
+                            <span className="badge bg-success ms-1">
+                              <i className="mdi mdi-star align-middle"></i>4.8
+                            </span>
+                          </h5>
+                          <p className="text-muted mb-2">Project Manager</p>
+                          <ul className="list-inline mb-0 text-muted">
+                            <li className="list-inline-item">
+                              <i className="mdi mdi-map-marker"></i> Oakridge
+                              Lane Richardson
+                            </li>
+                            <li className="list-inline-item">
+                              <i className="mdi mdi-wallet"></i> $650 / hours
+                            </li>
+                          </ul>
                         </div>
-                    </div>
-                    <div className="candidate-list-box card mt-4">
-                        <div className="p-4 card-body">
-                            <div className="align-items-center row">
-                                <div className="col-auto">
-                                    <div className="candidate-list-images">
-                                        <a href="#"><img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="" className="avatar-md img-thumbnail rounded-circle" /></a>
-                                    </div>
-                                </div>
-                                <div className="col-lg-5">
-                                    <div className="candidate-list-content mt-3 mt-lg-0">
-                                        <h5 className="fs-19 mb-0">
-                                            <a className="primary-link" href="#">Rebecca Swartz </a>
-                                            <span className="badge bg-success ms-1">
-                                              <i className="mdi mdi-star align-middle">
-                                                </i>4.3
-                                                </span>
-                                        </h5>
-                                        <p className="text-muted mb-2">Graphic Designer</p>
-                                        <ul className="list-inline mb-0 text-muted">
-                                            <li className="list-inline-item"><i className="mdi mdi-map-marker"></i> Oakridge Lane Richardson</li>
-                                            <li className="list-inline-item"><i className="mdi mdi-wallet"></i> $380 / hours</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div className="col-lg-4">
-                                    <div className="mt-2 mt-lg-0 d-flex flex-wrap align-items-start gap-1"><span className="badge bg-soft-secondary fs-14 mt-1">Design</span><span className="badge bg-soft-secondary fs-14 mt-1">Developer</span></div>
-                                </div>
-                            </div>
-                            <div className="favorite-icon">
-                                <a href="#"><i className="mdi mdi-heart fs-18"></i></a>
-                            </div>
+                      </div>
+                      <div className="col-lg-4">
+                        <div className="mt-2 mt-lg-0 d-flex flex-wrap align-items-start gap-1">
+                          <span className="badge bg-soft-secondary fs-14 mt-1">
+                            Leader
+                          </span>
+                          <span className="badge bg-soft-secondary fs-14 mt-1">
+                            Manager
+                          </span>
+                          <span className="badge bg-soft-secondary fs-14 mt-1">
+                            Developer
+                          </span>
                         </div>
+                      </div>
                     </div>
-                    <div className="candidate-list-box bookmark-post card mt-4">
-                        <div className="p-4 card-body">
-                            <div className="align-items-center row">
-                                <div className="col-auto">
-                                    <div className="candidate-list-images">
-                                        <a href="#"><img src="https://bootdey.com/img/Content/avatar/avatar4.png" alt="" className="avatar-md img-thumbnail rounded-circle" /></a>
-                                    </div>
-                                </div>
-                                <div className="col-lg-5">
-                                    <div className="candidate-list-content mt-3 mt-lg-0">
-                                        <h5 className="fs-19 mb-0">
-                                            <a className="primary-link" href="#">Betty Richards</a><span className="badge bg-success ms-1"><i className="mdi mdi-star align-middle"></i>4.5</span>
-                                        </h5>
-                                        <p className="text-muted mb-2">Education Training</p>
-                                        <ul className="list-inline mb-0 text-muted">
-                                            <li className="list-inline-item"><i className="mdi mdi-map-marker"></i> Oakridge Lane Richardson</li>
-                                            <li className="list-inline-item"><i className="mdi mdi-wallet"></i> $650 / hours</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div className="col-lg-4">
-                                    <div className="mt-2 mt-lg-0 d-flex flex-wrap align-items-start gap-1">
-                                        <span className="badge bg-soft-secondary fs-14 mt-1">Trainer</span><span className="badge bg-soft-secondary fs-14 mt-1">Adobe illustrator</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="favorite-icon">
-                                <a href="#"><i className="mdi mdi-heart fs-18"></i></a>
-                            </div>
+                    <div className="favorite-icon">
+                      <a href="#">
+                        <i className="mdi mdi-heart fs-18"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div className="candidate-list-box bookmark-post card mt-4">
+                  <div className="p-4 card-body">
+                    <div className="align-items-center row">
+                      <div className="col-auto">
+                        <div className="candidate-list-images">
+                          <a href="#">
+                            <img
+                              src="https://bootdey.com/img/Content/avatar/avatar2.png"
+                              alt=""
+                              className="avatar-md img-thumbnail rounded-circle"
+                            />
+                          </a>
                         </div>
-                    </div>
-                    <div className="candidate-list-box card mt-4">
-                        <div className="p-4 card-body">
-                            <div className="align-items-center row">
-                                <div className="col-auto">
-                                    <div className="candidate-list-images">
-                                        <a href="#"><img src="https://bootdey.com/img/Content/avatar/avatar5.png" alt="" className="avatar-md img-thumbnail rounded-circle" /></a>
-                                    </div>
-                                </div>
-                                <div className="col-lg-5">
-                                    <div className="candidate-list-content mt-3 mt-lg-0">
-                                        <h5 className="fs-19 mb-0">
-                                            <a className="primary-link" href="#">Jeffrey Montgomery</a><span className="badge bg-success ms-1"><i className="mdi mdi-star align-middle"></i>4.9</span>
-                                        </h5>
-                                        <p className="text-muted mb-2">Restaurant Team Member</p>
-                                        <ul className="list-inline mb-0 text-muted">
-                                            <li className="list-inline-item"><i className="mdi mdi-map-marker"></i> Oakridge Lane Richardson</li>
-                                            <li className="list-inline-item"><i className="mdi mdi-wallet"></i> $125 / hours</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div className="col-lg-4">
-                                    <div className="mt-2 mt-lg-0 d-flex flex-wrap align-items-start gap-1">
-                                        <span className="badge bg-soft-secondary fs-14 mt-1">Trainer</span><span className="badge bg-soft-secondary fs-14 mt-1">Adobe illustrator</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="favorite-icon">
-                                <a href="#"><i className="mdi mdi-heart fs-18"></i></a>
-                            </div>
+                      </div>
+                      <div className="col-lg-5">
+                        <div className="candidate-list-content mt-3 mt-lg-0">
+                          <h5 className="fs-19 mb-0">
+                            <a className="primary-link" href="#">
+                              Gabriel Palmer
+                            </a>
+                            <span className="badge bg-warning ms-1">
+                              <i className="mdi mdi-star align-middle"></i>3.4
+                            </span>
+                          </h5>
+                          <p className="text-muted mb-2">HTML Developer</p>
+                          <ul className="list-inline mb-0 text-muted">
+                            <li className="list-inline-item">
+                              <i className="mdi mdi-map-marker"></i> Oakridge
+                              Lane California
+                            </li>
+                            <li className="list-inline-item">
+                              <i className="mdi mdi-wallet"></i> $250 / hours
+                            </li>
+                          </ul>
                         </div>
-                    </div>
-                    <div className="candidate-list-box card mt-4">
-                        <div className="p-4 card-body">
-                            <div className="align-items-center row">
-                                <div className="col-auto">
-                                    <div className="candidate-list-images">
-                                        <a href="#"><img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="" className="avatar-md img-thumbnail rounded-circle" /></a>
-                                    </div>
-                                </div>
-                                <div className="col-lg-5">
-                                    <div className="candidate-list-content mt-3 mt-lg-0">
-                                        <h5 className="fs-19 mb-0">
-                                            <a className="primary-link" href="#">Milton Osborn</a><span className="badge bg-danger ms-1"><i className="mdi mdi-star align-middle"></i>2.5</span>
-                                        </h5>
-                                        <p className="text-muted mb-2">Assistant / Store Keeper</p>
-                                        <ul className="list-inline mb-0 text-muted">
-                                            <li className="list-inline-item"><i className="mdi mdi-map-marker"></i> Oakridge Lane Richardson</li>
-                                            <li className="list-inline-item"><i className="mdi mdi-wallet"></i> $455 / hours</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div className="col-lg-4">
-                                    <div className="mt-2 mt-lg-0 d-flex flex-wrap align-items-start gap-1">
-                                        <span className="badge bg-soft-secondary fs-14 mt-1">Trainer</span><span className="badge bg-soft-secondary fs-14 mt-1">Adobe illustrator</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="favorite-icon">
-                                <a href="#"><i className="mdi mdi-heart fs-18"></i></a>
-                            </div>
+                      </div>
+                      <div className="col-lg-4">
+                        <div className="mt-2 mt-lg-0 d-flex flex-wrap align-items-start gap-1">
+                          <span className="badge bg-soft-secondary fs-14 mt-1">
+                            Design
+                          </span>
+                          <span className="badge bg-soft-secondary fs-14 mt-1">
+                            Developer
+                          </span>
                         </div>
+                      </div>
                     </div>
-                    <div className="candidate-list-box card mt-4">
-                        <div className="p-4 card-body">
-                            <div className="align-items-center row">
-                                <div className="col-auto">
-                                    <div className="candidate-list-images">
-                                        <a href="#"><img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="" className="avatar-md img-thumbnail rounded-circle" /></a>
-                                    </div>
-                                </div>
-                                <div className="col-lg-5">
-                                    <div className="candidate-list-content mt-3 mt-lg-0">
-                                        <h5 className="fs-19 mb-0">
-                                            <a className="primary-link" href="#">Harold Jordan</a><span className="badge bg-success ms-1"><i className="mdi mdi-star align-middle"></i>4.9</span>
-                                        </h5>
-                                        <p className="text-muted mb-2">Executive, HR Operations</p>
-                                        <ul className="list-inline mb-0 text-muted">
-                                            <li className="list-inline-item"><i className="mdi mdi-map-marker"></i> Oakridge Lane Richardson</li>
-                                            <li className="list-inline-item"><i className="mdi mdi-wallet"></i> $799 / hours</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div className="col-lg-4">
-                                    <div className="mt-2 mt-lg-0 d-flex flex-wrap align-items-start gap-1">
-                                        <span className="badge bg-soft-secondary fs-14 mt-1">Trainer</span><span className="badge bg-soft-secondary fs-14 mt-1">Adobe illustrator</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="favorite-icon">
-                                <a href="#"><i className="mdi mdi-heart fs-18"></i></a>
-                            </div>
+                    <div className="favorite-icon">
+                      <a href="#">
+                        <i className="mdi mdi-heart fs-18"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div className="candidate-list-box card mt-4">
+                  <div className="p-4 card-body">
+                    <div className="align-items-center row">
+                      <div className="col-auto">
+                        <div className="candidate-list-images">
+                          <a href="#">
+                            <img
+                              src="https://bootdey.com/img/Content/avatar/avatar3.png"
+                              alt=""
+                              className="avatar-md img-thumbnail rounded-circle"
+                            />
+                          </a>
                         </div>
-                    </div>
-                    <div className="candidate-list-box card mt-4">
-                        <div className="p-4 card-body">
-                            <div className="align-items-center row">
-                                <div className="col-auto">
-                                    <div className="candidate-list-images">
-                                        <a href="#"><img src="https://bootdey.com/img/Content/avatar/avatar8.png" alt="" className="avatar-md img-thumbnail rounded-circle" /></a>
-                                    </div>
-                                </div>
-                                <div className="col-lg-5">
-                                    <div className="candidate-list-content mt-3 mt-lg-0">
-                                        <h5 className="fs-19 mb-0">
-                                            <a className="primary-link" href="#">MichaeL Drake </a><span className="badge bg-warning ms-1"><i className="mdi mdi-star align-middle"></i>3.9</span>
-                                        </h5>
-                                        <p className="text-muted mb-2">Full Stack Engineer</p>
-                                        <ul className="list-inline mb-0 text-muted">
-                                            <li className="list-inline-item"><i className="mdi mdi-map-marker"></i> Oakridge Lane Richardson</li>
-                                            <li className="list-inline-item"><i className="mdi mdi-wallet"></i> $240 / hours</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div className="col-lg-4">
-                                    <div className="mt-2 mt-lg-0 d-flex flex-wrap align-items-start gap-1">
-                                        <span className="badge bg-soft-secondary fs-14 mt-1">Trainer</span><span className="badge bg-soft-secondary fs-14 mt-1">Adobe illustrator</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="favorite-icon">
-                                <a href="#"><i className="mdi mdi-heart fs-18"></i></a>
-                            </div>
+                      </div>
+                      <div className="col-lg-5">
+                        <div className="candidate-list-content mt-3 mt-lg-0">
+                          <h5 className="fs-19 mb-0">
+                            <a className="primary-link" href="#">
+                              Rebecca Swartz{" "}
+                            </a>
+                            <span className="badge bg-success ms-1">
+                              <i className="mdi mdi-star align-middle"></i>4.3
+                            </span>
+                          </h5>
+                          <p className="text-muted mb-2">Graphic Designer</p>
+                          <ul className="list-inline mb-0 text-muted">
+                            <li className="list-inline-item">
+                              <i className="mdi mdi-map-marker"></i> Oakridge
+                              Lane Richardson
+                            </li>
+                            <li className="list-inline-item">
+                              <i className="mdi mdi-wallet"></i> $380 / hours
+                            </li>
+                          </ul>
                         </div>
+                      </div>
+                      <div className="col-lg-4">
+                        <div className="mt-2 mt-lg-0 d-flex flex-wrap align-items-start gap-1">
+                          <span className="badge bg-soft-secondary fs-14 mt-1">
+                            Design
+                          </span>
+                          <span className="badge bg-soft-secondary fs-14 mt-1">
+                            Developer
+                          </span>
+                        </div>
+                      </div>
                     </div>
-
+                    <div className="favorite-icon">
+                      <a href="#">
+                        <i className="mdi mdi-heart fs-18"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div className="candidate-list-box bookmark-post card mt-4">
+                  <div className="p-4 card-body">
+                    <div className="align-items-center row">
+                      <div className="col-auto">
+                        <div className="candidate-list-images">
+                          <a href="#">
+                            <img
+                              src="https://bootdey.com/img/Content/avatar/avatar4.png"
+                              alt=""
+                              className="avatar-md img-thumbnail rounded-circle"
+                            />
+                          </a>
+                        </div>
+                      </div>
+                      <div className="col-lg-5">
+                        <div className="candidate-list-content mt-3 mt-lg-0">
+                          <h5 className="fs-19 mb-0">
+                            <a className="primary-link" href="#">
+                              Betty Richards
+                            </a>
+                            <span className="badge bg-success ms-1">
+                              <i className="mdi mdi-star align-middle"></i>4.5
+                            </span>
+                          </h5>
+                          <p className="text-muted mb-2">Education Training</p>
+                          <ul className="list-inline mb-0 text-muted">
+                            <li className="list-inline-item">
+                              <i className="mdi mdi-map-marker"></i> Oakridge
+                              Lane Richardson
+                            </li>
+                            <li className="list-inline-item">
+                              <i className="mdi mdi-wallet"></i> $650 / hours
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div className="col-lg-4">
+                        <div className="mt-2 mt-lg-0 d-flex flex-wrap align-items-start gap-1">
+                          <span className="badge bg-soft-secondary fs-14 mt-1">
+                            Trainer
+                          </span>
+                          <span className="badge bg-soft-secondary fs-14 mt-1">
+                            Adobe illustrator
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="favorite-icon">
+                      <a href="#">
+                        <i className="mdi mdi-heart fs-18"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div className="candidate-list-box card mt-4">
+                  <div className="p-4 card-body">
+                    <div className="align-items-center row">
+                      <div className="col-auto">
+                        <div className="candidate-list-images">
+                          <a href="#">
+                            <img
+                              src="https://bootdey.com/img/Content/avatar/avatar5.png"
+                              alt=""
+                              className="avatar-md img-thumbnail rounded-circle"
+                            />
+                          </a>
+                        </div>
+                      </div>
+                      <div className="col-lg-5">
+                        <div className="candidate-list-content mt-3 mt-lg-0">
+                          <h5 className="fs-19 mb-0">
+                            <a className="primary-link" href="#">
+                              Jeffrey Montgomery
+                            </a>
+                            <span className="badge bg-success ms-1">
+                              <i className="mdi mdi-star align-middle"></i>4.9
+                            </span>
+                          </h5>
+                          <p className="text-muted mb-2">
+                            Restaurant Team Member
+                          </p>
+                          <ul className="list-inline mb-0 text-muted">
+                            <li className="list-inline-item">
+                              <i className="mdi mdi-map-marker"></i> Oakridge
+                              Lane Richardson
+                            </li>
+                            <li className="list-inline-item">
+                              <i className="mdi mdi-wallet"></i> $125 / hours
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div className="col-lg-4">
+                        <div className="mt-2 mt-lg-0 d-flex flex-wrap align-items-start gap-1">
+                          <span className="badge bg-soft-secondary fs-14 mt-1">
+                            Trainer
+                          </span>
+                          <span className="badge bg-soft-secondary fs-14 mt-1">
+                            Adobe illustrator
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="favorite-icon">
+                      <a href="#">
+                        <i className="mdi mdi-heart fs-18"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div className="candidate-list-box card mt-4">
+                  <div className="p-4 card-body">
+                    <div className="align-items-center row">
+                      <div className="col-auto">
+                        <div className="candidate-list-images">
+                          <a href="#">
+                            <img
+                              src="https://bootdey.com/img/Content/avatar/avatar6.png"
+                              alt=""
+                              className="avatar-md img-thumbnail rounded-circle"
+                            />
+                          </a>
+                        </div>
+                      </div>
+                      <div className="col-lg-5">
+                        <div className="candidate-list-content mt-3 mt-lg-0">
+                          <h5 className="fs-19 mb-0">
+                            <a className="primary-link" href="#">
+                              Milton Osborn
+                            </a>
+                            <span className="badge bg-danger ms-1">
+                              <i className="mdi mdi-star align-middle"></i>2.5
+                            </span>
+                          </h5>
+                          <p className="text-muted mb-2">
+                            Assistant / Store Keeper
+                          </p>
+                          <ul className="list-inline mb-0 text-muted">
+                            <li className="list-inline-item">
+                              <i className="mdi mdi-map-marker"></i> Oakridge
+                              Lane Richardson
+                            </li>
+                            <li className="list-inline-item">
+                              <i className="mdi mdi-wallet"></i> $455 / hours
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div className="col-lg-4">
+                        <div className="mt-2 mt-lg-0 d-flex flex-wrap align-items-start gap-1">
+                          <span className="badge bg-soft-secondary fs-14 mt-1">
+                            Trainer
+                          </span>
+                          <span className="badge bg-soft-secondary fs-14 mt-1">
+                            Adobe illustrator
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="favorite-icon">
+                      <a href="#">
+                        <i className="mdi mdi-heart fs-18"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div className="candidate-list-box card mt-4">
+                  <div className="p-4 card-body">
+                    <div className="align-items-center row">
+                      <div className="col-auto">
+                        <div className="candidate-list-images">
+                          <a href="#">
+                            <img
+                              src="https://bootdey.com/img/Content/avatar/avatar7.png"
+                              alt=""
+                              className="avatar-md img-thumbnail rounded-circle"
+                            />
+                          </a>
+                        </div>
+                      </div>
+                      <div className="col-lg-5">
+                        <div className="candidate-list-content mt-3 mt-lg-0">
+                          <h5 className="fs-19 mb-0">
+                            <a className="primary-link" href="#">
+                              Harold Jordan
+                            </a>
+                            <span className="badge bg-success ms-1">
+                              <i className="mdi mdi-star align-middle"></i>4.9
+                            </span>
+                          </h5>
+                          <p className="text-muted mb-2">
+                            Executive, HR Operations
+                          </p>
+                          <ul className="list-inline mb-0 text-muted">
+                            <li className="list-inline-item">
+                              <i className="mdi mdi-map-marker"></i> Oakridge
+                              Lane Richardson
+                            </li>
+                            <li className="list-inline-item">
+                              <i className="mdi mdi-wallet"></i> $799 / hours
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div className="col-lg-4">
+                        <div className="mt-2 mt-lg-0 d-flex flex-wrap align-items-start gap-1">
+                          <span className="badge bg-soft-secondary fs-14 mt-1">
+                            Trainer
+                          </span>
+                          <span className="badge bg-soft-secondary fs-14 mt-1">
+                            Adobe illustrator
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="favorite-icon">
+                      <a href="#">
+                        <i className="mdi mdi-heart fs-18"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div className="candidate-list-box card mt-4">
+                  <div className="p-4 card-body">
+                    <div className="align-items-center row">
+                      <div className="col-auto">
+                        <div className="candidate-list-images">
+                          <a href="#">
+                            <img
+                              src="https://bootdey.com/img/Content/avatar/avatar8.png"
+                              alt=""
+                              className="avatar-md img-thumbnail rounded-circle"
+                            />
+                          </a>
+                        </div>
+                      </div>
+                      <div className="col-lg-5">
+                        <div className="candidate-list-content mt-3 mt-lg-0">
+                          <h5 className="fs-19 mb-0">
+                            <a className="primary-link" href="#">
+                              MichaeL Drake{" "}
+                            </a>
+                            <span className="badge bg-warning ms-1">
+                              <i className="mdi mdi-star align-middle"></i>3.9
+                            </span>
+                          </h5>
+                          <p className="text-muted mb-2">Full Stack Engineer</p>
+                          <ul className="list-inline mb-0 text-muted">
+                            <li className="list-inline-item">
+                              <i className="mdi mdi-map-marker"></i> Oakridge
+                              Lane Richardson
+                            </li>
+                            <li className="list-inline-item">
+                              <i className="mdi mdi-wallet"></i> $240 / hours
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                      <div className="col-lg-4">
+                        <div className="mt-2 mt-lg-0 d-flex flex-wrap align-items-start gap-1">
+                          <span className="badge bg-soft-secondary fs-14 mt-1">
+                            Trainer
+                          </span>
+                          <span className="badge bg-soft-secondary fs-14 mt-1">
+                            Adobe illustrator
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="favorite-icon">
+                      <a href="#">
+                        <i className="mdi mdi-heart fs-18"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -502,34 +701,34 @@ const MovieList: React.FC = () => {
 };
 
 const StyledContainer = styled.div`
-.card {
-  box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
-}
-.avatar-md {
-  height: 5rem;
-  width: 5rem;
-}
-.fs-19 {
-  font-size: 19px;
-}
-.primary-link {
-  color: #314047;
-  -webkit-transition: all .5s ease;
-  transition: all .5s ease;
-}
+  .card {
+    box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
+  }
+  .avatar-md {
+    height: 5rem;
+    width: 5rem;
+  }
+  .fs-19 {
+    font-size: 19px;
+  }
+  .primary-link {
+    color: #314047;
+    -webkit-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+  }
 
-.fs-14 {
-  font-size: 14px;
-}
+  .fs-14 {
+    font-size: 14px;
+  }
 
-.bg-soft-secondary {
-  background-color: rgba(116,120,141,.15)!important;
-  color: #74788d!important;
-}
+  .bg-soft-secondary {
+    background-color: rgba(116, 120, 141, 0.15) !important;
+    color: #74788d !important;
+  }
 
-.mt-1 {
-  margin-top: 0.25rem!important;
-}
+  .mt-1 {
+    margin-top: 0.25rem !important;
+  }
 `;
 
 interface CSSContainerProps {
@@ -543,23 +742,22 @@ const CSSContainer: React.FC<CSSContainerProps> = ({ children }) => {
 interface RatingBadgeProps {
   movie: { avg_rating: number; title: string };
 }
-const RatingBadge:React.FC<RatingBadgeProps> = ({movie})=>{
+const RatingBadge: React.FC<RatingBadgeProps> = ({ movie }) => {
   const getBadgeClass = () => {
     if (movie.avg_rating > 4) {
-      return 'badge bg-success ms-1';
+      return "badge bg-success ms-1";
     } else if (movie.avg_rating < 2) {
-      return 'badge bg-danger ms-1';
+      return "badge bg-danger ms-1";
     } else {
-      return 'badge bg-warning ms-1';
+      return "badge bg-warning ms-1";
     }
   };
   return (
     <span className={getBadgeClass()}>
-        <i className="mdi mdi-star align-middle"></i>
-        {movie.avg_rating}
+      <i className="mdi mdi-star align-middle"></i>
+      {movie.avg_rating}
     </span>
   );
-}
-
+};
 
 export default MovieList;

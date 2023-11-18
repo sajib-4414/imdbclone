@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
-import { useAppSelector } from '../store/store';
+import React, { FC } from "react";
+import { useAppSelector } from "../store/store";
 
 const List: FC = () => {
   const persons = useAppSelector((state) => state.person.persons);

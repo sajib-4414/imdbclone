@@ -59,3 +59,12 @@ makes available React store to all components.
 
 ##### How to init a typescript project with webpack?
 - I followed a medium article, I will add it soon.
+
+##### How add a route guard to make a route protected?
+- see the App file and ProtectedRoute file
+
+##### How to add redux toolkit?
+
+##### Format code?
+- prettier is installed, format script is added to package.json
+- before committing run, `npm run format`

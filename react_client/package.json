@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --open --mode development --hot --port 3000",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "format": "prettier --write 'src/**/*.tsx' 'src/**/*.ts'"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +20,7 @@
     "css-loader": "^6.8.1",
     "dotenv-webpack": "^8.0.1",
     "html-webpack-plugin": "^5.5.3",
+    "prettier": "^3.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sass": "^1.69.5",

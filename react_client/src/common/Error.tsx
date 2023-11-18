@@ -1,8 +1,5 @@
-import React from 'react';
-
-interface ErrorProps {
-  errors: { error_code: string; error_details: string }[];
-}
+import React from "react";
+import { ErrorProps } from "../interfaces/ErrorProps";
 
 const Error: React.FC<ErrorProps> = ({ errors }) => {
   return (
@@ -10,9 +7,7 @@ const Error: React.FC<ErrorProps> = ({ errors }) => {
       <strong>Error:</strong>
       <ul>
         {errors.map((error, index) => (
-          <li key={index}>
-            {error.error_details}
-          </li>
+          <li key={index}>{error.error_details}</li>
         ))}
       </ul>
     </div>
