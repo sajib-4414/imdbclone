@@ -1,5 +1,5 @@
 from fastapi import HTTPException, Request, Body, APIRouter, status
-from model import TokenUser, LoginRequestBody
+from models import TokenUser, LoginRequestBody
 from helpers.token_helper import token_creator
 from helpers.error_parser import grpc_error_parser
 import grpc
@@ -8,7 +8,7 @@ router = APIRouter()
 
 
 # Endpoint to generate tokens for login from the client
-@router.post("/login/")
+@router.post("/login")
 async def login(request: Request, login_request: LoginRequestBody = Body(...)):
     username = login_request.username
     password = login_request.password
@@ -21,7 +21,12 @@ async def login(request: Request, login_request: LoginRequestBody = Body(...)):
             if is_credential_valid:
                 tokenuser = TokenUser(username=username, email=response.email)
                 token = token_creator(tokenuser)
-                return {"token": token}
+                return {
+                    "token": token.access_token,
+                    "refresh_token": token.refresh_token,
+                    "username":username,
+                    "email":response.email
+                    }
             else:
                 raise HTTPException(status_code=401, detail="Invalid username or password")
     except grpc.RpcError as rpc_error:

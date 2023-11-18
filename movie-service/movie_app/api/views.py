@@ -21,7 +21,8 @@ from movie_app.api.throttling import (ReviewCreateThrottle,
                                           ReviewListThrottle)
 from movie_app.models import Review, StreamPlatform, Movie
 from django.contrib.auth.models import User
-
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
+from django.http import HttpResponse
 
 class UserReview(generics.ListAPIView):
     # queryset = Review.objects.all() to customize the queryset
@@ -87,7 +88,7 @@ class ReviewCreate(generics.CreateAPIView):
         movie.number_rating = movie.number_rating + 1
         movie.save()
         
-        serializer.save(movie=movie, review_user=user) # saving the review for that particular movie
+        serializer.save(movie=movie, review_user=self.request.user) # saving the review for that particular movie
 
 
 # class ReviewList(mixins.ListModelMixin, mixins.CreateModelMixin, GenericAPIView):
@@ -120,6 +121,8 @@ class MovieSearchView(generics.ListAPIView):
 class MovieListGetCreateView(APIView):
     permission_classes = [IsAdminOrReadOnly]
     def get(self, request):
+        # Simulate a 401 response for demonstration purposes
+        # return HttpResponse(status=401)
         movies = Movie.objects.all()
         serializer = MovieSerializer(movies, many=True)
         return Response(serializer.data)
@@ -156,9 +159,34 @@ class MovieDetailView(APIView):
 #Modelviewset provides, list, post, individual item get, put, delete
 #readonly viewset provides only list, and individual get method
 class StreamPlatformViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows stream platforms to be viewed or edited.
+
+    This viewset automatically provides `list`, `create`, `retrieve`,
+    `update`, and `destroy` actions.
+
+    * `list`: Returns a list of all stream platforms.
+    * `create`: Creates a new stream platform.
+    * `retrieve`: Retrieves a specific stream platform.
+    * `update`: Updates a specific stream platform.
+    * `destroy`: Deletes a specific stream platform.
+
+    ## Additional Info:
+    - Only admins can edit stream platforms.
+    - ...
+
+    """
     permission_classes = [IsAdminOrReadOnly]
     queryset = StreamPlatform.objects.all()
     serializer_class = StreamPlatformSerializer
+    
+    @extend_schema(
+        description="Retrieve a specific stream platform by ID",
+        parameters=[OpenApiParameter("id", OpenApiTypes.INT, description="Stream Platform ID")],
+        responses={200: StreamPlatformSerializer}
+    )
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
     
 # class StreamPlatformViewSet(viewsets.ViewSet):
     

@@ -18,7 +18,7 @@ class Movie(models.Model):
     # we can do this, netflix_watchlist = netflix.watchlist.all()
     active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
-    avg_rating = models.FloatField(default=0)
+    avg_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0)
     number_rating = models.IntegerField(default=0)
     
     def __str__(self) -> str:

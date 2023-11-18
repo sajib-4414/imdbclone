@@ -6,6 +6,7 @@ from django.http import HttpResponseBadRequest
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
 import httpx
+from user_app.helpers.serializer_error_parser import parseError
 # from rest_framework.authtoken.models import Token
 # from rest_framework_simplejwt.tokens import RefreshToken
 # from user_app.models import * #sometime the signal file doesn't fire, in that case load that file
@@ -27,6 +28,8 @@ def registration_view(request):
         
         if serializer.is_valid():
             validated_data = serializer.validated_data
+            #check if that user already exists or not.
+            
             token_data = {
                 "username": validated_data['username'],
                 "email": validated_data['email'],
@@ -45,7 +48,7 @@ def registration_view(request):
             data['response'] = 'Registration Successful'
             data['username'] = account.username
             data['email'] = account.email
-
+            return Response(data, status.HTTP_201_CREATED)
             
             
             
@@ -59,9 +62,9 @@ def registration_view(request):
             
             
         else:
-            data = serializer.errors
+            return Response(parseError(serializer.errors), status.HTTP_400_BAD_REQUEST)
             
-        return Response(data, status.HTTP_201_CREATED)
+        
 
 @api_view(['POST'])
 def login_validate_view(request):
