@@ -5,7 +5,8 @@ export interface LoggedInUser{
     // name: string; will be brought soon
 	email:string; 
 	username:string;
-	token:string
+	token:string;
+	refresh_token:string;
 }
 
 export interface LoggedInUserState{

@@ -7,15 +7,17 @@ import { fetchPerson } from './store/features/personSlice';
 import { Products } from './components/Products';
 import { Cart } from './components/Cart';
 import Container from './common/Container';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import Dashboard from './components/Dashboard';
 import Login from './components/auth/Login';
-import { loadUserFromStorage } from './store/features/loginSlice';
+import { LoggedInUser, loadUserFromStorage, logoutDeleteFromStorage } from './store/features/loginSlice';
 import { ProtectedRoute } from './common/ProtectedRoute';
 import Signup from './components/auth/Signup';
 import MovieList from './components/Movies-All';
 import NotFound from './common/NotFound';
-import { NotificationProvider } from './contexts/NotificationContext';
+import { NotificationProvider, useNotification } from './contexts/NotificationContext';
+import createAxiosInstance from './axiosInstance';
+import axios, { AxiosResponse } from 'axios';
 
 const AppProviderWrapper = () => {
 
@@ -32,12 +34,29 @@ const App : FC = () => {
   // useEffect(()=>{
   //   dispatch(fetchPerson())
   // })
-
+  interface RefreshTokenResponse{
+    access_token:string;
+    refresh_token:string;
+    token_type:string;
+  }
    useEffect(()=>{
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      // Dispatch action to restore user data in the Redux store
-      dispatch(loadUserFromStorage(JSON.parse(storedUser)));
+    const storedUserData = localStorage.getItem('user');
+    if (storedUserData) {
+      const loggedInUser:LoggedInUser = JSON.parse(storedUserData) as LoggedInUser;
+      axios.post('/auth/token/refresh',{
+        "refresh_token": loggedInUser.refresh_token
+          })
+            .then((response: AxiosResponse<RefreshTokenResponse>) => {
+              const refreshTokenResponse = response.data;
+              loggedInUser.token = refreshTokenResponse.access_token;
+              loggedInUser.refresh_token = refreshTokenResponse.refresh_token;
+              dispatch(loadUserFromStorage(loggedInUser));
+              console.log("token was refreshed")
+            })
+            .catch(error => {
+              console.error('Error refreshing token:', error);
+              dispatch(logoutDeleteFromStorage())
+            });
     }
   },[])
   

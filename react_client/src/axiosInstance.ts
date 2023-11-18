@@ -12,10 +12,6 @@ const createAxiosInstance = (navigate:NavigateFunction, notificationHook:Notific
     (response) => response,
     (error: AxiosError) => {
       if (error.response?.status === 401) {
-        // Redirect to login page
-        // You can replace '/login' with your actual login page route
-        // window.location.replace('/login');
-        console.log("called...")
         notificationHook.showNotification('Please login..',{type:ToastType.Error})
         navigate("/login")
       }

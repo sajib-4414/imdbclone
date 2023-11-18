@@ -21,26 +21,41 @@ React, Express, React toolkit, nodejs.
 - **using centralized axios instance** - used an axios instance. usenavigate, usenotification is passed, so axios can throw
 notificaiton and error
 - **Typescript with babel** -webpack dev server.
+- **token refresh** - on the App component load[triggered by page reloading or first time loading], token is refreshed from API, if token cannot be refreshed, then
+state is cleared showing user is not logged in.
 
 #### Findings:
 - for some unknown reason, in the react docker file if the directory is /app, then nothing installs, therfore
 i set the working directory as /app2
+
+
+##### Access process.env variables
 - use DotEnv with webpack to get access to process.env variables.
-- to allow useeffect to run exactly once, use it with useref. used it for notification.
-  const initialized = useRef(false);
+
+##### useeffect is called twice even if dependecies are empty?
+- Tried removing strictmode, did not work
+- Did this workaround from stackoverflow. to allow useeffect to run exactly once, use it with useref. used it for notification.
+
+  ``const initialized = useRef(false);
   useEffect(()=>{
     if (!initialized.current) {
       initialized.current = true
       doSomethingThatneedstobedneonce()
-    }
+    }``
 
-<!-- ## Getting Started
+##### How Did I do jwt token refresh and prevent stale logged in user?
+- In the App component, first check if user exists on local storage, if it does not exist, then dont refresh.
+- If user exists in the local storage, then I called the token refresh api to get a new access token and refresh token
+- I then stored it to the local storage, also to state via redux reducers.
 
-Instructions on how to get a copy of your project up and running on a local machine.
+##### How did I do centralized Toast notification?
+- I created a context, and context provider. Then wrapped the container component (inside App) with context provider
+- Now the context provider makes a method show notificaition available to all the components, just like React provider
+makes available React store to all components.
 
-### Prerequisites
+##### How did I do centralized axios returning to login page if 401 received?
+- I created axios instance, and inside I created interceptor to modify requests, response, and what to do
+- I passed useNavigate, useNotificaiton Toast, so that if the response gets 401 it shows the notification, and redirects to login.
 
-List any prerequisites that need to be installed and provide commands to install them.
-
-```bash -->
-<!-- npm install -->
+##### How to init a typescript project with webpack?
+- I followed a medium article, I will add it soon.
