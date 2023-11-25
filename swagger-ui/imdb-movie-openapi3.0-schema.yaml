@@ -1,0 +1,493 @@
+openapi: 3.0.3
+info:
+  title: IMDB Movie Discussion API Documentation
+  description: |-
+    This is a IMDB project API spec based on the OpenAPI 3.0 specification.  All the api specications assume requests will go through Load Balancer, the paths are mentioned based on load balancer path definitions.
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.11
+servers:
+  - url: http://localhost:8005
+tags:
+  - name: Auth Service
+    description: Does authentication, token creation.
+  - name: User Service
+    description: Handles user related features such as user creation, update.
+  - name: Movie Service
+    description: Handles Movie creation, watchlist, review.
+paths:
+
+  /auth/:
+    get:
+      tags:
+        - Auth Service
+      summary: Checks JWT, modifies the header and include a user.
+      description: It is called by nginx for all API, as auth_request. it decodes the token and adds user in the modified header to be passed to other APIs. This is not called by any other service explicitly, rather called by nginx when calling other service. 
+      operationId: mainAuthEndpoint
+      responses:
+        '200':
+          description: Successful operation
+          headers:
+            Content-Type:
+              schema:
+                type: string
+                default: application/json
+            user_email:
+              schema:
+                type: string
+                format: email
+            X-Username:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: Invalid token provided
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - bearerAuth: []
+  /auth/token/create/:
+    post:
+      tags:
+        - Auth Service
+      summary: Creates a token from given user credentials.
+      description: Called by user-service internally. Given user information, creates a jwt token.
+      operationId: authTokenCreation
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  refresh_token:
+                    type: string
+        '400':
+          description: User information missing.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /auth/login/:
+    post:
+      tags:
+        - Auth Service
+      summary: Returns a JWT token if the credentials are valid.
+      description: Upon passing valid user credentials, it checks with user service and returns token.
+      operationId: authLogin
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  refresh_token:
+                    type: string
+                  username:
+                    type: string
+                  email:
+                    type: string
+        '400':
+          description: Credential error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /auth/token/refresh:
+    post:
+      tags:
+        - Auth Service
+      summary: Returns a refresh token.
+      description: Upon passing refresh token, it refreshes the token.
+      operationId: authTokenRefresh
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  refresh_token:
+                    type: string
+        '401':
+          description: Token Invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  
+  /user-service/api/v1/register:
+    post:
+      tags:
+        - User Service
+      summary: Creates user and returns user and token.
+      description: Upon passing valid credentials, it returns user and token.
+      operationId: userRegister
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  refresh_token:
+                    type: string
+                  response:
+                    type: string
+                  username:
+                    type: string
+                  email:
+                    type: string
+        '400':
+          description: Token Creation failed or Credentials not valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /user-service/api/v1/login-validate:
+    post:
+      tags:
+        - User Service
+      summary: Validates the user credentials.
+      description: This is not used anymore, use the GRPC endpoint. Takes user credentials and verifies if they are correct. called by auth service internally only.
+      operationId: userLoginValidate
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  refresh_token:
+                    type: string
+                  response:
+                    type: string
+                  username:
+                    type: string
+                  email:
+                    type: string
+        '400':
+          description: Token Creation failed or Credentials not valid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  
+  
+  /movie-service/api/v1/movies/:
+    get:
+      tags:
+        - Movie Service
+      summary: Lists all movies.
+      description: Lists all movies.
+      operationId: movieList
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MoviesList'
+    post:
+      tags:
+        - Movie Service
+      summary: Creates a new movie
+      description: Creates a new movie.
+      operationId: movieCreate
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+        '403':
+          description: User is not admin
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Information missing.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - bearerAuth: []
+  /movie-service/api/v1/movies/{pk}:
+    get:
+      tags:
+        - Movie Service
+      summary: Details of a Movie.
+      description: Details of a Movie.
+      operationId: movieDetails
+      parameters:
+        - name: pk
+          in: path
+          description: ID of movie to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Movie'
+  /movie-service/api/v1/{pk}/reviews/create/:
+    post:
+      tags:
+        - Movie Service
+      summary: Create Review for a movie.
+      description: Create Review for a movie.
+      operationId: reviewCreate
+      parameters:
+        - name: pk
+          in: path
+          description: ID of movie to create review
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        '400':
+          description: Information missing or movie was already reviewed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Must be authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - bearerAuth: []
+  /movie-service/api/v1/{pk}/reviews/:
+    get:
+      tags:
+        - Movie Service
+      summary: List all reviews for a movie.
+      description: List all reviews for a movie.
+      operationId: reviewListOfAMovie
+      parameters:
+        - name: pk
+          in: path
+          description: ID of movie to see reviews
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReviewList'
+  /movie-service/api/v1/reviews/{pk}/:
+    get:
+      tags:
+        - Movie Service
+      summary: Review Details.
+      description: Review Details.
+      operationId: reviewDetails
+      parameters:
+        - name: pk
+          in: path
+          description: ID of review
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        
+  
+  
+  /movie-service/api/v1/stream/:
+    get:
+      tags:
+        - Movie Service
+      summary: Lists all streaming platforms.
+      description: Lists all streaming platforms.
+      operationId: streamingPlatformList
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StreamPlatformList'
+    post:
+      tags:
+        - Movie Service
+      summary: Creates a streaming platform.
+      description: Creates a streaming platform.only admin user can create.
+      operationId: streamingPlatformCreate
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StreamPlatform'
+        '403':
+          description: User is not admin
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '400':
+          description: Information missing.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      security:
+        - bearerAuth: []
+  
+  /movie-service/api/v1/stream/{pk}/:
+    get:
+      tags:
+        - Movie Service
+      summary: streaming platform Details.
+      description: streaming platform Details.
+      operationId: streamingPlatformDetails
+      parameters:
+        - name: pk
+          in: path
+          description: ID of a streaming platform
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StreamPlatform'
+  
+
+
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              error_code:
+                type: string
+              error_details:
+                type: string
+    Movie:
+      type: object
+      properties:
+        title:
+          type: string
+        storyline:
+          type: string
+        platform:
+          type: string
+        active:
+          type: boolean
+        created:
+          type: string  # You may use 'string' or 'date' based on the actual format
+        avg_rating:
+          type: number
+        number_rating:
+          type: integer
+    Review:
+      type: object
+      properties:
+        review_user:
+          type: number
+        rating:
+          type: number
+        description:
+          type: string
+        active:
+          type: boolean
+        created:
+          type: string
+          format: date-time
+        update:
+          type: string
+          format: date-time
+    StreamPlatform:
+      type: object
+      properties:
+        name:
+          type: string
+        about:
+          type: string
+        website:
+          type: string
+
+    MoviesList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Movie'
+    ReviewList:
+      type: array
+      items:
+        $ref: '#/components/schemas/Review'
+    StreamPlatformList:
+      type: array
+      items:
+        $ref: '#/components/schemas/StreamPlatform'
+        
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
