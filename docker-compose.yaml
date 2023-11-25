@@ -9,6 +9,7 @@ services:
     volumes:
       - ./nginx-config.conf:/etc/nginx/nginx.conf
       - ./user_service/static:/app/static  # Map the volume for static files
+      - ./documentation/_build/html:/usr/share/nginx/html/docs
     depends_on:
       - auth-service
       - user-service
