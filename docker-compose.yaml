@@ -14,6 +14,7 @@ services:
       - user-service
       - movie-service
       - client-service
+      - swagger-ui
     networks:
       - main-internal-net
   
@@ -65,6 +66,46 @@ services:
       - main-internal-net
     environment:
       - WATCHPACK_POLLING=true
+  
+  swagger-ui:
+    build:
+      context: ./swagger-ui
+      dockerfile: dev.Dockerfile
+    networks:
+      - main-internal-net
+    volumes:
+      - ./swagger-ui:/app # Map the volume for the code in the user_service folder
+    ports:
+      - "3002:3002"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+  
+  # kafka and zookeeper
+  # zookeeper:
+  #   image: confluentinc/cp-zookeeper:latest
+  #   environment:
+  #     ZOOKEEPER_CLIENT_PORT: 2181
+  #     ZOOKEEPER_TICK_TIME: 2000
+  #   ports:
+  #     - 22181:2181
+  #   networks:
+  #     - main-internal-net
+  
+  # kafka:
+  #   image: confluentinc/cp-kafka:5.3.1
+  #   depends_on:
+  #     - zookeeper
+  #   ports:
+  #     - 29092:29092
+  #   environment:
+  #     KAFKA_BROKER_ID: 1
+  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+  #     KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+  #     KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+  #     KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  #   networks:
+  #     - main-internal-net
 
 networks:
   main-internal-net:

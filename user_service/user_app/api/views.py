@@ -39,6 +39,7 @@ def registration_view(request):
             if response.status_code == 200:
                 token = response.json().get("token")
                 data['token'] = token
+                data['refresh_token'] = response.json().get("refresh_token")
             else:
                 # Handle token creation error
                 data['token'] = 'Token creation failed'

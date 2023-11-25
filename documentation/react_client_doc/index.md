@@ -27,6 +27,9 @@ state is cleared showing user is not logged in.
 #### Findings:
 - for some unknown reason, in the react docker file if the directory is /app, then nothing installs, therfore
 i set the working directory as /app2
+- My react client was was not working without the node_modules on the host, and doing hot reload,
+becauase of some problem with docker compose volume mapping. volume mapping replaces the app directory
+contents, and the app does not have access to packages installed. https://stackoverflow.com/questions/30043872/docker-compose-node-modules-not-present-in-a-volume-after-npm-install-succeeds . Indeed this is a complex problem, having hot reload, having vscode sugestion, and also not copying host node_modules to the container.
 
 
 ##### Access process.env variables
