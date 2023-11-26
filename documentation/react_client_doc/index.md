@@ -33,6 +33,7 @@ contents, and the app does not have access to packages installed. https://stacko
 - Another issue i found with kafka was, even if i specified user_service depends on kafka, that was not engough. that just means starting of service, not actively listening. therefore userservice which has code to call kafka to send events, was not getting the kafka ready on boot. so i had to add a health check block on the docker compose for kafka, and on the user service, i added condition such as kafka has to be healthy, until then wait for kafka to be healthy before user service starts.
 - for now I am copying the grpc codes to both of the producing and listening projects, will move them to a common shared library.
 - for now, kafka events code is copied to all the producing and listening projects, will move them to a common shared library.
+- in movie service, to start listenign to kafka events, i had so much trouble, i tried creating django management command file to start listening to kafka, and then creating a python file to start a thread with the two process runserver and manage.py [command file name]. It worked but it required creating this thread with 2 workers. so then i was looking for another options, then i found out that with the apps.py's ready method i can call the consumer to keep listening. the **shortcoming** is yet, i am not able to reload, if i change the consumer file or any file that consumer is referring to for event handling. in that case i have to restart the movie service, if i change the consumer logic.
 
 
 ##### Access process.env variables
@@ -74,3 +75,7 @@ makes available React store to all components.
 ##### Format code?
 - prettier is installed, format script is added to package.json
 - before committing run, `npm run format`
+
+##### Integrating Kafka
+- user service with signal fires kafka events.
+- movie service with consumer catches those events.
