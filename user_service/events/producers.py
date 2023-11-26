@@ -1,4 +1,4 @@
-import json
+import pickle
 from kafka import KafkaProducer
 from events.topics import TOPIC_USER_REGISTERED
 from events.user_created import UserCreatedEvent
@@ -17,8 +17,8 @@ def send_kafka_event_user_created(username, email):
         "username":username,
         "email":email
     }
-    print("will now send kafka event.....reaady....")
     if UserCreatedEvent(**data).is_valid():
         print("sending kafka event.....")
-        producer.send(TOPIC_USER_REGISTERED, json.dumps(data).encode("utf-8"))
+        serialized_data = pickle.dumps(data, pickle.HIGHEST_PROTOCOL)
+        producer.send(TOPIC_USER_REGISTERED, serialized_data)
         print(f"Done Sending...")

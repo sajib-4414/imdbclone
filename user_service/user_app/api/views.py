@@ -86,16 +86,15 @@ def call_kafka(request):
     if request.method == 'GET':
         from kafka import KafkaProducer
         import pickle
-        ORDER_KAFKA_TOPIC = "order_details"
+        ORDER_KAFKA_TOPIC = "user_registered"
         try:
             producer = KafkaProducer(bootstrap_servers='kafka:9092')
-            v = {
-                'msg': {
-                    'hello': 'world',
-                },
+            data = {
+                "username":"shamsul",
+                "email":"shamsul@gmail.com"
             }
-            serialized_data = pickle.dumps(v, pickle.HIGHEST_PROTOCOL)
-            producer.send('Ptopic', serialized_data)
+            serialized_data = pickle.dumps(data, pickle.HIGHEST_PROTOCOL)
+            producer.send('user_registered', serialized_data)
            
         except Exception as e:
             print(f"Exception occurred: {e}")
