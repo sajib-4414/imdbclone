@@ -1,5 +1,5 @@
 # from rest_framework.authtoken.views import obtain_auth_token
-from user_app.api.views import registration_view, logout_view, login_validate_view
+from user_app.api.views import registration_view, logout_view, login_validate_view, call_kafka
 # from rest_framework_simplejwt.views import (
 #     TokenObtainPairView,
 #     TokenRefreshView,
@@ -12,6 +12,7 @@ urlpatterns = [
     path("login-validate/", login_validate_view, name='login-validate'),
     # to use this api, no header, pass in the body as {"refresh":refresh_token}
     path("register/", registration_view, name='register'),
+    path("kafka-test/", call_kafka, name='kafka'),
     # path("logout/", logout_view, name='logout'),
     
     # jwt authentication token and token refresh

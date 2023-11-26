@@ -21,7 +21,6 @@ from movie_app.api.throttling import (ReviewCreateThrottle,
                                           ReviewListThrottle)
 from movie_app.models import Review, StreamPlatform, Movie
 from django.contrib.auth.models import User
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
 from django.http import HttpResponse
 
 class UserReview(generics.ListAPIView):
@@ -180,11 +179,6 @@ class StreamPlatformViewSet(viewsets.ModelViewSet):
     queryset = StreamPlatform.objects.all()
     serializer_class = StreamPlatformSerializer
     
-    @extend_schema(
-        description="Retrieve a specific stream platform by ID",
-        parameters=[OpenApiParameter("id", OpenApiTypes.INT, description="Stream Platform ID")],
-        responses={200: StreamPlatformSerializer}
-    )
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
     

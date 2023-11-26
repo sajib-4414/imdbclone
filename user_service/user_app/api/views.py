@@ -50,18 +50,7 @@ def registration_view(request):
             data['username'] = account.username
             data['email'] = account.email
             return Response(data, status.HTTP_201_CREATED)
-            
-            
-            
-            # token = Token.objects.get(user=account).key
-            # data['token'] = token
-            # refresh = RefreshToken.for_user(account)
-            # data['token'] =  {
-            # 'refresh': str(refresh),
-            # 'access': str(refresh.access_token),
-            # }
-            
-            
+                       
         else:
             return Response(parseError(serializer.errors), status.HTTP_400_BAD_REQUEST)
             
@@ -90,3 +79,16 @@ def login_validate_view(request):
                 # The username and password are not correct
                 return JsonResponse({'message': 'Invalid username or password'}, status=401)
         return JsonResponse({'message': 'wrong data'}, status=401)
+
+@api_view(['GET'])
+def call_kafka(request):
+    if request.method == 'GET':
+        from kafka import KafkaProducer
+        ORDER_KAFKA_TOPIC = "order_details"
+        try:
+            producer = KafkaProducer(bootstrap_servers="kafka:29092")
+            print(f"Kafka broker found...")
+        except Exception as e:
+            print(f"Error initializing Kafka producer: {e}")
+            producer = None  # Set producer to None to indicate that it's not available
+        return JsonResponse({'message': 'wrong data'}, status=200)

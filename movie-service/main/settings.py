@@ -40,8 +40,7 @@ INSTALLED_APPS = [
     "movie_app",
     "rest_framework",
     # 'rest_framework.authtoken', #this will create a token table in the database,
-    'django_filters',
-    'drf_spectacular'
+    'django_filters'
 ]
 
 MIDDLEWARE = [
