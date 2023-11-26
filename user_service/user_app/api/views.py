@@ -6,6 +6,7 @@ from django.http import HttpResponseBadRequest
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
 import httpx
+import json
 from user_app.helpers.serializer_error_parser import parseError
 # from rest_framework.authtoken.models import Token
 # from rest_framework_simplejwt.tokens import RefreshToken
@@ -84,11 +85,20 @@ def login_validate_view(request):
 def call_kafka(request):
     if request.method == 'GET':
         from kafka import KafkaProducer
+        import pickle
         ORDER_KAFKA_TOPIC = "order_details"
         try:
-            producer = KafkaProducer(bootstrap_servers="kafka:29092")
-            print(f"Kafka broker found...")
+            producer = KafkaProducer(bootstrap_servers='kafka:9092')
+            v = {
+                'msg': {
+                    'hello': 'world',
+                },
+            }
+            serialized_data = pickle.dumps(v, pickle.HIGHEST_PROTOCOL)
+            producer.send('Ptopic', serialized_data)
+           
         except Exception as e:
-            print(f"Error initializing Kafka producer: {e}")
-            producer = None  # Set producer to None to indicate that it's not available
+            print(f"Exception occurred: {e}")
+            import traceback
+            traceback.print_exc()
         return JsonResponse({'message': 'wrong data'}, status=200)

@@ -36,11 +36,16 @@ services:
     build:
       context: ./movie-service  # Relative path to the movie-service folder
       dockerfile: dev.Dockerfile
-    command: python manage.py runserver 0.0.0.0:8000
+    # command: python manage.py runserver 0.0.0.0:8000
+    # command: python manage.py listener
+    command: python run_server_and_listener.py
     volumes:
       - ./movie-service:/app  # Map the volume for the code in the movie-service folder
     ports:
       - "8001:8000"
+    depends_on:
+      kafka:
+        condition: service_healthy
     networks:
       - main-internal-net
   user-service:
