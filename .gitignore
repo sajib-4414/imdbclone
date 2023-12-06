@@ -2,3 +2,4 @@
 */static
 **/node_modules
 user_service/supervisord.log
+notification_postgres_data/

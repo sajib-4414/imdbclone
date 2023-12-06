@@ -18,6 +18,8 @@ services:
       - movie-service
       - client-service
       - swagger-ui
+      - notification-service
+      - notification-db
     networks:
       - main-internal-net
   
@@ -77,6 +79,34 @@ services:
     environment:
       - WATCHPACK_POLLING=true
   
+  notification-service:
+    build:
+      context: ./notification-service
+      dockerfile: dev.Dockerfile
+    command: bash -c 'while !</dev/tcp/notification-db/5432; do sleep 1; done; uvicorn app.main:app --host 0.0.0.0'
+    volumes:
+      - ./notification-service:/app
+    ports:
+      - 8008:8000
+    depends_on:
+      - notification-db
+    environment:
+      - DATABASE_URL=postgresql://root:root@notification-db:5432/notification_db
+    networks:
+      - main-internal-net
+  notification-db:
+    image: postgres:15-alpine
+    volumes:
+      - ./notification_postgres_data:/var/lib/postgresql/data/
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=notification_db
+    networks:
+      - main-internal-net
+  
   swagger-ui:
     build:
       context: ./swagger-ui
@@ -125,3 +155,6 @@ services:
 networks:
   main-internal-net:
     driver: bridge
+
+volumes:
+  notification_postgres_data:
