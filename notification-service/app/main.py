@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from app.db import database, User
-app = FastAPI(title="FastAPI, Docker, and Traefik")
-
+from app.kafka_consumer import kafka_consumer
+app = FastAPI(title="Notification service..")
+import asyncio
 
 @app.get("/")
 def read_root():
@@ -9,6 +10,7 @@ def read_root():
 
 @app.on_event("startup")
 async def startup():
+    asyncio.create_task(kafka_consumer())
     if not database.is_connected:
         await database.connect()
     # create a dummy entry

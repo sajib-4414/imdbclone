@@ -16,7 +16,7 @@ export const doLogin = createAsyncThunk(
     { username, password }: { username: string; password: string },
     thunkAPI,
   ) => {
-    const root_url = "http://localhost:8005"; // process.env.REACT_API_HOST
+    const root_url = process.env.REACT_API_HOST;
     const loginUrl = `${root_url}/auth/login`;
 
     try {

@@ -152,7 +152,7 @@ const Signup: React.FC = () => {
               Sign Up
             </button>
           </form>
-          {signupErrors.length > 0 && <Error errors={signupErrors} />}
+          {signupErrors && signupErrors.length > 0 && <Error errors={signupErrors} />}
         </div>
       </div>
     </div>

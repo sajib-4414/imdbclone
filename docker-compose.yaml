@@ -83,17 +83,20 @@ services:
     build:
       context: ./notification-service
       dockerfile: dev.Dockerfile
-    command: bash -c 'while !</dev/tcp/notification-db/5432; do sleep 1; done; uvicorn app.main:app --host 0.0.0.0'
+    # command: bash -c 'while !</dev/tcp/notification-db/5432; do sleep 1; done; uvicorn app.main:app --host 0.0.0.0 --debug'
     volumes:
       - ./notification-service:/app
     ports:
       - 8008:8000
-    depends_on:
-      - notification-db
     environment:
       - DATABASE_URL=postgresql://root:root@notification-db:5432/notification_db
     networks:
       - main-internal-net
+    depends_on:
+      kafka:
+        condition: service_healthy
+      notification-db:
+        condition: service_healthy
   notification-db:
     image: postgres:15-alpine
     volumes:
@@ -106,6 +109,11 @@ services:
       - POSTGRES_DB=notification_db
     networks:
       - main-internal-net
+    healthcheck:
+      test: ["CMD", "sh", "-c", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
   
   swagger-ui:
     build:

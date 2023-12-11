@@ -93,7 +93,7 @@ const Login: React.FC = () => {
           Login
         </button>
       </form>
-      {loginError.length > 0 && <Error errors={loginError} />}
+      {loginError && loginError.length > 0 && <Error errors={loginError} />}
     </div>
   );
 };
