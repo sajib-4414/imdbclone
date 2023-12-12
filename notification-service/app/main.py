@@ -1,12 +1,13 @@
 from fastapi import FastAPI
 from app.db import database, User
 from app.kafka_consumer import kafka_consumer
-app = FastAPI(title="Notification service..")
+from concurrent.futures import ThreadPoolExecutor
+app = FastAPI(title="Notification service......")
 import asyncio
 
 @app.get("/")
 def read_root():
-    return {"hello": "world"}
+    return {"hello": "world......"}
 
 @app.on_event("startup")
 async def startup():

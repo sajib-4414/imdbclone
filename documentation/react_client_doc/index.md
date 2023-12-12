@@ -35,6 +35,22 @@ contents, and the app does not have access to packages installed. https://stacko
 - for now, kafka events code is copied to all the producing and listening projects, will move them to a common shared library.
 - in movie service, to start listenign to kafka events, i had so much trouble, i tried creating django management command file to start listening to kafka, and then creating a python file to start a thread with the two process runserver and manage.py [command file name]. It worked but it required creating this thread with 2 workers. also it does to reload if command file is changed.
 so then i was looking for another options, then i found out that with the apps.py's ready method i can call the consumer to keep listening. the **shortcoming** is yet, i am not able to reload, if i change the consumer file or any file that consumer is referring to for event handling. in that case i have to restart the movie service, if i change the consumer logic. Also it does not run the django server anymore, just the listener, so switched back to command file mentioned above.
+I also tried with supervisord to run both, but in that case it does not print to terminal anymore, and i think file change is not reflected.
+- fastapi with postgres, https://testdriven.io/blog/fastapi-docker-traefik/
+environment variable passing did not work, and also postgres volume creation did not, had to do a ./
+- unwrap result if not called, does not throw the error in the component where i am calling async thunk,
+if i want to catch the api call error in the async thunk in the component i am calling from, i need to unwrap, this will give me the raw resultr and also throw exception if there is any.
+found in signup.tsx
+`doSignUp({
+          username: formData["username"],
+          password: formData["password"],
+          password2: formData["confirmPassword"],
+          email: formData["email"],
+        }),
+      );
+      const originalPromiseResult = unwrapResult(resultAction); //is needed to throw error`
+-sqlalchemy, ormar using fastapi, i found that i cannot just add a unique not null value in the database
+suddenly in a talbe with data, it will show error, that because that column is new, when trying to fill this with null, it gets the eeror that column is not nullable. nullable=False, the lesson is when a table is up and running, with data. make sure a unique non null column has a default value. 
 
 
 ##### Access process.env variables

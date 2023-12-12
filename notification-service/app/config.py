@@ -4,7 +4,6 @@ from pydantic import BaseSettings, Field
 
 
 class Settings(BaseSettings):
-    # db_url: str = Field(..., env='DATABASE_URL')
-    db_url = "postgresql://root:root@notification-db:5432/notification_db"
+    db_url = os.getenv("DATABASE_URL", "")
 
 settings = Settings()

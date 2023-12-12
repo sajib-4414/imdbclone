@@ -87,7 +87,7 @@ services:
     volumes:
       - ./notification-service:/app
     ports:
-      - 8008:8000
+      - 8008:8008
     environment:
       - DATABASE_URL=postgresql://root:root@notification-db:5432/notification_db
     networks:

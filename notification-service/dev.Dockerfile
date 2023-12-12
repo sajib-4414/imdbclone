@@ -23,5 +23,5 @@ COPY . .
 # Make port 8008 available to the world outside this container
 EXPOSE 8008
 
-# CMD ["bash", "-c", "while !</dev/tcp/notification-db/5432; do sleep 1; done; uvicorn app.main:app --host 0.0.0.0 --port 8008 --debug"]
+
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8008", "--debug"]
