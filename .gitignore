@@ -3,3 +3,4 @@
 **/node_modules
 user_service/supervisord.log
 notification_postgres_data/
+user_postgres_data/
