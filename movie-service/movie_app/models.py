@@ -19,14 +19,14 @@ class User(AbstractUser):
         
 class StreamPlatform(models.Model):
     name = models.CharField(max_length=30) # e.g. netflix, amazon, etc
-    about = models.CharField(max_length=150)
+    about = models.TextField() #models.CharField(max_length=300)
     website = models.URLField(max_length=100)
     
     def __str__(self) -> str:
         return self.name
     
 class Movie(models.Model):
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=200)
     storyline = models.CharField(max_length=200)
     platform = models.ForeignKey(StreamPlatform, on_delete=models.CASCADE, related_name="movie") # Many to One
     # here streamplatform has many watchlists, so to access the watchlists from a single stream platform

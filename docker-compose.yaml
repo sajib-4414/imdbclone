@@ -47,8 +47,29 @@ services:
     depends_on:
       kafka:
         condition: service_healthy
+      user-db:
+        condition: service_healthy
     networks:
       - main-internal-net
+
+  movie-db:
+    image: postgres:15-alpine
+    volumes:
+      - ./movie_postgres_data:/var/lib/postgresql/data/
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=movie_db
+    networks:
+      - main-internal-net
+    healthcheck:
+      test: ["CMD", "sh", "-c", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
   user-service:
     build:
       context: ./user_service  # Relative path to the user_service folder
@@ -85,6 +106,7 @@ services:
       interval: 10s
       timeout: 3s
       retries: 3
+      
   client-service:
     build:
       context: ./react_client  # Relative path to the user_service folder

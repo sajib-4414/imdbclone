@@ -13,6 +13,7 @@ jsonschema==4.19.2
 jsonschema-specifications==2023.11.1
 kafka-python==2.0.2
 PyJWT==2.8.0
+psycopg2==2.9.9
 python-dateutil==2.8.2
 pytz==2023.3.post1
 PyYAML==6.0.1
