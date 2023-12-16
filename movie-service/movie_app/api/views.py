@@ -15,7 +15,7 @@ from movie_app.api.pagination import (MovieListCursorPagination,
                                           MovieListLimitOffsetPagination,
                                           MovieListPagination)
 from movie_app.api.permissions import (IsAdminOrReadOnly,
-                                           IsReviewUserOrReadOnly)
+                                           IsReviewUserOrReadOnly, IsContentCreatorOrReadOnly)
 from movie_app.api.serializers import *
 from movie_app.api.throttling import (ReviewCreateThrottle,
                                           ReviewListThrottle)
@@ -116,9 +116,11 @@ class MovieSearchView(generics.ListAPIView):
     # ordering_fields = ['avg_rating']
     pagination_class = MovieListCursorPagination
     
+from movie_app.decorators.movie_decorators import check_permission
+
     
 class MovieListGetCreateView(APIView):
-    permission_classes = [IsAdminOrReadOnly]
+    permission_classes = [IsContentCreatorOrReadOnly]
     def get(self, request):
         # Simulate a 401 response for demonstration purposes
         # return HttpResponse(status=401)

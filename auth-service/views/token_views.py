@@ -31,10 +31,12 @@ def token_refresh(body: TokenRefreshRequestBody):
 # Validates a given JWT token        
 @router.get("/")
 async def validate_jwt_token(authorization: str = Header(None)):
+    print("came here for auth.....")
     if not authorization:
         # raise HTTPException(status_code=401, detail="Authorization header is missing")
         #Letting the destination service handle what happens when authorization is not present
         # Return a response indicating the absence of authentication
+        print("1.1......")
         response = {"message": "No authentication header provided"}
         return JSONResponse(content=response, status_code=200)
     token = authorization.replace("Bearer ", "")
@@ -46,8 +48,10 @@ async def validate_jwt_token(authorization: str = Header(None)):
             "user_email": "test@test.com",
             "X-Username": payload.get("sub"),
         }
+        print("1.2......")
         return JSONResponse(content=response, headers=headers)
 
     else:
         # Token is invalid
+        print("1.3......")
         raise HTTPException(status_code=401, detail="Invalid token")

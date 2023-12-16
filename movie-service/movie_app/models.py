@@ -13,9 +13,11 @@ class User(AbstractUser):
     role = models.CharField(max_length=50, choices=Role.choices)
 
     def save(self, *args, **kwargs):
+        print("save called....")
         if not self.pk:
             self.role = self.base_role
             return super().save(*args, **kwargs)
+        super().save(*args, **kwargs)
         
 class StreamPlatform(models.Model):
     name = models.CharField(max_length=30) # e.g. netflix, amazon, etc

@@ -11,9 +11,12 @@ from user_app.helpers.serializer_error_parser import parseError
 from events.topics import TOPIC_USER_REGISTERED, TOPIC_USER_UPDATED
 from kafka import KafkaProducer
 import pickle
+from django.shortcuts import get_object_or_404
 # from rest_framework.authtoken.models import Token
 # from rest_framework_simplejwt.tokens import RefreshToken
 # from user_app.models import * #sometime the signal file doesn't fire, in that case load that file
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 @api_view(['POST',])
 def logout_view(request):
@@ -83,6 +86,13 @@ def login_validate_view(request):
                 # The username and password are not correct
                 return JsonResponse({'message': 'Invalid username or password'}, status=401)
         return JsonResponse({'message': 'wrong data'}, status=401)
+
+@api_view(['GET'])
+def get_user_permissions(request,username):
+    if request.method == 'GET':
+        user = get_object_or_404(User, username=username)
+        user_permissions = user.get_all_permissions()
+        return JsonResponse({'username': username, 'permissions': list(user_permissions)})
 
 @api_view(['GET'])
 def call_kafka(request):
