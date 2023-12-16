@@ -18,8 +18,12 @@ class Command(BaseCommand):
 
         for message in consumer:
             topic = message.topic
-            deserialized_data = pickle.loads(message.value)
-            print("message received on the movie service") 
-            print(deserialized_data)
-            if topic == TOPIC_USER_REGISTERED:
-                handle_user_registered_event(deserialized_data)
+            try:
+                deserialized_data = pickle.loads(message.value)
+                print("message received on the movie service") 
+                print(deserialized_data)
+                if topic == TOPIC_USER_REGISTERED:
+                    handle_user_registered_event(deserialized_data)
+            except pickle.PickleError as pe:
+                    print(f"Error while unpickling data: {pe}")
+                    # Handle the pickle error as needed

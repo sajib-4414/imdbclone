@@ -8,6 +8,9 @@ from django.http import JsonResponse
 import httpx
 import json
 from user_app.helpers.serializer_error_parser import parseError
+from events.topics import TOPIC_USER_REGISTERED, TOPIC_USER_UPDATED
+from kafka import KafkaProducer
+import pickle
 # from rest_framework.authtoken.models import Token
 # from rest_framework_simplejwt.tokens import RefreshToken
 # from user_app.models import * #sometime the signal file doesn't fire, in that case load that file
@@ -84,9 +87,8 @@ def login_validate_view(request):
 @api_view(['GET'])
 def call_kafka(request):
     if request.method == 'GET':
-        from kafka import KafkaProducer
-        import pickle
-        TOPIC_USER_REGISTERED = "user_registered"
+
+        
         try:
             producer = KafkaProducer(bootstrap_servers='kafka:9092')
             data = {
