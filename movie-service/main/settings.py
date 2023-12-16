@@ -161,3 +161,5 @@ REST_FRAMEWORK = {
 # SIMPLE_JWT = {
 #     'ROTATE_REFRESH_TOKENS': True
 # }
+
+AUTH_USER_MODEL = "movie_app.User"

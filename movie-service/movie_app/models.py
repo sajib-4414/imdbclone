@@ -1,7 +1,22 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
+class User(AbstractUser):
+    class Role(models.TextChoices):
+        ADMIN = "ADMIN", "Admin"
+        REGULAR_USER = "REGULAR_USER", "Regular_User"
+        CONTENT_CREATOR_USER = "CONTENT_CREATOR_USER", "Content_Creator_User"
+
+    base_role = Role.ADMIN
+    role = models.CharField(max_length=50, choices=Role.choices)
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.role = self.base_role
+            return super().save(*args, **kwargs)
+        
 class StreamPlatform(models.Model):
     name = models.CharField(max_length=30) # e.g. netflix, amazon, etc
     about = models.CharField(max_length=150)
@@ -35,3 +50,4 @@ class Review(models.Model):
     
     def __str__(self) -> str:
         return str(self.rating) + ' | ' + self.movie.title + ' | ' + str(self.review_user)
+    
