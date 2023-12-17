@@ -1,5 +1,5 @@
 from rest_framework.decorators import api_view
-from user_app.api.serializers import RegistrationSerializer, LoginSerializer
+from user_app.api.serializers import RegistrationCreatorSerializer, RegistrationRegularSerializer, LoginSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import HttpResponseBadRequest
@@ -27,9 +27,9 @@ def logout_view(request):
     
     
 @api_view(['POST'])
-def registration_view(request):
+def registration_for_regular_view(request):
     if request.method == 'POST':
-        serializer = RegistrationSerializer(data=request.data)
+        serializer = RegistrationRegularSerializer(data=request.data)
         
         data = {}
         
@@ -56,11 +56,48 @@ def registration_view(request):
             data['response'] = 'Registration Successful'
             data['username'] = account.username
             data['email'] = account.email
+            data['role'] = account.role
             return Response(data, status.HTTP_201_CREATED)
                        
         else:
             return Response(parseError(serializer.errors), status.HTTP_400_BAD_REQUEST)
+      
+
+@api_view(['POST'])
+def registration_for_creator_view(request):
+    if request.method == 'POST':
+        serializer = RegistrationCreatorSerializer(data=request.data)
+        
+        data = {}
+        
+        if serializer.is_valid():
+            validated_data = serializer.validated_data
+            #check if that user already exists or not.
             
+            token_data = {
+                "username": validated_data['username'],
+                "email": validated_data['email'],
+                # Add any other necessary data for token creation
+            }
+            response = httpx.post("http://auth-service:8003/token/create/", json=token_data)
+            if response.status_code == 200:
+                token = response.json().get("token")
+                data['token'] = token
+                data['refresh_token'] = response.json().get("refresh_token")
+            else:
+                # Handle token creation error
+                data['token'] = 'Token creation failed'
+                raise HttpResponseBadRequest("Token creation failed")
+
+            account = serializer.save()
+            data['response'] = 'Registration Successful'
+            data['username'] = account.username
+            data['email'] = account.email
+            data['role'] = account.role
+            return Response(data, status.HTTP_201_CREATED)
+                       
+        else:
+            return Response(parseError(serializer.errors), status.HTTP_400_BAD_REQUEST)      
         
 
 @api_view(['POST'])

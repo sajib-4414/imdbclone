@@ -141,3 +141,4 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 AUTH_USER_MODEL = "user_app.User"
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8005']
