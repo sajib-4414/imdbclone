@@ -29,9 +29,6 @@ async def kafka_consumer():
         # Will leave consumer group; perform autocommit if enabled.
         # await consumer.stop()
 
-    # async for message in consumer:
-    #     asyncio.create_task(process_kafka_event(message))
-        # process_kafka_event(message)
 
 async def process_kafka_event(message):
     topic = message.topic

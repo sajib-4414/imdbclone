@@ -1,28 +1,16 @@
 # app/db.py
-import databases
-import ormar
-import sqlalchemy
+from tortoise.models import Model
+from tortoise import fields
 
-from app.config import settings
+class User(Model):
+    # Defining `id` field is optional, it will be defined automatically
+    # if you haven't done it yourself
+    id = fields.IntField(pk=True)
+    username:str = fields.CharField(max_length=255, unique=True)
+    email:str = fields.CharField(max_length=255, unique=True)
+    active: bool = fields.BooleanField(default=True, nullable=False)
 
-database = databases.Database(settings.db_url)
-metadata = sqlalchemy.MetaData()
-
-
-class BaseMeta(ormar.ModelMeta):
-    metadata = metadata
-    database = database
-
-
-class User(ormar.Model):
-    class Meta(BaseMeta):
-        tablename = "users"
-
-    id: int = ormar.Integer(primary_key=True)
-    email: str = ormar.String(max_length=128, unique=True, nullable=False)
-    username: str = ormar.String(max_length=128, unique=True, nullable=False)
-    active: bool = ormar.Boolean(default=True, nullable=False)
-
-
-engine = sqlalchemy.create_engine(settings.db_url)
-metadata.create_all(engine)
+    # Defining ``__str__`` is also optional, but gives you pretty
+    # represent of model in debugger and interpreter
+    def __str__(self):
+        return self.name

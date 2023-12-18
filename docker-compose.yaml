@@ -130,7 +130,9 @@ services:
     ports:
       - 8008:8008
     environment:
-      - DATABASE_URL=postgresql://root:root@notification-db:5432/notification_db
+      # - DATABASE_URL=postgresql://root:root@notification-db:5432/notification_db
+      - DATABASE_URL=asyncpg://root:root@notification-db:5432/notification_db
+      - TORTOISE_ORM=tortoise-settings.TORTOISE_ORM
     networks:
       - main-internal-net
     depends_on:
