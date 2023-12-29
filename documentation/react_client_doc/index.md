@@ -59,6 +59,15 @@ when tried to create user, exception happened and user not created.
 processed by the movie service, that is inconsistent data. also if movie service changes the user role, and user service does not, its a consistency problem. data has to be in sync.
 ##### Access process.env variables
 - use DotEnv with webpack to get access to process.env variables.
+- react js hotload socket not working with nginx config? 
+#below code is for accepting websocket connections from react app container, for hotload
+            proxy_set_header HOST $host;
+            proxy_set_header X-Forwarded-Host $http_host;
+
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_http_version 1.1;
+            proxy_set_header Connection "upgrade";
+            proxy_read_timeout 86400;
 
 ##### useeffect is called twice even if dependecies are empty?
 - Tried removing strictmode, did not work
