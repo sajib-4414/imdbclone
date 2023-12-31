@@ -17,7 +17,7 @@ IMDB movie review app clone with Django REST framework backend APIs.
 * **User service**: Django App. handles signup of user and user profile updates. Has REST, and GRPC.
 * **Movie service**: Django App. handles movie related things.
 * **Comments and Discussion**: Planned. Comments and replies.
-* **Notification service**: Planned. Email and In app notifications.
+* **Notification service**: Email and In app notifications.
 * **Search service**: Planned. Elastic Search.
 * **Recommendation Engine service**: Planned. ML recommendation.
 * **admin dashboard microservice**: Planned. User, movie and all management services.
@@ -27,11 +27,12 @@ IMDB movie review app clone with Django REST framework backend APIs.
 ## Technology stack:
 
 - **Backend:** Django, FastAPI, GRPC (Django GRPC), [Planned] Flask
+- **Task queue:** Celery with Redis backend in user-service
 - **Frontend:** Webpack, React, Typescript, Redux toolkit.
 - **Load Balancer** :For development, nginx. django admin's file serving is not working right now when admin of individual services is accessed through ngninx. For production will use AWS ALB load balancer.
 - **Test Cases:** APITest cases, Pytest test cases, Unit test cases.
 - **ORM:** Django ORM for database operations, [Planned] SQLAlchemy
-- **Database:** SQLite database, will be upgraded to PostgreSQL database soon. Database: database per service, will try to use mysql, postgres. will try to use Redis, MongoDB for some service. 
+- **Database:**  PostgreSQL database . Database: database per service,  will try to use Redis, MongoDB for some service. 
 - **Throttling:** Throttling to limit permissions to regular users wherever applicable
 - **Authentication:** JWT Authentication, planned to upgrade to OAuth2.
 - **Devops CI/CD**: Different docker for dev and prod. [Planned] jenkins/github actions for test run. [Planned] EKS Cluster deployment.
