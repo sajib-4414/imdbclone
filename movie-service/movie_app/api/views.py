@@ -15,13 +15,12 @@ from movie_app.api.pagination import (MovieListCursorPagination,
                                           MovieListLimitOffsetPagination,
                                           MovieListPagination)
 from movie_app.api.permissions import (IsAdminOrReadOnly,
-                                           IsReviewUserOrReadOnly)
+                                           IsReviewUserOrReadOnly, IsContentCreatorOrReadOnly)
 from movie_app.api.serializers import *
 from movie_app.api.throttling import (ReviewCreateThrottle,
                                           ReviewListThrottle)
 from movie_app.models import Review, StreamPlatform, Movie
 from django.contrib.auth.models import User
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
 from django.http import HttpResponse
 
 class UserReview(generics.ListAPIView):
@@ -117,9 +116,11 @@ class MovieSearchView(generics.ListAPIView):
     # ordering_fields = ['avg_rating']
     pagination_class = MovieListCursorPagination
     
+from movie_app.decorators.movie_decorators import check_permission
+
     
 class MovieListGetCreateView(APIView):
-    permission_classes = [IsAdminOrReadOnly]
+    permission_classes = [IsContentCreatorOrReadOnly]
     def get(self, request):
         # Simulate a 401 response for demonstration purposes
         # return HttpResponse(status=401)
@@ -180,11 +181,6 @@ class StreamPlatformViewSet(viewsets.ModelViewSet):
     queryset = StreamPlatform.objects.all()
     serializer_class = StreamPlatformSerializer
     
-    @extend_schema(
-        description="Retrieve a specific stream platform by ID",
-        parameters=[OpenApiParameter("id", OpenApiTypes.INT, description="Stream Platform ID")],
-        responses={200: StreamPlatformSerializer}
-    )
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
     

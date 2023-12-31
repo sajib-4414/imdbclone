@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.9
+FROM python:3.9-slim
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -18,4 +18,5 @@ RUN pip install -r requirements.txt
 EXPOSE 8000
 
 # Define the command to run your Django application
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# CMD ["python", "run_server_and_listener.py"]

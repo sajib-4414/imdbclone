@@ -1,0 +1,7 @@
+MANIFEST.in
+README.md
+setup.py
+events_schema.egg-info/PKG-INFO
+events_schema.egg-info/SOURCES.txt
+events_schema.egg-info/dependency_links.txt
+events_schema.egg-info/top_level.txt

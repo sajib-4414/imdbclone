@@ -194,8 +194,36 @@ paths:
                     type: string
                   email:
                     type: string
+  /user-service/api/v1/account/get-permissions/{username}:
+    get:
+      tags:
+        - User Service
+      summary: Validates the user credentials.
+      description: This is not used anymore, use the GRPC endpoint. Takes user credentials and verifies if they are correct. called by auth service internally only.
+      operationId: userpermissionList
+      parameters:
+        - name: username
+          in: path
+          description: username of the permisison to query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  permissions:
+                    type: array
+                    items:
+                      type: string
         '400':
-          description: Token Creation failed or Credentials not valid
+          description: Username not supplied
           content:
             application/json:
               schema:

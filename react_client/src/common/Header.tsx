@@ -81,6 +81,12 @@ const Header: FC = () => {
                     </a>
                   </li>
                   <li>
+                  <Link to="export" className="dropdown-item">
+                  Export
+                </Link>
+                    
+                  </li>
+                  <li>
                     <hr className="dropdown-divider" />
                   </li>
                   <li>

@@ -11,11 +11,15 @@ services:
       - ./user_service/static:/app/static  # Map the volume for static files
       - ./documentation/_build/html:/usr/share/nginx/html/docs
     depends_on:
+      - kafka
+      - zookeeper
       - auth-service
       - user-service
       - movie-service
       - client-service
       - swagger-ui
+      - notification-service
+      - notification-db
     networks:
       - main-internal-net
   
@@ -34,19 +38,42 @@ services:
     build:
       context: ./movie-service  # Relative path to the movie-service folder
       dockerfile: dev.Dockerfile
-    command: python manage.py runserver 0.0.0.0:8000
+    # command: python manage.py runserver 0.0.0.0:8000
+    command: python run_server_and_event_thread.py
     volumes:
       - ./movie-service:/app  # Map the volume for the code in the movie-service folder
     ports:
       - "8001:8000"
+    depends_on:
+      kafka:
+        condition: service_healthy
+      user-db:
+        condition: service_healthy
     networks:
       - main-internal-net
+
+  movie-db:
+    image: postgres:15-alpine
+    volumes:
+      - ./movie_postgres_data:/var/lib/postgresql/data/
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=movie_db
+    networks:
+      - main-internal-net
+    healthcheck:
+      test: ["CMD", "sh", "-c", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
   user-service:
     build:
       context: ./user_service  # Relative path to the user_service folder
       dockerfile: dev.Dockerfile
-    # command: /usr/bin/supervisord #python runcommand.py
-    # command: python manage.py runserver 0.0.0.0:8000
     command: python runcommand.py
     volumes:
       - ./user_service:/app  # Map the volume for the code in the user_service folder
@@ -55,6 +82,50 @@ services:
       - "5008:50051"
     networks:
       - main-internal-net
+    restart: always
+    depends_on:
+      kafka:
+        condition: service_healthy
+      user-db:
+        condition: service_healthy
+      celery-worker-user-service:
+        condition: service_healthy
+  celery-worker-user-service:
+    build:
+      context: ./user_service  # Relative path to the user_service folder
+      dockerfile: dev.Dockerfile
+    command: celery -A main worker --loglevel=info
+    volumes:
+      - ./user_service:/app  # Map the volume for the code in the user_service folder
+    networks:
+      - main-internal-net
+    restart: always
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: celery -A main status
+      interval: 10s
+      timeout: 10s
+      retries: 10
+  user-db:
+    image: postgres:15-alpine
+    volumes:
+      - ./user_postgres_data:/var/lib/postgresql/data/
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=user_db
+    networks:
+      - main-internal-net
+    healthcheck:
+      test: ["CMD", "sh", "-c", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      
   client-service:
     build:
       context: ./react_client  # Relative path to the user_service folder
@@ -67,6 +138,44 @@ services:
       - main-internal-net
     environment:
       - WATCHPACK_POLLING=true
+  
+  notification-service:
+    build:
+      context: ./notification-service
+      dockerfile: dev.Dockerfile
+    # command: bash -c 'while !</dev/tcp/notification-db/5432; do sleep 1; done; uvicorn app.main:app --host 0.0.0.0 --debug'
+    volumes:
+      - ./notification-service:/app
+    ports:
+      - 8008:8008
+    environment:
+      # - DATABASE_URL=postgresql://root:root@notification-db:5432/notification_db
+      - DATABASE_URL=asyncpg://root:root@notification-db:5432/notification_db
+      - TORTOISE_ORM=tortoise-settings.TORTOISE_ORM
+    networks:
+      - main-internal-net
+    depends_on:
+      kafka:
+        condition: service_healthy
+      notification-db:
+        condition: service_healthy
+  notification-db:
+    image: postgres:15-alpine
+    volumes:
+      - ./notification_postgres_data:/var/lib/postgresql/data/
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=notification_db
+    networks:
+      - main-internal-net
+    healthcheck:
+      test: ["CMD", "sh", "-c", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
   
   swagger-ui:
     build:
@@ -81,33 +190,52 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
   
-  # kafka and zookeeper
-  # zookeeper:
-  #   image: confluentinc/cp-zookeeper:latest
-  #   environment:
-  #     ZOOKEEPER_CLIENT_PORT: 2181
-  #     ZOOKEEPER_TICK_TIME: 2000
-  #   ports:
-  #     - 22181:2181
-  #   networks:
-  #     - main-internal-net
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis_data:/data
+    networks:
+      - main-internal-net
+    healthcheck:
+      test: ["CMD", "redis-cli","ping"]
   
-  # kafka:
-  #   image: confluentinc/cp-kafka:5.3.1
-  #   depends_on:
-  #     - zookeeper
-  #   ports:
-  #     - 29092:29092
-  #   environment:
-  #     KAFKA_BROKER_ID: 1
-  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-  #     KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
-  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-  #     KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-  #     KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-  #   networks:
-  #     - main-internal-net
+  # kafka and zookeeper
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22181:2181
+    networks:
+      - main-internal-net
+  
+  kafka:
+    image: confluentinc/cp-kafka:5.3.1
+    depends_on:
+      - zookeeper
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    healthcheck:
+      test: ["CMD", "nc", "-vz", "localhost", "29092"]
+      interval: 30s
+      timeout: 10s
+      retries: 4
+    networks:
+      - main-internal-net
 
 networks:
   main-internal-net:
     driver: bridge
+
+volumes:
+  notification_postgres_data:

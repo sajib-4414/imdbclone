@@ -40,8 +40,7 @@ INSTALLED_APPS = [
     "movie_app",
     "rest_framework",
     # 'rest_framework.authtoken', #this will create a token table in the database,
-    'django_filters',
-    'drf_spectacular'
+    'django_filters'
 ]
 
 MIDDLEWARE = [
@@ -78,10 +77,21 @@ WSGI_APPLICATION = "main.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'movie_db',
+        'USER': 'root',
+        'PASSWORD':'root',
+        'HOST': 'movie-db',
+        'PORT': '5432'
     }
 }
 
@@ -162,3 +172,5 @@ REST_FRAMEWORK = {
 # SIMPLE_JWT = {
 #     'ROTATE_REFRESH_TOKENS': True
 # }
+
+AUTH_USER_MODEL = "movie_app.User"

@@ -21,6 +21,7 @@ import NotFound from "./common/NotFound";
 import { NotificationProvider } from "./contexts/NotificationContext";
 import axios, { AxiosResponse } from "axios";
 import { LoggedInUser } from "./interfaces/LoginInterfaces";
+import ExportIndex from "./components/export/ExportIndex";
 
 const AppProviderWrapper = () => {
   return (
@@ -74,6 +75,7 @@ const App: FC = () => {
           <Route path="signup" element={<Signup />} />
           <Route element={<ProtectedRoute />}>
             <Route path="add" element={<Add />} />
+            <Route path="export" element={<ExportIndex />} />
           </Route>
           <Route path="movies" element={<MovieList />} />
           <Route path="users" element={<List />} />

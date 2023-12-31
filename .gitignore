@@ -2,3 +2,8 @@
 */static
 **/node_modules
 user_service/supervisord.log
+notification_postgres_data/
+user_postgres_data/
+movie_postgres_data/
+redis_data/
+user_service/media/

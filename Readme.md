@@ -31,7 +31,7 @@ IMDB movie review app clone with Django REST framework backend APIs.
 - **Frontend:** Webpack, React, Typescript, Redux toolkit.
 - **Load Balancer** :For development, nginx. django admin's file serving is not working right now when admin of individual services is accessed through ngninx. For production will use AWS ALB load balancer.
 - **Test Cases:** APITest cases, Pytest test cases, Unit test cases.
-- **ORM:** Django ORM for database operations, [Planned] SQLAlchemy
+- **ORM:** Django ORM for database operations, SQLAlchemy, Tortoise ORM
 - **Database:**  PostgreSQL database . Database: database per service,  will try to use Redis, MongoDB for some service. 
 - **Throttling:** Throttling to limit permissions to regular users wherever applicable
 - **Authentication:** JWT Authentication, planned to upgrade to OAuth2.
