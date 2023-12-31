@@ -24,6 +24,7 @@ urlpatterns = [
     path(f"{servicePrefix}api/v1/",  include([
         path("account/", include('user_app.api.urls')),
     ])),
+    path(f"{servicePrefix}export-app/", include('exports.urls')),
 ]
 
 def grpc_handlers(server):

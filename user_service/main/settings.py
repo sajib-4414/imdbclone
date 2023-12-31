@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     "user_app",
     "rest_framework",
     'django_grpc_framework',
-    # 'rest_framework.authtoken' #this will create a token table in the database
+    'exports'
+    # 'rest_framework.authtoken' #this will create a token table in the database...
 ]
 
 MIDDLEWARE = [
@@ -95,11 +96,11 @@ DATABASES = {
     }
 }
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework.authentication.TokenAuthentication',
-#     ]
-# }
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'main.auth_backend.UsernameAuthentication',
+    ]
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -139,6 +140,16 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+MEDIA_ROOT = os.path.join(BASE_DIR, '')
 
 AUTH_USER_MODEL = "user_app.User"
 CSRF_TRUSTED_ORIGINS = ['http://localhost:8005']
+
+# Celery configuration
+CELERY_BROKER_URL = 'redis://redis:6379/0' 
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+CELERY_ENABLE_UTC = True

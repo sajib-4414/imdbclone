@@ -84,6 +84,7 @@ services:
       - "5008:50051"
     networks:
       - main-internal-net
+    restart: always
     depends_on:
       kafka:
         condition: service_healthy
@@ -170,6 +171,15 @@ services:
       - "3002:3002"
     environment:
       - CHOKIDAR_USEPOLLING=true
+  
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis_data:/data
+    networks:
+      - main-internal-net
   
   # kafka and zookeeper
   zookeeper:

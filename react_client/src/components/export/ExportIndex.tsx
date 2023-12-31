@@ -35,8 +35,11 @@ const ExportIndex: React.FC = () => {
 </table>
 <h2 className="mb-4">Create a new export</h2>
       <form>
-        <div>
-            <input type="checkbox">My reviews</input>
+        <div className="form-check">
+        <input type="checkbox" className="form-check-input" id="user-login-chkbox" name="export-checkbox-1" value="user-login"/>
+        <label htmlFor="user-login-chkbox" className="form-check-label">User creation and last login</label><br/>
+        <input type="checkbox" className="form-check-input"  id="user-reviews-chkbox" name="export-checkbox-2" value="reviews"/>
+        <label htmlFor="user-reviews-chkbox" className="form-check-label"> Reviews created</label><br/>
         </div>
       </form>
       {/* {loginError && loginError.length > 0 && <Error errors={loginError} />} */}

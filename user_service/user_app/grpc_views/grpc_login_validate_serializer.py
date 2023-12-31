@@ -2,8 +2,7 @@ from django_grpc_framework import proto_serializers
 from login_proto import login_grpc_pb2
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from django.contrib.auth.models import User  # Import Django's User model
-
+from django.contrib.auth.models import User, update_last_login  # Import Django's User model
 
 class LoginProtoSerializer(proto_serializers.ProtoSerializer):
     username = serializers.CharField()
@@ -22,6 +21,8 @@ class LoginProtoSerializer(proto_serializers.ProtoSerializer):
 
         if not user:
             raise serializers.ValidationError('Invalid username or password')
+        
+        update_last_login(None, user)
 
         return user
     def to_representation(self, instance):

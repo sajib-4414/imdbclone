@@ -53,5 +53,5 @@ async def validate_jwt_token(authorization: str = Header(None)):
 
     else:
         # Token is invalid
-        print("1.3......")
+        print("Invalid token....")
         raise HTTPException(status_code=401, detail="Invalid token")
