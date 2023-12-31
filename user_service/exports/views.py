@@ -40,7 +40,7 @@ class ExportFileView(APIView):
     def get(self, request, task_id, *args, **kwargs):
         task_result = AsyncResult(task_id)
         if not task_result.ready():
-            response = create_error_from_message('task_queued','Task not done yet. status= ')
+            response = create_error_from_message('task_queued','Task not done yet.. status= ')
             return JsonResponse(response, status=400)
         export = Export.objects.get(
             task_id=task_id

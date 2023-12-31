@@ -10,7 +10,8 @@ class Command(BaseCommand):
     help = 'Run all commands'
     commands = [
         'python manage.py grpcrunserver',
-        'python manage.py runserver 0.0.0.0:8000'
+        'python manage.py runserver 0.0.0.0:8000',
+        'celery -A main worker -l INFO'
     ]
 
     def handle(self, *args, **options):
