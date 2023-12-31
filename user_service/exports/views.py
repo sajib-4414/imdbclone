@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
 User = get_user_model()
 import pandas as pd
-from django.http import HttpResponseBadRequest,JsonResponse
+from django.http import JsonResponse
 from io import BytesIO
 from django.core.files.storage import default_storage
 import datetime
@@ -11,56 +11,47 @@ from exports.models import Export
 from django.conf import settings
 from django.http import HttpResponse
 from wsgiref.util import FileWrapper
+from rest_framework import status
 from user_app.helpers.serializer_error_parser import create_error_from_message
+from exports.tasks import generate_csv_file
+from rest_framework.response import Response
+from celery.result import AsyncResult
 # Create your views here.
 class ExportCreateAPIView(APIView):
     permission_classes= [IsAuthenticated]
     def post(self, request, format=None):
-        """
-        Return a list of all users......
-        """
         user = request.user
-        username = user.username
-        registration_time = user.date_joined
-        last_login_time = user.last_login
-        # Create a DataFrame
-        data = {'Username': [username],
-                'Registration Time': [registration_time],
-                'Last Login Time': [last_login_time]}
-
-        
-        df = pd.DataFrame(data)
-        df['Registration Time'] = df['Registration Time'].apply(lambda a: pd.to_datetime(a).date()) 
-        df['Last Login Time'] = df['Last Login Time'].apply(lambda a: pd.to_datetime(a).date()) 
-        
-        output = BytesIO()
-        writer = pd.ExcelWriter(output, engine='xlsxwriter')
-        df.to_excel(writer, sheet_name='Sheet1', index=False)
-        writer.close()
-
-        output.seek(0)
-        # workbook = output.getvalue()
-        output_name = f"export_{datetime.datetime.now().strftime('%Y%m%d%H%M%S')}"
-        output_file_name = output_name+".xlsx"
-        
-        file_path = f'media/{output_name}.xlsx'  # Adjust the storage path as needed
-        default_storage.save(file_path, output)
-        export = Export.objects.create(
+        celery_task = generate_csv_file.delay(user.id)
+        Export.objects.create(
             creator=user,
-            file_name=output_file_name,
-            status=Export.STATUS_CHOICES[0][0],
-            description="Registration data, Review Data"
+            file_name="",
+            description="Registration data, Review Data",
+            task_id = celery_task.id
         )
-        
-        # Return a JSON response with the status and download link
         response_data = {
-            'status': 'completed',
-            'filename': output_file_name,
+            'export_id': celery_task.id,
+            'status': 'queued',
         }
-        return JsonResponse(response_data, status=200)
+
+        return Response(response_data, status=status.HTTP_202_ACCEPTED)
+
 
 class ExportFileView(APIView):
-    def get(self, request, file_name, *args, **kwargs):
+    def get(self, request, task_id, *args, **kwargs):
+        task_result = AsyncResult(task_id)
+        if not task_result.ready():
+            response = create_error_from_message('task_queued','Task not done yet. status= ')
+            return JsonResponse(response, status=400)
+        export = Export.objects.get(
+            task_id=task_id
+        )
+        if export.status == 'queued' or export.status == 'in_progress':
+            response = create_error_from_message('task_queued','Task not done yet. status= '+export.status)
+            return JsonResponse(response, status=400)
+        elif export.status == 'failed':
+            response = create_error_from_message('task_failed','Export failed')
+            return JsonResponse(response, status=400)
+        file_name = export.file_name
         # Check the status of the Celery task
         # Task is completed
         file_path = settings.MEDIA_ROOT +'/'+ 'media/' + file_name
