@@ -74,8 +74,6 @@ services:
     build:
       context: ./user_service  # Relative path to the user_service folder
       dockerfile: dev.Dockerfile
-    # command: /usr/bin/supervisord #python runcommand.py
-    # command: python manage.py runserver 0.0.0.0:8000
     command: python runcommand.py
     volumes:
       - ./user_service:/app  # Map the volume for the code in the user_service folder
@@ -90,8 +88,26 @@ services:
         condition: service_healthy
       user-db:
         condition: service_healthy
+      celery-worker-user-service:
+        condition: service_healthy
+  celery-worker-user-service:
+    build:
+      context: ./user_service  # Relative path to the user_service folder
+      dockerfile: dev.Dockerfile
+    command: celery -A main worker --loglevel=info
+    volumes:
+      - ./user_service:/app  # Map the volume for the code in the user_service folder
+    networks:
+      - main-internal-net
+    restart: always
+    depends_on:
       redis:
         condition: service_healthy
+    healthcheck:
+      test: celery -A main status
+      interval: 10s
+      timeout: 10s
+      retries: 10
   user-db:
     image: postgres:15-alpine
     volumes:

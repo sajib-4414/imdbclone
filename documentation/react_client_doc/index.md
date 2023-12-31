@@ -58,6 +58,7 @@ suddenly in a talbe with data, it will show error, that because that column is n
 when tried to create user, exception happened and user not created.
 - had data inconsistency, i had identical User with Role, if user role is changed in user service, and it is not yet
 processed by the movie service, that is inconsistent data. also if movie service changes the user role, and user service does not, its a consistency problem. data has to be in sync.
+- problem solve story: [office story bolbo] age synchronously api call e csv generate kortam, lag hoito, tasara djangio single threaded so eta server k block rakhto, pore ami research kore background job e celery dei. ejonno amar model banano lagse track rakhte, storage rakha lagse save korte, ar system ta change kora lagse, request=queued. download api te click korle either file or statusqueued asbe ekhon,
 ##### Access process.env variables
 - use DotEnv with webpack to get access to process.env variables.
 - react js hotload socket not working with nginx config? 
