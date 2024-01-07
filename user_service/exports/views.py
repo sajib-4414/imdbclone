@@ -16,6 +16,7 @@ from user_app.helpers.serializer_error_parser import create_error_from_message
 from exports.tasks import generate_csv_file
 from rest_framework.response import Response
 from celery.result import AsyncResult
+from exports.serializers import ExportSerializer
 # Create your views here.
 class ExportCreateAPIView(APIView):
     permission_classes= [IsAuthenticated]
@@ -34,8 +35,12 @@ class ExportCreateAPIView(APIView):
         }
 
         return Response(response_data, status=status.HTTP_202_ACCEPTED)
+    def get(self, request):
+        exports = Export.objects.all()
+        serializer = ExportSerializer(exports, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-
+#.....
 class ExportFileView(APIView):
     def get(self, request, task_id, *args, **kwargs):
         task_result = AsyncResult(task_id)

@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     "user_app",
     "rest_framework",
     'django_grpc_framework',
-    'exports'
+    'exports',
+    'corsheaders',
     # 'rest_framework.authtoken' #this will create a token table in the database...
 ]
 
@@ -52,7 +53,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+# CORS_ALLOWED_ORIGINS = [
+#     "http://localhost:3003",  # Add the origin of your React app
+# ]
 
 ROOT_URLCONF = 'main.urls'
 

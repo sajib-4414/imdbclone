@@ -84,3 +84,8 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError({'password': 'Password is required'})
 
         return data
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email']  # Include the fields you want to include

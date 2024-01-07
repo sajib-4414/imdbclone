@@ -139,6 +139,19 @@ services:
     environment:
       - WATCHPACK_POLLING=true
   
+  staff-service: # admin react interface
+    build:
+      context: ./react_staff  # Relative path to the user_service folder
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./react_staff:/app  # Map the volume for the code in the user_service folder
+    ports:
+      - "3003:3000"
+    networks:
+      - main-internal-net
+    environment:
+      - WATCHPACK_POLLING=true
+  
   notification-service:
     build:
       context: ./notification-service
