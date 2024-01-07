@@ -66,6 +66,10 @@ consumer side:
 * calls a private api that is open to all consumers -> just checks the user roles, if the user role in the user copy of the that service says it is a consumer role, then allow access.
 * same goes for staff side, some apis are open to all staff's, some apis require specific permission, for them we call to user service. 
 - django cors error when serving api via ngix, frotned was localhost:3003, backends were served through nginx. to solve that i had to add cors header conf in nginx conf ONLY, adding in django did not help. also adding in django+nginx also did not work. it said multiple cors headers.
+
+I also used a proxy model, RegularUser, StaffUser, this allows to set the role automatically if you create user with theese proxy models, these are just a virtual copy of regular user model i createad as a custom.
+i have two endpoint for two kind of user creation, login, such that those two kind of user objects are created, so that the user is created with roles. also i have a profile for both of them, profiles are created with signal, as soon as user is created. they also send message to kafka.
+
 ##### Access process.env variables
 - use DotEnv with webpack to get access to process.env variables.
 - react js hotload socket not working with nginx config? 

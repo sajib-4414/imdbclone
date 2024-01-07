@@ -17,7 +17,7 @@ export const doLogin = createAsyncThunk(
     thunkAPI,
   ) => {
     const root_url = process.env.REACT_API_HOST;
-    const loginUrl = `${root_url}/auth/login`;
+    const loginUrl = `${root_url}/auth/login/creator`;
 
     try {
       const response = await axios.post(loginUrl, {

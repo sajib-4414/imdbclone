@@ -18,19 +18,10 @@ class LoginProtoSerializer(proto_serializers.ProtoSerializer):
         username = data.get('username')
         password = data.get('password')
         
-        # user = User.objects.get(username=username)
-        # print("user found................")
-        # print(user)
-        # if not user:
-        #     raise serializers.ValidationError('Invalid username or password')
 
-        # is_matched = user.check_password(password)
         # Authenticate the user based on username and password...
         user = authenticate(username=username, password=password)
 
-        # print("matching..............")
-        # print(is_matched)
-        # if not is_matched:
         if not user:
             raise serializers.ValidationError('Invalid username or password')
         
@@ -42,5 +33,7 @@ class LoginProtoSerializer(proto_serializers.ProtoSerializer):
         return {
             'username': instance.username,
             'email': instance.email,
+            'name': instance.username,
+            'role': instance.role,
             'valid':True
         }

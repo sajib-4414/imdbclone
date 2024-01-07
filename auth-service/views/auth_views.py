@@ -1,14 +1,16 @@
 from fastapi import HTTPException, Request, Body, APIRouter, status
+import fastapi.exceptions
 from models import TokenUser, LoginRequestBody
 from helpers.token_helper import token_creator
 from helpers.error_parser import grpc_error_parser
 import grpc
 from login_proto import login_grpc_pb2, login_grpc_pb2_grpc
 router = APIRouter()
+from fastapi.exceptions import RequestValidationError
 
 
 # Endpoint to generate tokens for login from the client
-@router.post("/login")
+@router.post("/login/creator")
 async def login(request: Request, login_request: LoginRequestBody = Body(...)):
     username = login_request.username
     password = login_request.password
@@ -19,13 +21,54 @@ async def login(request: Request, login_request: LoginRequestBody = Body(...)):
             is_credential_valid = response.valid
             # print(response, end="")
             if is_credential_valid:
+                if response.role != "CONTENT_CREATOR_USER":
+                    raise HTTPException(status_code=403, detail=[{
+                        "error_code":"not_staf_credentials",
+                        "error_details": "Please provide a staff side credentials"
+                    }])
                 tokenuser = TokenUser(username=username, email=response.email)
                 token = token_creator(tokenuser)
                 return {
                     "token": token.access_token,
                     "refresh_token": token.refresh_token,
                     "username":username,
-                    "email":response.email
+                    "email":response.email,
+                    "name": response.name,
+                    "role": response.role
+                    }
+            else:
+                raise HTTPException(status_code=401, detail="Invalid username or password")
+    except grpc.RpcError as rpc_error:
+        parsed_errors = grpc_error_parser(rpc_error)
+        http_exception = HTTPException(status_code=status.HTTP_401_UNAUTHORIZED , detail=parsed_errors)
+        raise http_exception
+
+# Endpoint to generate tokens for login from the client
+@router.post("/login/regular")
+async def login(request: Request, login_request: LoginRequestBody = Body(...)):
+    username = login_request.username
+    password = login_request.password
+    try:
+        with grpc.insecure_channel('user-service:50051') as channel: #always use internal port of service in the code,external port is for postman or external client
+            stub = login_grpc_pb2_grpc.UserLoginServiceStub(channel)
+            response = stub.ValidateUser(login_grpc_pb2.UserValidationRequest(username=username,password=password))
+            is_credential_valid = response.valid
+            # print(response, end="")
+            if is_credential_valid:
+                if response.role != "REGULAR_USER":
+                    raise HTTPException(status_code=403, detail=[{
+                        "error_code":"not_regular_credentials",
+                        "error_details": "Please provide a regular user side credentials"
+                    }])
+                tokenuser = TokenUser(username=username, email=response.email)
+                token = token_creator(tokenuser)
+                return {
+                    "token": token.access_token,
+                    "refresh_token": token.refresh_token,
+                    "username":username,
+                    "email":response.email,
+                    "name": response.name,
+                    "role": response.role
                     }
             else:
                 raise HTTPException(status_code=401, detail="Invalid username or password")
