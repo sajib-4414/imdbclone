@@ -12,7 +12,10 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from "axios";
 import fileDownload from "js-file-download";
-
+interface CheckboxState {
+  'export-checkbox-creation-last-login': boolean;
+  'export-checkbox-review-created': boolean;
+}
 const ExportIndex: React.FC = () => {
   const [currentPageExports, setCurrentPageExports] = useState<Export[]>([]);
   const axiosInstance = createAxiosInstance(useNavigate(), useNotification());
@@ -20,26 +23,39 @@ const ExportIndex: React.FC = () => {
   const loggedInUser: LoggedInUser = useAppSelector(
     (state) => state.loginUser.loggedInUser,
   );
+
+  const [checkboxes, setCheckboxes] = useState<CheckboxState>({
+    'export-checkbox-creation-last-login': false,
+    'export-checkbox-review-created': false,
+  });
+  const handleCheckboxChange = (name: keyof CheckboxState) => {
+    setCheckboxes((prevState) => ({
+      ...prevState,
+      [name]: !prevState[name],
+    }));
+  };
+  const fetchExports= async () => {
+    const exportfetchUrl:string = `http://localhost:8005/user-service/export-app/exports`;
+    await axiosInstance
+      .get(exportfetchUrl, {
+        headers: {
+          Authorization: `Bearer ${loggedInUser.token}`,
+          // Add any other headers if needed
+        },
+      })
+      .then((response) => {
+        setCurrentPageExports(response.data);
+        console.log("data is", response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching exports:", error);
+      });
+  };
   //use useeffect to call a method right after rendering
   // and also for cleanup
   useEffect(() => {
-    const exportfetchUrl:string = `http://localhost:8005/user-service/export-app/exports`;
-    const fetchExports= async () => {
-      await axiosInstance
-        .get(exportfetchUrl, {
-          headers: {
-            Authorization: `Bearer ${loggedInUser.token}`,
-            // Add any other headers if needed
-          },
-        })
-        .then((response) => {
-          setCurrentPageExports(response.data);
-          console.log("data is", response.data);
-        })
-        .catch((error) => {
-          console.error("Error fetching exports:", error);
-        });
-    };
+    
+
     if(loggedInUser){
       fetchExports();
     }
@@ -65,6 +81,39 @@ const ExportIndex: React.FC = () => {
     
 
 };
+  const submitExport = ()=>{
+    console.log('Selected Checkboxes:', checkboxes);
+    const submitNewExportURL:string = `http://localhost:8005/user-service/export-app/exports`
+    const createNewExports= async () => {
+      await axiosInstance
+        .post(submitNewExportURL, {},{
+          headers: {
+            Authorization: `Bearer ${loggedInUser.token}`,
+            // Add any other headers if needed
+          },
+        })
+        .then((response) => {
+          notificationHook.showNotification("New Export submitted", {
+            type: ToastType.Success,
+          });
+          fetchExports();
+        })
+        .catch((error) => {
+          console.error("Error fetching exports:", error);
+          notificationHook.showNotification("Problem submitting new export", {
+            type: ToastType.Error,
+          });
+        });
+    };
+    if(loggedInUser){
+      createNewExports();
+    }
+    else{
+      notificationHook.showNotification("Wait a second", {
+        type: ToastType.Error,
+      });
+    }
+  }
 
 
 
@@ -102,13 +151,32 @@ const ExportIndex: React.FC = () => {
 <h2 className="mb-4">Create a new export</h2>
       <form>
         <div className="form-check">
-        <input type="checkbox" className="form-check-input" id="user-login-chkbox" name="export-checkbox-1" value="user-login"/>
-        <label htmlFor="user-login-chkbox" className="form-check-label">User creation and last login</label><br/>
-        <input type="checkbox" className="form-check-input"  id="user-reviews-chkbox" name="export-checkbox-2" value="reviews"/>
-        <label htmlFor="user-reviews-chkbox" className="form-check-label"> Reviews created</label><br/>
+        <input
+            type="checkbox"
+            className="form-check-input"
+            id="user-login-chkbox"
+            name="export-checkbox-creation-last-login"
+            checked={checkboxes['export-checkbox-creation-last-login']}
+            onChange={() => handleCheckboxChange('export-checkbox-creation-last-login')}
+          />
+        <label htmlFor="user-login-chkbox" className="form-check-label">
+            User creation and last login
+          </label>
+          <br />
+          <input
+            type="checkbox"
+            className="form-check-input"
+            id="user-reviews-chkbox"
+            name="export-checkbox-review-created"
+            checked={checkboxes['export-checkbox-review-created']}
+            onChange={() => handleCheckboxChange('export-checkbox-review-created')}
+          />
+          <label htmlFor="user-reviews-chkbox" className="form-check-label">
+            Reviews created
+          </label>
         </div>
       </form>
-      {/* {loginError && loginError.length > 0 && <Error errors={loginError} />} */}
+       <button type="submit" onClick={e=>submitExport()} className="btn btn-primary">Submit</button>
     </div>
   );
 };
