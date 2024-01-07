@@ -35,6 +35,7 @@ class RegistrationCreatorSerializer(serializers.ModelSerializer):
     def save(self):
         user = ContentCreatorUser.objects.create(username=self.validated_data['username'], email=self.validated_data['email'])
         user.set_password(self.validated_data['password'])
+        user.save()
         return user
     
 class RegistrationRegularSerializer(serializers.ModelSerializer):
@@ -68,6 +69,8 @@ class RegistrationRegularSerializer(serializers.ModelSerializer):
     def save(self):
         user = RegularUser.objects.create(username=self.validated_data['username'], email=self.validated_data['email'])
         user.set_password(self.validated_data['password'])
+        user.save()
+        print('password set is',self.validated_data['password'])
         return user
 
 class LoginSerializer(serializers.Serializer):

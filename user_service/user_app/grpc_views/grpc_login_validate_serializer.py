@@ -1,8 +1,10 @@
 from django_grpc_framework import proto_serializers
 from login_proto import login_grpc_pb2
 from rest_framework import serializers
+from django.contrib.auth.models import update_last_login  # Import Django's User model
+from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
-from django.contrib.auth.models import User, update_last_login  # Import Django's User model
+User = get_user_model()
 
 class LoginProtoSerializer(proto_serializers.ProtoSerializer):
     username = serializers.CharField()
@@ -15,10 +17,20 @@ class LoginProtoSerializer(proto_serializers.ProtoSerializer):
     def validate(self, data):
         username = data.get('username')
         password = data.get('password')
+        
+        # user = User.objects.get(username=username)
+        # print("user found................")
+        # print(user)
+        # if not user:
+        #     raise serializers.ValidationError('Invalid username or password')
 
-        # Authenticate the user based on username and password
+        # is_matched = user.check_password(password)
+        # Authenticate the user based on username and password...
         user = authenticate(username=username, password=password)
 
+        # print("matching..............")
+        # print(is_matched)
+        # if not is_matched:
         if not user:
             raise serializers.ValidationError('Invalid username or password')
         

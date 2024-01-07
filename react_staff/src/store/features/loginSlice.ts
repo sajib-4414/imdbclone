@@ -61,7 +61,7 @@ export const doSignUp = createAsyncThunk(
     thunkAPI,
   ) => {
     const root_url = process.env.REACT_API_HOST; //  "http://localhost:8005";
-    const registerUrl = `${root_url}/user-service/api/v1/account/register/regular/`;
+    const registerUrl = `${root_url}/user-service/api/v1/account/register/creator/`;
 
     try {
       const response = await axios.post(registerUrl, {

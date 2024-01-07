@@ -151,6 +151,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, '')
 AUTH_USER_MODEL = "user_app.User"
 CSRF_TRUSTED_ORIGINS = ['http://localhost:8005']
 
+
 # Celery configuration
 CELERY_BROKER_URL = 'redis://redis:6379/0' 
 CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
