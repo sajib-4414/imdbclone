@@ -1,12 +1,14 @@
+import rest_framework.decorators
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
 User = get_user_model()
 import pandas as pd
+import os
 from django.http import JsonResponse
 from io import BytesIO
 from django.core.files.storage import default_storage
-import datetime
+from django.shortcuts import get_object_or_404
 from exports.models import Export
 from django.conf import settings
 from django.http import HttpResponse
@@ -17,6 +19,8 @@ from exports.tasks import generate_csv_file
 from rest_framework.response import Response
 from celery.result import AsyncResult
 from exports.serializers import ExportSerializer
+from rest_framework.decorators import api_view
+from django.shortcuts import get_list_or_404
 # Create your views here.
 class ExportCreateAPIView(APIView):
     permission_classes= [IsAuthenticated]
@@ -40,13 +44,25 @@ class ExportCreateAPIView(APIView):
         serializer = ExportSerializer(exports, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
+@api_view(['POST'])
+def export_bulk_delete_with_post(request):
+    export_ids_to_delete  = request.data.get('export_ids', [])
+    exports_to_delete = get_list_or_404(Export, id__in=export_ids_to_delete) #Export.objects.filter(id__in=export_ids_to_delete)
+    for export_obj in exports_to_delete:
+        if export_obj.file_name and len(export_obj.file_name)>0:
+            file_path = f'media/{export_obj.file_name}'
+            if os.path.exists(file_path):
+                os.remove(file_path)
+        export_obj.delete()
+
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 #.....
 class ExportFileView(APIView):
     def get(self, request, task_id, *args, **kwargs):
-        task_result = AsyncResult(task_id)
-        if not task_result.ready():
-            response = create_error_from_message('task_queued','Task not done yet.. status= ')
-            return JsonResponse(response, status=400)
+        
         export = Export.objects.get(
             task_id=task_id
         )

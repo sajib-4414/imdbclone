@@ -59,7 +59,7 @@ MIDDLEWARE = [
 # CORS_ALLOWED_ORIGINS = [
 #     "http://localhost:3003",  # Add the origin of your React app
 # ]
-
+#...
 ROOT_URLCONF = 'main.urls'
 
 TEMPLATES = [

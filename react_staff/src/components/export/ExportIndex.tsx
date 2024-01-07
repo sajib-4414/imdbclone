@@ -20,6 +20,53 @@ const ExportIndex: React.FC = () => {
   const [currentPageExports, setCurrentPageExports] = useState<Export[]>([]);
   const axiosInstance = createAxiosInstance(useNavigate(), useNotification());
   const notificationHook = useNotification();
+  const [selectedDeleteCheckboxes, setSelectedDeleteCheckboxes] = useState([]);
+  const handleDeleteCheckboxChange = (exportItemId:number) => {
+    const updatedCheckboxes = [...selectedDeleteCheckboxes];
+    if (updatedCheckboxes.includes(exportItemId)) {
+      updatedCheckboxes.splice(updatedCheckboxes.indexOf(exportItemId), 1);//deletes 1 item from the given index
+    } else {
+      updatedCheckboxes.push(exportItemId);
+    }
+    setSelectedDeleteCheckboxes(updatedCheckboxes);
+  };
+  const handleDelete = () => {
+    // Implement your delete API call using selectedCheckboxes array
+    console.log('Selected Checkboxes:', selectedDeleteCheckboxes);
+    if(selectedDeleteCheckboxes.length ==0){
+      notificationHook.showNotification('Please select at last one item to be deleted',{
+        type: ToastType.Error,
+      })
+      return;
+    }
+    deleteSelectedExports(selectedDeleteCheckboxes)
+  }
+    const deleteSelectedExports= async (export_ids:number[]) => {
+      const exportDeleteURL:string = `http://localhost:8005/user-service/export-app/exports/bulk-delete/`
+      await axiosInstance
+        .post(exportDeleteURL, {
+          export_ids:export_ids
+        },{
+          headers: {
+            Authorization: `Bearer ${loggedInUser.token}`,
+            // Add any other headers if needed
+          },
+        })
+        .then((response) => {
+          notificationHook.showNotification("Export deleted", {
+            type: ToastType.Success,
+          });
+          setSelectedDeleteCheckboxes([])
+          fetchExports();
+        })
+        .catch((error) => {
+          console.error("Error deleting exports:", error);
+          notificationHook.showNotification("Problem deleting exports", {
+            type: ToastType.Error,
+          });
+        });
+    // Call your delete API here
+  };
   const loggedInUser: LoggedInUser = useAppSelector(
     (state) => state.loginUser.loggedInUser,
   );
@@ -128,6 +175,7 @@ const ExportIndex: React.FC = () => {
       <th scope="col">Time</th>
       <th scope="col">Status</th>
       <th scope="col">Download link</th>
+      <th scope="col">Select</th>
     </tr>
   </thead>
   <tbody>
@@ -142,12 +190,14 @@ const ExportIndex: React.FC = () => {
         {exportItem.status==ExportStatus.COMPLETED?
         <FontAwesomeIcon icon={faDownload} onClick={() => handleDownload(exportItem.task_id)} />:"-"}
         </td>
+      <td><input type="checkbox" className="form-check-input" onChange={() => handleDeleteCheckboxChange(exportItem.id)}/></td>
     </tr>
   ))
 }
 
   </tbody>
 </table>
+<button className="btn btn-danger" onClick={handleDelete}>Delete</button>
 <h2 className="mb-4">Create a new export</h2>
       <form>
         <div className="form-check">
