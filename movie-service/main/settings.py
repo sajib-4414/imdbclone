@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-(5*q$9vf-ekxq5#yf5ds$z38ul2b2pjt%3&v_ovq+4vu_o&%en
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['movie-service','localhost']
+ALLOWED_HOSTS = ['movie-service','localhost', 'shamsul-dev1.rits.uregina.ca' ]
 
 
 # Application definition
