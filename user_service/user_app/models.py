@@ -3,6 +3,8 @@ from django.db.models.signals import post_save
 from django.db import models
 from django.contrib.auth.models import AbstractUser,BaseUserManager
 from django.dispatch import receiver
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 
 # @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 # def create_auth_token(sender, instance=None, created=False, **kwargs):
@@ -79,8 +81,60 @@ class ProContentCreatorPermissions(models.Model):
                                  # and "view" default permissions
 
         permissions = ( 
-            ('create_content', 'Create Content'),  
-            ('update_content', 'Update the contents'), 
-            ('delete_content', 'Delete the contents'), 
-            ('read_content', 'Read all the contents'), 
+            ('create_movie', 'Create Movie'),  
+            ('update_movie', 'Update own movie'), 
+            ('delete_movie', 'Delete own movie'), 
+            ('read_all_my_movies', 'Read all own movies'), 
         )
+
+
+
+class RegularProUserPermissionManager(models.Manager):
+    def get_queryset(self):
+        # Get the content type object for RegularProUserPermission model
+        content_type = ContentType.objects.get(model='regular pro user permission')
+        
+        if content_type:
+        # Content type found, proceed with filtering
+            return super().get_queryset().filter(content_type=content_type)
+        else:
+        # Content type not found, handle the case accordingly
+            return super().get_queryset().none()  # Return an empty queryset or handle the error
+    
+class RegularProUserPermission(Permission):
+
+    objects = RegularProUserPermissionManager()
+    class Meta:
+        proxy = True
+
+    def save(self, *args, **kwargs):
+        ct, created = ContentType.objects.get_or_create(
+            model=self._meta.verbose_name, app_label=self._meta.app_label,
+        )
+        self.content_type = ct
+        super(RegularProUserPermission, self).save(*args)
+
+class ContentCreatorProUserPermissionManager(models.Manager):
+    def get_queryset(self):
+        # Get the content type object for RegularProUserPermission model
+        content_type = ContentType.objects.filter(model='content creator pro user permission').first()
+        
+        if content_type:
+        # Content type found, proceed with filtering
+            return super().get_queryset().filter(content_type=content_type)
+        else:
+        # Content type not found, handle the case accordingly
+            return super().get_queryset().none()  # Return an empty queryset or handle the error
+    
+class ContentCreatorProUserPermission(Permission):
+
+    objects = ContentCreatorProUserPermissionManager()
+    class Meta:
+        proxy = True
+
+    def save(self, *args, **kwargs):
+        ct, created = ContentType.objects.get_or_create(
+            model=self._meta.verbose_name, app_label=self._meta.app_label,
+        )
+        self.content_type = ct
+        super(ContentCreatorProUserPermission, self).save(*args)
