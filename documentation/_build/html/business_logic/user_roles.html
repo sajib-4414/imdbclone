@@ -5,20 +5,21 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Users and Roles &#8212; IMDB Clone project 0.1 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=4f649999" />
-    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=039e1c02" />
+    <title>Role based Access controls &#8212; IMDB Clone project 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=d1102ebc" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=12dfc556" />
     <script src="../_static/documentation_options.js?v=2709fde1"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="CI/CD and Scaling" href="../todo_and_others/scaling_plan.html" />
+    <link rel="prev" title="Configure and Run Tests" href="../todo_and_others/how_to_configure_tests.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
+
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  
 
   </head><body>
   
@@ -30,9 +31,18 @@
 
           <div class="body" role="main">
             
-  <section id="users-and-roles">
-<h1>Users and Roles<a class="headerlink" href="#users-and-roles" title="Link to this heading">¶</a></h1>
-<p>What everyone can do.</p>
+  <section id="role-based-access-controls">
+<h1>Role based Access controls<a class="headerlink" href="#role-based-access-controls" title="Link to this heading">¶</a></h1>
+<section id="user-types">
+<h2>User types:<a class="headerlink" href="#user-types" title="Link to this heading">¶</a></h2>
+<p>there are two user types, there are roles associated with a user object. the two roles are
+creator user, regular user.
+Also there is admin user.
+There will be seprate permission set in the Future like pro creator, regular creator, that will dictate who can do what.
+for now all creator user can create Movie, update their movie and delete their movie.
+but they need some permission. For this in the django admin panel of user service, create a creator group, attach content creator pro permissions, and add a content creator user to that group(go to user details and add them)
+the regular user also should be attached to a regular user group. regular user can be in future also regular, and regular premium user.</p>
+<p>What everyone/Regular user basic can do.</p>
 <ul class="simple">
 <li><p>Users create their account with username, email, password</p></li>
 <li><p>Can sign in.</p></li>
@@ -53,6 +63,7 @@ review is active or not. If admin changes it to False, then the review will not 
 <li><p><strong>See Review</strong>: Regular User can see all his reviews.</p></li>
 </ul>
 </section>
+</section>
 
 
           </div>
@@ -71,29 +82,37 @@ review is active or not. If admin changes it to False, then the review will not 
 
 
 <h3>Navigation</h3>
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Services:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../auth_service_doc/index.html">Auth-Service</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../movie_service_doc/index.html">Movie-Service</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_service_doc/index.html">User-Service</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../react_client_doc/index.html">React Client</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../grpc_doc/index.html">GRPC Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../problem_solving_doc/index.html">Issues found and solutions.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../problem_solving_doc/index.html#specific-problem-solution-stories">Specific Problem solution stories</a></li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../todo_and_others/services_to_be_added.html">Services to be Added</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../todo_and_others/documentation_tobe_added.html">Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../todo_and_others/moving_monolith_to_microservices.html">Moving monolith to microservices.</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../todo_and_others/scaling_plan.html">CI/CD and Scaling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../todo_and_others/how_to_configure_sphinx.html">How to configure and Run API DOC Sphinx</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../todo_and_others/how_to_configure_sphinx.html#to-run-in-linux">To run in Linux</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../todo_and_others/how_to_configure_tests.html">Configure and Run Tests</a></li>
 </ul>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Users and Roles</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Role based Access controls</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#user-types">User types:</a></li>
+</ul>
+</li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="../todo_and_others/scaling_plan.html" title="previous chapter">CI/CD and Scaling</a></li>
+      <li>Previous: <a href="../todo_and_others/how_to_configure_tests.html" title="previous chapter">Configure and Run Tests</a></li>
   </ul></li>
 </ul>
 </div>
@@ -120,11 +139,11 @@ review is active or not. If admin changes it to False, then the review will not 
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2023, Shamsul Arefin.
+      &#169;2023, Shamsul Arefin.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
       
       |
       <a href="../_sources/business_logic/user_roles.md.txt"

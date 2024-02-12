@@ -25,7 +25,7 @@ SECRET_KEY = 'f-a3q*5yt84kwln@2q0kw4)8d_gz%$!($!7z8u5)*@3!)p4dul'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['user-service','localhost']
+ALLOWED_HOSTS = ['user-service','localhost', 'ubuntu-development' ]
 
 
 # Application definition

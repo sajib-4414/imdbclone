@@ -28,9 +28,9 @@ class StreamPlatform(models.Model):
         return self.name
     
 class Movie(models.Model):
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200, db_index=True)
     storyline = models.CharField(max_length=200)
-    platform = models.ForeignKey(StreamPlatform, on_delete=models.CASCADE, related_name="movie") # Many to One
+    platform = models.ForeignKey(StreamPlatform, on_delete=models.CASCADE, related_name="movies") # Many to One
     # here streamplatform has many watchlists, so to access the watchlists from a single stream platform
     # we can do this, netflix_watchlist = netflix.watchlist.all()
     active = models.BooleanField(default=True)

@@ -5,11 +5,11 @@
 Auth-Service
 ========================================
 
-Auth-Service is a Flask-based lightweight microservice providing central authentication for microservices.
+Auth-Service is a FastAPI-based lightweight microservice providing central authentication for microservices.
 
 - **Central Authentication:**
   All microservice API calls pass through the central auth API. It validates the token and then sends the username in the header to the destination microservice.
-
+  As of 15th November 2023, decided to not raise 401 from auth service, rather pass the message to the destination service that user is not present, and let the destination handle it. 
 - **Login:**
   For now generate JWT token, and return to user. it contacts the user service through grpc for validating login credentials..  
 

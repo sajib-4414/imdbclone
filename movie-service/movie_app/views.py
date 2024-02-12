@@ -4,24 +4,23 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, generics, status, viewsets
 # from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
-from rest_framework.permissions import (IsAuthenticated,
-                                        IsAuthenticatedOrReadOnly)
+from rest_framework.permissions import (IsAuthenticated)
 from rest_framework.response import Response
-from rest_framework.throttling import (AnonRateThrottle, ScopedRateThrottle,
-                                       UserRateThrottle)
+from rest_framework.throttling import (AnonRateThrottle, ScopedRateThrottle)
 from rest_framework.views import APIView
 
-from movie_app.api.pagination import (MovieListCursorPagination,
+from movie_app.pagination import (MovieListCursorPagination,
                                           MovieListLimitOffsetPagination,
                                           MovieListPagination)
-from movie_app.api.permissions import (IsAdminOrReadOnly,
+from movie_app.permissions import (IsAdminOrReadOnly,
                                            IsReviewUserOrReadOnly, IsContentCreatorOrReadOnly)
-from movie_app.api.serializers import *
-from movie_app.api.throttling import (ReviewCreateThrottle,
+from movie_app.serializers import *
+from movie_app.throttling import (ReviewCreateThrottle,
                                           ReviewListThrottle)
 from movie_app.models import Review, StreamPlatform, Movie
 from django.contrib.auth.models import User
 from django.http import HttpResponse
+
 
 class UserReview(generics.ListAPIView):
     # queryset = Review.objects.all() to customize the queryset
@@ -177,7 +176,7 @@ class StreamPlatformViewSet(viewsets.ModelViewSet):
     - ...
 
     """
-    permission_classes = [IsAdminOrReadOnly]
+    permission_classes = [IsContentCreatorOrReadOnly]
     queryset = StreamPlatform.objects.all()
     serializer_class = StreamPlatformSerializer
     

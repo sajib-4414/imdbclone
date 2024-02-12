@@ -30,19 +30,19 @@ const Header: FC = () => {
           {loggedInUser ?
           <>
             <li>
-          <Link to="movies" className="nav-link px-2 text-white">
+          <Link to="userlist" className="nav-link px-2 text-white">
             All Users
           </Link>
         </li>
         <li>
-          <a href="#" className="nav-link px-2 text-white">
+        <Link to="movielist" className="nav-link px-2 text-white">
             All movies
-          </a>
+        </Link>
         </li>
         <li>
         <Link to="export" className="nav-link px-2 text-white">
             Export
-          </Link>
+        </Link>
         </li>
           </>
           
