@@ -42,7 +42,8 @@ const ExportIndex: React.FC = () => {
     deleteSelectedExports(selectedDeleteCheckboxes)
   }
     const deleteSelectedExports= async (export_ids:number[]) => {
-      const exportDeleteURL:string = `http://localhost:8005/user-service/export-app/exports/bulk-delete/`
+      const root_url = process.env.REACT_API_HOST;
+      const exportDeleteURL:string = `${root_url}/user-service/export-app/exports/bulk-delete/`
       await axiosInstance
         .post(exportDeleteURL, {
           export_ids:export_ids
@@ -82,7 +83,8 @@ const ExportIndex: React.FC = () => {
     }));
   };
   const fetchExports= async () => {
-    const exportfetchUrl:string = `http://localhost:8005/user-service/export-app/exports`;
+    const root_url = process.env.REACT_API_HOST;
+    const exportfetchUrl:string = `${root_url}/user-service/export-app/exports`;
     await axiosInstance
       .get(exportfetchUrl, {
         headers: {
@@ -109,7 +111,8 @@ const ExportIndex: React.FC = () => {
   }, [loggedInUser]);
 
   const handleDownload = async (task_id:string) => {
-    const apiUrl = `http://localhost:8005/user-service/export-app/exports/download/${task_id}`;
+    const root_url = process.env.REACT_API_HOST;
+    const apiUrl = `${root_url}/user-service/export-app/exports/download/${task_id}`;
     try{
       await axios.get(apiUrl, {
         responseType: 'blob',
@@ -130,7 +133,8 @@ const ExportIndex: React.FC = () => {
 };
   const submitExport = ()=>{
     console.log('Selected Checkboxes:', checkboxes);
-    const submitNewExportURL:string = `http://localhost:8005/user-service/export-app/exports`
+    const root_url = process.env.REACT_API_HOST;
+    const submitNewExportURL:string = `${root_url}/user-service/export-app/exports`
     const createNewExports= async () => {
       await axiosInstance
         .post(submitNewExportURL, {},{

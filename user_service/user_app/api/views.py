@@ -1,5 +1,5 @@
 from rest_framework.decorators import api_view
-from user_app.api.serializers import RegistrationCreatorSerializer, RegistrationRegularSerializer, LoginSerializer
+from user_app.api.serializers import RegistrationCreatorSerializer, RegistrationRegularSerializer, LoginSerializer, UserSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import HttpResponseBadRequest
@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
 import httpx
 import json
+from rest_framework.views import APIView
 from user_app.helpers.serializer_error_parser import parseError
 from events.topics import TOPIC_USER_REGISTERED, TOPIC_USER_UPDATED
 from kafka import KafkaProducer
@@ -150,3 +151,9 @@ def call_kafka(request):
             import traceback
             traceback.print_exc()
         return JsonResponse({'message': 'wrong data'}, status=200)
+    
+class UserListCreate(APIView):
+    def get(self, request, format=None):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)

@@ -13,6 +13,8 @@ import { LoggedInUser } from "./interfaces/LoginInterfaces";
 import { NotificationProvider } from "./contexts/NotificationContext";
 import ExportIndex from "./components/export/ExportIndex";
 import NotFound from "./common/NotFound";
+import UserList from "./components/users/Userlist";
+import MovieList from "./components/movies/MovieList";
 
 const AppProviderWrapper = () => {
   return (
@@ -38,8 +40,9 @@ const App: FC = () => {
       const loggedInUser: LoggedInUser = JSON.parse(
         storedUserData,
       ) as LoggedInUser;
+      const tokenRefreshUrl =process.env.REACT_API_HOST + "/auth/token/refresh"
       axios
-        .post(process.env.REACT_API_HOST + "/auth/token/refresh", {
+        .post(tokenRefreshUrl, {
           refresh_token: loggedInUser.refresh_token,
         })
         .then((response: AxiosResponse<RefreshTokenResponse>) => {
@@ -66,6 +69,8 @@ const App: FC = () => {
           <Route element={<ProtectedRoute />}>
             {/* <Route path="add" element={<Add />} /> */}
             <Route path="export" element={<ExportIndex />} />
+            <Route path="userlist" element={<UserList />} />
+            <Route path="movielist" element={<MovieList />} />
           </Route>
           {/* <Route path="movies" element={<MovieList />} />
           <Route path="users" element={<List />} />

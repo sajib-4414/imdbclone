@@ -8,7 +8,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, '/dist'),
     filename: 'bundle.js',
-    publicPath: 'http://localhost:8005/',
+    publicPath: 'http://ubuntu-development:8005/',
   },
   devServer: {
     static: './dist',

@@ -139,18 +139,6 @@ services:
     environment:
       - WATCHPACK_POLLING=true
   
-  staff-service: # admin react interface
-    build:
-      context: ./react_staff  # Relative path to the user_service folder
-      dockerfile: dev.Dockerfile
-    volumes:
-      - ./react_staff:/app  # Map the volume for the code in the user_service folder
-    ports:
-      - "3003:3000"
-    networks:
-      - main-internal-net
-    environment:
-      - WATCHPACK_POLLING=true
   
   notification-service:
     build:
@@ -245,6 +233,15 @@ services:
       retries: 4
     networks:
       - main-internal-net
+  
+  jenkins-master:
+    image: jenkins/jenkins
+    privileged: true
+    user: root
+    ports:
+      - 8080:8080
+    volumes:
+      - ./jenkins_volume:/var/jenkins_home
 
 networks:
   main-internal-net:

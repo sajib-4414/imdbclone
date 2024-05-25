@@ -18,5 +18,3 @@ User-Service handles user signup and user profile updates.
   
   Note: Running `python manage.py test` executes all test cases across the entire project, no need to run command `pytest`.
 
-Feel free to adjust this according to your specific requirements and preferences.
-

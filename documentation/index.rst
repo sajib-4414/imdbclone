@@ -23,6 +23,7 @@ Tools Used:
    user_service_doc/index
    react_client_doc/index
    grpc_doc/index
+   problem_solving_doc/index
 
 Search and Index
 ==================

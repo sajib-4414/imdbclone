@@ -1,6 +1,16 @@
-# Users and Roles
+# Role based Access controls
 
-What everyone can do.
+### User types:
+there are two user types, there are roles associated with a user object. the two roles are
+creator user, regular user.
+Also there is admin user.
+There will be seprate permission set in the Future like pro creator, regular creator, that will dictate who can do what.
+for now all creator user can create Movie, update their movie and delete their movie.
+but they need some permission. For this in the django admin panel of user service, create a creator group, attach content creator pro permissions, and add a content creator user to that group(go to user details and add them)
+the regular user also should be attached to a regular user group. regular user can be in future also regular, and regular premium user.
+
+
+What everyone/Regular user basic can do.
 - Users create their account with username, email, password
 - Can sign in.
 - Can see any reviews, any movies.

@@ -27,6 +27,7 @@ Now to add grpc code in your django rest framework project you need to do follow
    - add `django_grpc_framework` to your installed apps.
    - generate python file from the proto file with Python's grpc_tools (not the windows/linux's grpc tools) with this, Remember we need to generate two files, one is `pb2`, one is `pb2_grpc`, the command is
    `python -m grpc_tools.protoc --proto_path=./[this is your path to proto files] --python_out=./[path to generate python pb2 output files] --grpc_python_out=./[to generate pb2_grpc file] ./account.proto[which file in the proto path you want to choose to create python]`
+   **after this if you just copy the files wont work, fix the imports seeing the prvious versions in the grpc files**
    - You may want to create a serializer to validate the incoming message. you can use the `proto_serializers.ModelProtoSerializer` or `proto_serializers.ProtoSerializer` , documentation is not that good. 
    - Create service 
    - Create Hanlder either in a handler.py file or in the urls file

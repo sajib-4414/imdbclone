@@ -1,5 +1,13 @@
 # from rest_framework.authtoken.views import obtain_auth_token
-from user_app.api.views import registration_for_regular_view,registration_for_creator_view, logout_view, login_validate_view, call_kafka,get_user_permissions
+from user_app.api.views import (
+    registration_for_regular_view,
+    registration_for_creator_view,
+    logout_view,
+    login_validate_view,
+    call_kafka,
+    get_user_permissions,
+    UserListCreate
+)
 # from rest_framework_simplejwt.views import (
 #     TokenObtainPairView,
 #     TokenRefreshView,
@@ -15,6 +23,7 @@ urlpatterns = [
     path("register/regular/", registration_for_regular_view, name='register'),
     path("register/creator/", registration_for_creator_view, name='register'),
     path("kafka-test/", call_kafka, name='kafka'), #for testing only
+    path('users/', UserListCreate.as_view()),
     # path("logout/", logout_view, name='logout'),
     
     # jwt authentication token and token refresh

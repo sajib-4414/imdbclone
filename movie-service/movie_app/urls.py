@@ -1,5 +1,5 @@
 from django.urls import path,include
-from movie_app.api.views import (MovieDetailView, MovieListGetCreateView, 
+from movie_app.views import (MovieDetailView, MovieListGetCreateView, 
                                     #  StreamPlatformView, StreamPlatformDetailView, 
                                      ReviewList,
                                      ReviewDetail, ReviewCreate, StreamPlatformViewSet, UserReview,

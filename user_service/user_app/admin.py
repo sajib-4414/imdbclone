@@ -3,11 +3,10 @@ from .models import User
 # Register your models here.
 admin.site.register(User)
 
-from .models import ProContentCreatorPermissions, ContentCreatorProfile, RegularUserProfile
+from .models import  ContentCreatorProfile, RegularUserProfile ,RegularProUserPermission, ContentCreatorProUserPermission
 
-class ProContentCreatorPermissionsAdmin(admin.ModelAdmin):
-    pass
 
-admin.site.register(ProContentCreatorPermissions, ProContentCreatorPermissionsAdmin)
 admin.site.register(ContentCreatorProfile)
 admin.site.register(RegularUserProfile)
+admin.site.register(RegularProUserPermission)
+admin.site.register(ContentCreatorProUserPermission)
