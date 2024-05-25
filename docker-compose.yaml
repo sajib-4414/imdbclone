@@ -233,6 +233,15 @@ services:
       retries: 4
     networks:
       - main-internal-net
+  
+  jenkins-master:
+    image: jenkins/jenkins
+    privileged: true
+    user: root
+    ports:
+      - 8080:8080
+    volumes:
+      - ./jenkins_volume:/var/jenkins_home
 
 networks:
   main-internal-net:

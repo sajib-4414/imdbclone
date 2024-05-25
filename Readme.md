@@ -42,8 +42,9 @@ IMDB movie review app clone with Django REST framework backend APIs.
    ``
    git clone https://github.com/your_username/your_project.git ``
 
-2. Install docker and docker compose and start docker in your computer
-3. in the project directory issue command `docker compose up`
+2. Install docker and docker compose and start docker in your computer. if needed install make utilities in linux/windows.
+jenkins need specific permission on the mapping volume folders in the host,this is covered in the makefile.
+3. in the project directory issue command `make up`
 
 ## Run tests:
 * Used API testcases, run ```python manage.py test <optionally-app-name>```. If no app name specified, then this code will run test cases for all apps. This runs all kinds of tests.
@@ -79,3 +80,9 @@ IMDB movie review app clone with Django REST framework backend APIs.
 - `GET /api/v1/stream/`: List all stream platforms.
 - `POST /api/v1/stream/`: Create a new stream platform.
 - `GET /api/v1/stream/<int:pk>/`: Retrieve details of a specific stream platform.
+
+#### general helpful commands:
+- to run a command inside the docker container, 
+docker compose exec jenkins-master cat `/var/jenkins_home/secrets/initialAdminPassword`
+you can also go inside the container and then run the command you want, here I am just printing the password to the console.
+you could have gone to the container and do cat `/var/jenkins_home/secrets/initialAdminPassword`. they are the same.
