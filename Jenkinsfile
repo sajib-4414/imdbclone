@@ -1,14 +1,11 @@
-pipeline{
-    agent any //any agent can run this job
+pipeline {
+    agent any // any agent can run this job
 
-    stages{
-        stage('Checkout Code'){
-            steps{
+    stages {
+        stage('Checkout Code') {
+            steps {
                 checkout scm
-
                 sh "ls -ltr"
-            }
-            steps{
                 echo 'After checkout'
             }
         }
@@ -17,10 +14,10 @@ pipeline{
                 echo 'Hello World'
             }
         }
-    },
+    }
     post {
         always {
-            cleanWs() //clean workspace when done
+            cleanWs() // clean workspace when done
         }
     }
 }

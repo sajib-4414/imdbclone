@@ -1,0 +1,13 @@
+version: "2"
+authtoken: 2gwcUW9Imbx5yV99EaODx1djyFG_xyVvVj899w82jYpEd2it
+web_addr: 0.0.0.0:8081
+update: false
+log: stdout
+
+tunnels:
+  # ssh-access:
+  #   addr: ssh-server:22
+  #   proto: tcp
+  app-foo:
+    addr: jenkins-master:8080
+    proto: http

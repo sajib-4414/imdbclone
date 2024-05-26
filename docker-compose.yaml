@@ -242,6 +242,33 @@ services:
       - 8080:8080
     volumes:
       - ./jenkins_volume:/var/jenkins_home
+    networks:
+      - main-internal-net
+
+  ngrok:
+    image: wernight/ngrok
+    ports:
+      - "8081:8081"
+    command:
+    - /bin/sh
+    - -c
+    - |
+      ngrok start --all
+    volumes:
+      - .:/home/ngrok/.ngrok2/
+    depends_on:
+      - jenkins-master
+    # restart: unless-stopped
+    # command: ["start", "--all", "--config", "/etc/ngrok.yml"]
+    # volumes:
+    #   - ./nginx-config.conf:/etc/nginx/nginx.conf
+    #   - ./ngrok.yml:/etc/ngrok.yml:ro
+    environment:
+      - NGROK_AUTH_TOKEN=${NGROK_AUTH_TOKEN}
+    # ports:
+    #   - 4040:4040
+    networks:
+      - main-internal-net
 
 networks:
   main-internal-net:
