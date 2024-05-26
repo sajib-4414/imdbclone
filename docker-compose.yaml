@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   nginx:
     image: nginx:latest
@@ -258,15 +256,8 @@ services:
       - .:/home/ngrok/.ngrok2/
     depends_on:
       - jenkins-master
-    # restart: unless-stopped
-    # command: ["start", "--all", "--config", "/etc/ngrok.yml"]
-    # volumes:
-    #   - ./nginx-config.conf:/etc/nginx/nginx.conf
-    #   - ./ngrok.yml:/etc/ngrok.yml:ro
     environment:
       - NGROK_AUTH_TOKEN=${NGROK_AUTH_TOKEN}
-    # ports:
-    #   - 4040:4040
     networks:
       - main-internal-net
 
