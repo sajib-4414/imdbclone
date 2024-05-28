@@ -232,34 +232,34 @@ services:
     networks:
       - main-internal-net
   
-  jenkins-master:
-    image: jenkins/jenkins
-    privileged: true
-    user: root
-    ports:
-      - 8080:8080
-    volumes:
-      - ./jenkins_volume:/var/jenkins_home
-    networks:
-      - main-internal-net
+  # jenkins-master: # did to try jenkins
+  #   image: jenkins/jenkins
+  #   privileged: true
+  #   user: root
+  #   ports:
+  #     - 8080:8080
+  #   volumes:
+  #     - ./jenkins_volume:/var/jenkins_home
+  #   networks:
+  #     - main-internal-net
 
-  ngrok:
-    image: wernight/ngrok
-    ports:
-      - "8081:8081"
-    command:
-    - /bin/sh
-    - -c
-    - |
-      ngrok start --all
-    volumes:
-      - .:/home/ngrok/.ngrok2/
-    depends_on:
-      - jenkins-master
-    environment:
-      - NGROK_AUTH_TOKEN=${NGROK_AUTH_TOKEN}
-    networks:
-      - main-internal-net
+  # ngrok: Not needng it right now, experimented jenkins with it
+  #   image: wernight/ngrok
+  #   ports:
+  #     - "8081:8081"
+  #   command:
+  #   - /bin/sh
+  #   - -c
+  #   - |
+  #     ngrok start --all
+  #   volumes:
+  #     - .:/home/ngrok/.ngrok2/
+  #   depends_on:
+  #     - jenkins-master
+  #   environment:
+  #     - NGROK_AUTH_TOKEN=${NGROK_AUTH_TOKEN}
+  #   networks:
+  #     - main-internal-net
 
 networks:
   main-internal-net:

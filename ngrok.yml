@@ -1,5 +1,5 @@
 version: "2"
-authtoken: 2gwcUW9Imbx5yV99EaODx1djyFG_xyVvVj899w82jYpEd2it
+authtoken: your_token #replcae with actual token
 web_addr: 0.0.0.0:8081
 update: false
 log: stdout
