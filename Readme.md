@@ -1,6 +1,6 @@
 # IMDB Clone with Python
 
-IMDB movie review app clone with Django REST framework backend APIs.yes
+IMDB movie review app clone with Django REST framework backend APIs.
 
 ## Table of Contents
 
